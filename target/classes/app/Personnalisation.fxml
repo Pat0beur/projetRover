@@ -14,8 +14,8 @@
             <Font size="24.0" />
          </font>
       </Label>
-      <Button fx:id="btnGauche" layoutX="80.0" layoutY="188.0" mnemonicParsing="false" text="&lt;" />
-      <Button fx:id="btnDroite" layoutX="487.0" layoutY="188.0" mnemonicParsing="false" text="&gt;" />
+      <Button fx:id="btnGauche" layoutX="80.0" layoutY="188.0" mnemonicParsing="false" text="&lt;" onAction="#ChangerImage" />
+      <Button fx:id="btnDroite" layoutX="487.0" layoutY="188.0" mnemonicParsing="false" text="&gt;" onAction="#ChangerImage" />
       <Button fx:id="btnRetour" layoutX="24.0" layoutY="347.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="81.0" text="Retour" />
       <Button fx:id="btnValider" layoutX="499.0" layoutY="347.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="81.0" text="Valider" />
       <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="200.0" layoutY="126.0" pickOnBounds="true" preserveRatio="true">

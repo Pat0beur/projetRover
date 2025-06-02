@@ -7,6 +7,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 /**
@@ -19,9 +21,19 @@ public class ControllerPersonnalisation {
     @FXML private Button btnDroite;
     @FXML private Button btnRetour;
     @FXML private Button btnValider;
+    @FXML private ImageView imageView;
+    private final int  indice = 1;
+    private boolean suivant= false;
+    private final Image image1 = new Image(getClass().getResource("/images/kiwi.jpg").toExternalForm());
+    private Image[] Images = {
+    new Image(getClass().getResource("/images/kiwi.jpg").toExternalForm()),
+    new Image(getClass().getResource("/images/pamplemousse.jpg").toExternalForm())
+    // new Image(getClass().getResource("/images/kiwi.jpg").toExternalForm())
+    };
 
     @FXML
     public void initialize() {
+        imageView.setImage(image1);
         System.out.println("ControllerPersonnalisation.initialize() appelé");
 
         btnRetour.setOnAction(event -> {
@@ -53,11 +65,23 @@ public class ControllerPersonnalisation {
                 e.printStackTrace();
             }
         });
+
         btnDroite.setOnAction(event -> {
-            System.out.println("Vous avez appuyé sur le bouton de droite");
+            suivant = true;
+            ChangerImage(suivant);
         });
         btnGauche.setOnAction(event -> {
+            ChangerImage(suivant);
             System.out.println("Vous avez appuyé sur le bouton de gauche");
         });
+    }
+    @FXML
+    public void ChangerImage(boolean a){
+        if(a){
+            imageView.setImage(Images[indice +1]);
+        }
+        else {
+            imageView.setImage(Images[indice -1]);
+        }
     }
 }
