@@ -65,20 +65,4 @@ public class ControllerPersonnalisation {
             }
         });
     }
-
-    /**
-     * Met à jour le texte du label en fonction de l'index actuel.
-     * Vous pouvez adapter cette méthode pour afficher l'aperçu de la personnalisation.
-     */
-    private void updateLabel() {
-        labelPersonnalisation.setText("Personnalisation (option " + indexOption + ")");
-    }
-
-    /**
-     * Valeur maximale de l'index d'option autorisé.
-     * Si vous avez, par exemple, 5 styles ou 3 couleurs, renvoyez 4 (pour 0..4), etc.
-     */
-    private int maxOption() {
-        return 4; // Remplacez par la vraie taille de votre liste d'options
-    }
 }
