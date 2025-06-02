@@ -34,24 +34,33 @@ public class ControllerMenu {
     public void initialize() {
         System.out.println("✅ Contrôleur initialisé !");
 
-    btnQuitter.setOnAction(event -> {
-        System.out.println("👋 Fermeture de l'application");
-        System.exit(0);
-    });
-    btnCommandes.setOnAction(event -> {
-        try {
-            // Stage stage = new Stage();
-            Stage stage = (Stage)btnCommandes.getScene().getWindow();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/app/Commandes.fxml"));
-            Parent root;
-            root = loader.load();
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        btnQuitter.setOnAction(event -> {
+            System.out.println("👋 Fermeture de l'application");
+            System.exit(0);
+        });
+        btnCommandes.setOnAction(event -> {
+            try {
+                // Stage stage = new Stage();
+                Stage stage = (Stage)btnCommandes.getScene().getWindow();
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/app/Commandes.fxml"));
+                Parent root;
+                root = loader.load();
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+                stage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
-    });
+        });
+
+        btnJouer.setOnAction(e -> {
+            System.out.println("🚀 Lancement du crawl Star Wars (sans audio) …");
+            // Récupère la Stage courante
+            Stage stage = (Stage) btnJouer.getScene().getWindow();
+            // Instancie et démarre le CrawlPane
+            CrawlPane crawlPane = new CrawlPane(stage);
+            crawlPane.startCrawl();
+        });
     }
 }
