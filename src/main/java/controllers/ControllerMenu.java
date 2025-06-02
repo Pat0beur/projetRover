@@ -1,8 +1,6 @@
 package controllers;
 
-
 import java.io.IOException;
-
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -13,85 +11,57 @@ import javafx.stage.Stage;
 
 public class ControllerMenu {
 
-    @FXML
-    private Button btnJouer;
-    @FXML
-    private Button btnPersonnaliser;
-    @FXML
-    private Button btnCommandes;
+    @FXML private Button btnJouer;
+    @FXML private Button btnPersonnaliser;
+    @FXML private Button btnCommandes;
+    @FXML private Button btnQuitter;
 
-    @FXML
-    private Button btnQuitter;
-
-    @FXML
-    private RadioButton radiobtnEasy;
-    @FXML
-    private RadioButton radiobtnMedium;
-    @FXML
-    private RadioButton radiobtnHard;
+    @FXML private RadioButton radiobtnEasy;
+    @FXML private RadioButton radiobtnMedium;
+    @FXML private RadioButton radiobtnHard;
 
     @FXML
     public void initialize() {
-        System.out.println("✅ Contrôleur initialisé !");
+        System.out.println("✅ Contrôleur Menu.initialisé !");
 
-<<<<<<< HEAD
-    btnQuitter.setOnAction(event -> {
-        System.out.println("👋 Fermeture de l'application");
-        System.exit(0);
-    });
-
-    btnPersonnaliser.setOnAction(event -> {
-        try {
-            Stage stage = (Stage)btnPersonnaliser.getScene().getWindow();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/app/Personnalisation.fxml"));
-            Parent root= loader.load();
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    });
-
-    btnCommandes.setOnAction(event -> {
-        try {
-            Stage stage = (Stage)btnCommandes.getScene().getWindow();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/app/Commandes.fxml"));
-            Parent root;
-            root = loader.load();
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-=======
+        // Bouton Quitter : ferme l'application
         btnQuitter.setOnAction(event -> {
             System.out.println("👋 Fermeture de l'application");
             System.exit(0);
         });
-        btnCommandes.setOnAction(event -> {
+
+        // Bouton Personnaliser : charge la vue Personnalisation.fxml
+        btnPersonnaliser.setOnAction(event -> {
             try {
-                // Stage stage = new Stage();
-                Stage stage = (Stage)btnCommandes.getScene().getWindow();
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/app/Commandes.fxml"));
-                Parent root;
-                root = loader.load();
+                Stage stage = (Stage) btnPersonnaliser.getScene().getWindow();
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/app/Personnalisation.fxml"));
+                Parent root = loader.load();
                 Scene scene = new Scene(root);
                 stage.setScene(scene);
                 stage.show();
             } catch (IOException e) {
                 e.printStackTrace();
             }
->>>>>>> 9189fdae8dfdd12d2ae7d39c132410a734f2111a
-
         });
 
-        btnJouer.setOnAction(e -> {
-            System.out.println(" Lancement du crawl Star Wars (sans audio) …");
-            // Récupère la Stage courante
+        // Bouton Commandes : charge la vue Commandes.fxml
+        btnCommandes.setOnAction(event -> {
+            try {
+                Stage stage = (Stage) btnCommandes.getScene().getWindow();
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/app/Commandes.fxml"));
+                Parent root = loader.load();
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+                stage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+        // Bouton Jouer : lance le CrawlPane (crawl Star Wars sans audio)
+        btnJouer.setOnAction(event -> {
+            System.out.println("🚀 Lancement du crawl Star Wars (sans audio) …");
             Stage stage = (Stage) btnJouer.getScene().getWindow();
-            // Instancie et démarre le CrawlPane
             CrawlPane crawlPane = new CrawlPane(stage);
             crawlPane.startCrawl();
         });
