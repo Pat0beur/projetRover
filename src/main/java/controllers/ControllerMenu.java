@@ -88,7 +88,7 @@ public class ControllerMenu {
         });
 
         btnJouer.setOnAction(e -> {
-            System.out.println("🚀 Lancement du crawl Star Wars (sans audio) …");
+            System.out.println(" Lancement du crawl Star Wars (sans audio) …");
             // Récupère la Stage courante
             Stage stage = (Stage) btnJouer.getScene().getWindow();
             // Instancie et démarre le CrawlPane
