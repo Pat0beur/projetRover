@@ -30,18 +30,6 @@ public class ControllerPersonnalisation {
         // Initialiser le label (ou tout autre composant) si besoin
         labelPersonnalisation.setText("Personnalisation (option " + indexOption + ")");
 
-        // Bouton Gauche : décrémenter l'index de l'option
-        btnGauche.setOnAction(event -> {
-            indexOption = (indexOption > 0) ? indexOption - 1 : maxOption();
-            updateLabel();
-        });
-
-        // Bouton Droite : incrémenter l'index de l'option
-        btnDroite.setOnAction(event -> {
-            indexOption = (indexOption < maxOption()) ? indexOption + 1 : 0;
-            updateLabel();
-        });
-
         // Bouton Retour : revenir à Menu.fxml
         btnRetour.setOnAction(event -> {
             try {
@@ -60,7 +48,7 @@ public class ControllerPersonnalisation {
 
         // Bouton Valider : appliquer la personnalisation et revenir au menu ou lancer le jeu
         btnValider.setOnAction(event -> {
-            System.out.println("✔ Option personnalisée : " + indexOption);
+            // System.out.println("✔ Option personnalisée : " + indexOption);
             // Ici, enregistrez l'option choisie ou transmettez-la au modèle,
             // puis revenez à la vue Menu ou lancez la partie.
             try {
