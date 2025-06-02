@@ -28,7 +28,15 @@ public class ControllerPersonnalisation {
     @FXML private ImageView imageView;
     private int  indice = 0;
     private Image[] images = {
-    new Image(getClass().getResource("/images/kiwi.jpg").toExternalForm()),
+    new Image(getClass().getResource("/images/skins/Car_AM_General_Hummer_98x164.png").toExternalForm()),
+    new Image(getClass().getResource("/images/skins/Car_Audi_Sport_Quattro_Rally_86x145.png").toExternalForm()),
+    new Image(getClass().getResource("/images/skins/Car_Chevrolet_Camaro_ZL-1_86x145.png").toExternalForm()),
+    new Image(getClass().getResource("/images/skins/Car_DeLorean_DMC_86x145.png").toExternalForm()),
+    new Image(getClass().getResource("/images/skins/Car_Ferrari_F40_86x145.png").toExternalForm()),
+    new Image(getClass().getResource("/images/skins/Car_Ford_GT40_86x145.png").toExternalForm()),
+    new Image(getClass().getResource("/images/skins/Car_Plymouth_Hemi_Quada_98x164.png").toExternalForm()),
+    new Image(getClass().getResource("/images/skins/Lancia_Delta_Integrale_Police_125x209.png").toExternalForm()),
+    new Image(getClass().getResource("/images/skins/rover.png").toExternalForm()),
     new Image(getClass().getResource("/images/pamplemousse.jpg").toExternalForm())
     // new Image(getClass().getResource("/images/kiwi.jpg").toExternalForm())
     };
