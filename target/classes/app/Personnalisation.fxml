@@ -5,15 +5,14 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ControllerPersonnalisation">
    <children>
-      <Label layoutX="170.0" layoutY="14.0" text="Personnalisation">
+      <Label fx:id="labelPersonnalisation" layoutX="170.0" layoutY="14.0" text="Personnalisation">
          <font>
             <Font size="36.0" />
          </font>
       </Label>
-      <Button layoutX="2.0" layoutY="188.0" mnemonicParsing="false" text="&lt;" AnchorPane.leftAnchor="90.0" />
-      <Button layoutX="574.0" layoutY="188.0" mnemonicParsing="false" text="&gt;" AnchorPane.rightAnchor="90.0" />
+      <Button fx:id="btnGauche" layoutX="2.0" layoutY="188.0" mnemonicParsing="false" text="&lt;" AnchorPane.leftAnchor="90.0" />
+      <Button fx:id="btnDroite" layoutX="574.0" layoutY="188.0" mnemonicParsing="false" text="&gt;" AnchorPane.rightAnchor="90.0" />
    </children>
 </AnchorPane>
