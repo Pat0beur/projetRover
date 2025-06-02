@@ -5,14 +5,12 @@ import java.net.URL;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 /**
@@ -37,23 +35,13 @@ public class ControllerPersonnalisation {
     new Image(getClass().getResource("/images/skins/Car_Plymouth_Hemi_Quada_98x164.png").toExternalForm()),
     new Image(getClass().getResource("/images/skins/Lancia_Delta_Integrale_Police_125x209.png").toExternalForm()),
     new Image(getClass().getResource("/images/skins/rover.png").toExternalForm()),
-    new Image(getClass().getResource("/images/pamplemousse.jpg").toExternalForm())
-    // new Image(getClass().getResource("/images/kiwi.jpg").toExternalForm())
     };
 
     @FXML
     public void initialize() {
-        // imageView = new ImageView();
-        URL url = getClass().getResource("/images/kiwi.jpg");
-        if (url != null) {
-            Image img = new Image(url.toExternalForm(), false);
-            imageView.setImage(img);
-            imageView.setVisible(true); 
-            imageView.setManaged(true);
-            System.out.println("Je suis là");
-        } else {
-            System.out.println("Image introuvable !");
-        }
+        imageView.setImage(images[0]);
+        imageView.setVisible(true); 
+        imageView.setManaged(true);
         btnRetour.setOnAction(event -> {
             try {
                 Stage stage = (Stage) btnRetour.getScene().getWindow();
