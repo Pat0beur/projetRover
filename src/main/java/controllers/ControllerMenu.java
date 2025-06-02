@@ -33,8 +33,6 @@ public class ControllerMenu {
     @FXML
     public void initialize() {
         System.out.println("✅ Contrôleur initialisé !");
-
-<<<<<<< HEAD
     btnQuitter.setOnAction(event -> {
         System.out.println("👋 Fermeture de l'application");
         System.exit(0);
@@ -65,7 +63,7 @@ public class ControllerMenu {
         } catch (IOException e) {
             e.printStackTrace();
         }
-=======
+    });
         btnQuitter.setOnAction(event -> {
             System.out.println("👋 Fermeture de l'application");
             System.exit(0);
@@ -83,8 +81,6 @@ public class ControllerMenu {
             } catch (IOException e) {
                 e.printStackTrace();
             }
->>>>>>> 9189fdae8dfdd12d2ae7d39c132410a734f2111a
-
         });
 
         btnJouer.setOnAction(e -> {
