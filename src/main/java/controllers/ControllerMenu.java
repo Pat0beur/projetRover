@@ -22,9 +22,44 @@ public class ControllerMenu {
 
     @FXML
     public void initialize() {
+<<<<<<< HEAD
+        System.out.println("✅ Contrôleur initialisé !");
+    btnQuitter.setOnAction(event -> {
+        System.out.println("👋 Fermeture de l'application");
+        System.exit(0);
+    });
+
+    btnPersonnaliser.setOnAction(event -> {
+        try {
+            Stage stage = (Stage)btnPersonnaliser.getScene().getWindow();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/app/Personnalisation.fxml"));
+            Parent root= loader.load();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    });
+
+    btnCommandes.setOnAction(event -> {
+        try {
+            Stage stage = (Stage)btnCommandes.getScene().getWindow();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/app/Commandes.fxml"));
+            Parent root;
+            root = loader.load();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    });
+=======
         System.out.println("✅ Contrôleur Menu.initialisé !");
 
         // Bouton Quitter : ferme l'application
+>>>>>>> 6b6b8cc2819c45f1068070a86d102d49edbbd684
         btnQuitter.setOnAction(event -> {
             System.out.println("👋 Fermeture de l'application");
             System.exit(0);
