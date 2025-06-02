@@ -1,9 +1,5 @@
 package models;
 
-import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.RadioButton;
-
 public class Model {
     // Exemple de donnée
     private String roverName;
