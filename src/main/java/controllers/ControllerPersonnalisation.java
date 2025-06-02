@@ -39,6 +39,8 @@ public class ControllerPersonnalisation {
 
     @FXML
     public void initialize() {
+        
+        //Affiche par défaut le premier élément dans le tableau images
         imageView.setImage(images[0]);
         imageView.setVisible(true); 
         imageView.setManaged(true);
