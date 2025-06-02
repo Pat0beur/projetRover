@@ -22,11 +22,11 @@ public class ControllerMenu {
 
     @FXML
     public void initialize() {
-        System.out.println("✅ Contrôleur Menu.initialisé !");
+        System.out.println("Contrôleur Menu.initialisé !");
 
         // Bouton Quitter : ferme l'application
         btnQuitter.setOnAction(event -> {
-            System.out.println("👋 Fermeture de l'application");
+            System.out.println("Fermeture de l'application");
             System.exit(0);
         });
 
@@ -56,14 +56,6 @@ public class ControllerMenu {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        });
-
-        // Bouton Jouer : lance le CrawlPane (crawl Star Wars sans audio)
-        btnJouer.setOnAction(event -> {
-            System.out.println("🚀 Lancement du crawl Star Wars (sans audio) …");
-            Stage stage = (Stage) btnJouer.getScene().getWindow();
-            CrawlPane crawlPane = new CrawlPane(stage);
-            crawlPane.startCrawl();
         });
     }
 }

@@ -14,7 +14,7 @@ public class ControllerCommandes {
 
     @FXML
     public void initialize() {
-        System.out.println("✅ ControllerCommande.initialize() appelé");
+        System.out.println("ControllerCommande.initialize() appelé");
 
         btnRetour.setOnAction(event -> {
             try {

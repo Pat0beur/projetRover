@@ -20,17 +20,10 @@ public class ControllerPersonnalisation {
     @FXML private Button btnRetour;
     @FXML private Button btnValider;
 
-    // Exemple de variable d'état : index de l'élément à personnaliser
-    private int indexOption = 0;
-
     @FXML
     public void initialize() {
         System.out.println("✅ ControllerPersonnalisation.initialize() appelé");
 
-        // Initialiser le label (ou tout autre composant) si besoin
-        labelPersonnalisation.setText("Personnalisation (option " + indexOption + ")");
-
-        // Bouton Retour : revenir à Menu.fxml
         btnRetour.setOnAction(event -> {
             try {
                 Stage stage = (Stage) btnRetour.getScene().getWindow();
@@ -46,11 +39,7 @@ public class ControllerPersonnalisation {
             }
         });
 
-        // Bouton Valider : appliquer la personnalisation et revenir au menu ou lancer le jeu
         btnValider.setOnAction(event -> {
-            // System.out.println("✔ Option personnalisée : " + indexOption);
-            // Ici, enregistrez l'option choisie ou transmettez-la au modèle,
-            // puis revenez à la vue Menu ou lancez la partie.
             try {
                 Stage stage = (Stage) btnValider.getScene().getWindow();
                 FXMLLoader loader = new FXMLLoader(
