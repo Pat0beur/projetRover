@@ -27,8 +27,6 @@ public class ControllerPersonnalisation {
     @FXML private Button btnValider;
     @FXML private ImageView imageView;
     private int  indice = 0;
-    private boolean suivant= false;
-    private final Image image1 = new Image(getClass().getResource("/images/kiwi.jpg").toExternalForm());
     private Image[] images = {
     new Image(getClass().getResource("/images/kiwi.jpg").toExternalForm()),
     new Image(getClass().getResource("/images/pamplemousse.jpg").toExternalForm())
@@ -79,7 +77,6 @@ public class ControllerPersonnalisation {
         });
 
         btnDroite.setOnAction(event -> {
-            suivant = true;
             idSuivant();
         });
         btnGauche.setOnAction(event -> {
