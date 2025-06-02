@@ -22,7 +22,7 @@ public class ControllerPersonnalisation {
 
     @FXML
     public void initialize() {
-        System.out.println("✅ ControllerPersonnalisation.initialize() appelé");
+        System.out.println("ControllerPersonnalisation.initialize() appelé");
 
         btnRetour.setOnAction(event -> {
             try {
