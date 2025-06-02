@@ -54,6 +54,7 @@ import javafx.stage.Stage;
 
 public class App extends Application {
 
+    @SuppressWarnings("exports")
     @Override
     public void start(Stage primaryStage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/app/Menu.fxml"));
