@@ -38,9 +38,22 @@ public class ControllerMenu {
         System.out.println("👋 Fermeture de l'application");
         System.exit(0);
     });
+
+    btnPersonnaliser.setOnAction(event -> {
+        try {
+            Stage stage = (Stage)btnPersonnaliser.getScene().getWindow();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/app/Personnalisation.fxml"));
+            Parent root= loader.load();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    });
+
     btnCommandes.setOnAction(event -> {
         try {
-            // Stage stage = new Stage();
             Stage stage = (Stage)btnCommandes.getScene().getWindow();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/app/Commandes.fxml"));
             Parent root;
