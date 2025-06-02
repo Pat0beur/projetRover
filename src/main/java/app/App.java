@@ -45,8 +45,7 @@
 //     }
 
 // }
-package app;
-// import controllers.ControllerMenu;
+package app;    
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -57,7 +56,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        System.out.println("FXML found: " + getClass().getResource("/app/Menu.fxml")); // test de debug
+        System.out.println("FXML found: " + getClass().getResource("C:/Users/raph_/Desktop/Polytech/ET3/S6/IHM/Projet/projetRover/src/main/resources/app/Menu.fxml")); // test de debug
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/app/Menu.fxml"));
         Parent root = loader.load();
         Scene scene = new Scene(root);

@@ -14,7 +14,6 @@ public class ControllerMenu {
     private Button btnCommandes;
     @FXML
     private Button btnQuitter;
-
     @FXML
     private RadioButton radiobtnEasy;
     @FXML
@@ -25,5 +24,8 @@ public class ControllerMenu {
     @FXML
     public void initialize() {
         System.out.println("✅ Contrôleur initialisé !");
+        btnQuitter.setOnAction(event -> {
+            System.exit(0);
+        });
     }
 }

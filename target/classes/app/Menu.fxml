@@ -8,76 +8,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ControllerMenu">
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Button fx:id="btnJouer" alignment="CENTER" contentDisplay="CENTER" minHeight="30.0" minWidth="200.0" mnemonicParsing="false" prefHeight="40.0" text="Jouer">
          <VBox.margin>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-         </VBox.margin>
-         <font>
-            <Font size="19.0" />
-         </font>
-      </Button>
-      <Button fx:id="btnPersonnaliser" minHeight="30.0" minWidth="180.0" mnemonicParsing="false" prefHeight="40.0" text="Personnaliser">
-         <font>
-            <Font size="19.0" />
-         </font>
-         <VBox.margin>
-            <Insets bottom="10.0" top="10.0" />
-         </VBox.margin>
-      </Button>
-      <Button fx:id="btnCommandes" minHeight="30.0" minWidth="180.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="180.0" text="Commandes">
-         <font>
-            <Font size="19.0" />
-         </font>
-         <VBox.margin>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-         </VBox.margin>
-      </Button>
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-         <children>
-            <Label text="Difficulté">
-               <font>
-                  <Font size="19.0" />
-               </font>
-               <HBox.margin>
-                  <Insets right="10.0" />
-               </HBox.margin>
-               <padding>
-                  <Insets top="12.0" />
-               </padding>
-            </Label>
-            <VBox alignment="CENTER" prefHeight="150.0" prefWidth="40.0">
-               <children>
-                  <Label text="Easy" />
-                  <RadioButton fx:id="radiobtnEasy" contentDisplay="BOTTOM" mnemonicParsing="false" textAlignment="CENTER" />
-               </children>
-            </VBox>
-            <VBox alignment="CENTER" layoutX="325.0" layoutY="10.0" prefHeight="150.0" prefWidth="60.0">
-               <children>
-                  <Label text="Medium" />
-                  <RadioButton fx:id="radiobtnMedium" contentDisplay="BOTTOM" mnemonicParsing="false" textAlignment="CENTER" />
-               </children>
-            </VBox>
-            <VBox alignment="CENTER" layoutX="375.0" layoutY="10.0" prefHeight="150.0" prefWidth="40.0">
-               <children>
-                  <Label text="Hard" />
-                  <RadioButton fx:id="radiobtnHard" contentDisplay="BOTTOM" mnemonicParsing="false" textAlignment="CENTER" />
-               </children>
-            </VBox>
-         </children>
-      </HBox>
-      <Button fx:id="btnQuitter" minHeight="40.0" minWidth="140.0" mnemonicParsing="false" text="Quitter">
-         <font>
-            <Font size="19.0" />
-         </font>
-         <VBox.margin>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-         </VBox.margin>
-      </Button>
-   </children>
-</VBox>
          </VBox.margin>
          <font>
             <Font size="19.0" />
