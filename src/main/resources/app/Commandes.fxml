@@ -12,7 +12,7 @@
 <?import javafx.scene.text.Text?>
 
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ControllerCommandes">
    <children>
       <VBox prefHeight="400.0" prefWidth="600.0">
          <children>
@@ -76,7 +76,7 @@
             </HBox>
             <AnchorPane prefHeight="41.0" prefWidth="600.0">
                <children>
-                  <Button id="btnRetour" alignment="CENTER" contentDisplay="CENTER" layoutX="261.0" mnemonicParsing="false" text="Retour" textAlignment="CENTER">
+                  <Button fx:id="btnRetour" alignment="CENTER" contentDisplay="CENTER" layoutX="261.0" mnemonicParsing="false" text="Retour" textAlignment="CENTER">
                      <font>
                         <Font size="18.0" />
                      </font>
