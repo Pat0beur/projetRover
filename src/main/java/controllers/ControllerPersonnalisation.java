@@ -53,5 +53,11 @@ public class ControllerPersonnalisation {
                 e.printStackTrace();
             }
         });
+        btnDroite.setOnAction(event -> {
+            System.out.println("Vous avez appuyé sur le bouton de droite");
+        });
+        btnGauche.setOnAction(event -> {
+            System.out.println("Vous avez appuyé sur le bouton de gauche");
+        });
     }
 }
