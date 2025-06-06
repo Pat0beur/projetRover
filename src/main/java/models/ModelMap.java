@@ -1,28 +1,35 @@
-// src/main/java/app/models/ModelMap.java
+// src/main/java/models/ModelMap.java
 package models;
 
 /**
- * ModelMap : contient la taille de la carte et la position du rover.
- * Ici on n’a plus de ModelCar, juste la position (roverX, roverY).
+ * ModelMap : contient la taille de la carte (mapWidth, mapHeight), 
+ * la position (roverX, roverY) et une instance de ModelCar pour le skin.
  */
 public class ModelMap {
+
     private final double mapWidth;
     private final double mapHeight;
 
     private double roverX;
     private double roverY;
 
+    // NEURO: Instance du ModelCar pour récupérer getSkin()
+    private final ModelCar car;
+
     /**
      * @param mapWidth  largeur “réelle” de la carte (en pixels logiques)
      * @param mapHeight hauteur “réelle” de la carte (en pixels logiques)
      */
     public ModelMap(double mapWidth, double mapHeight) {
-        this.mapWidth  = mapWidth;
+        this.mapWidth = mapWidth;
         this.mapHeight = mapHeight;
 
-        // On place le rover au centre de la carte au départ
-        this.roverX = mapWidth  / 2.0;
+        // Initialiser le rover au centre
+        this.roverX = mapWidth / 2.0;
         this.roverY = mapHeight / 2.0;
+
+        // Créer une instance de ModelCar
+        this.car = new ModelCar();
     }
 
     public double getMapWidth() {
@@ -42,25 +49,23 @@ public class ModelMap {
     }
 
     /**
-     * Déplace le rover de (dx, dy) en restant dans les limites [0..mapWidth]×[0..mapHeight].
+     * Déplace le rover de (dx, dy) en s'assurant de rester dans les limites [0..mapWidth]×[0..mapHeight]
      */
     public void moveRover(double dx, double dy) {
         double newX = roverX + dx;
         double newY = roverY + dy;
 
-        if (newX < 0) {
-            newX = 0;
-        } else if (newX > mapWidth) {
-            newX = mapWidth;
-        }
+        if (newX < 0) newX = 0;
+        if (newX > mapWidth) newX = mapWidth;
+        if (newY < 0) newY = 0;
+        if (newY > mapHeight) newY = mapHeight;
 
-        if (newY < 0) {
-            newY = 0;
-        } else if (newY > mapHeight) {
-            newY = mapHeight;
-        }
+        this.roverX = newX;
+        this.roverY = newY;
+    }
 
-        roverX = newX;
-        roverY = newY;
+    /** Renvoie l’instance de ModelCar pour récupérer l’image du rover */
+    public ModelCar getCar() {
+        return car;
     }
 }
