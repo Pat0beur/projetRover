@@ -106,4 +106,4 @@ public class ControllerPersonnalisation {
     public void SetVoiture(Image image){
         modelCar.notifyCarChanged(image);
     }
-}   
+}
