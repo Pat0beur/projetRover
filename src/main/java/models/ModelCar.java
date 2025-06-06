@@ -8,7 +8,7 @@ import javafx.scene.image.Image;
 
 public class ModelCar {
     private ModelCar modelCar;
-    private ArrayList<String> Inventaire;
+    private ArrayList<Image> Inventaire;
     private Image Skin;
     private int Batterie;
     private boolean EtatBatterie;
@@ -19,9 +19,11 @@ public class ModelCar {
         this.EtatBatterie = true;
         this.Inventaire = new ArrayList<>();
     }
+    @SuppressWarnings("exports")
     public void notifyCarChanged(Image image){
         modelCar.Skin = image;
     }
+    @SuppressWarnings("exports")
     public Image getSkin(){
         return Skin;
     }
