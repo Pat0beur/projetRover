@@ -16,15 +16,10 @@
             AnchorPane.topAnchor="0.0"
             AnchorPane.leftAnchor="0.0"
             AnchorPane.rightAnchor="0.0"
-            AnchorPane.bottomAnchor="0.0"
-            width="800"
-            height="600" />
-
-    <!-- Canvas de la minimap : taille fixe 200×200, ancrée en bas à droite -->
+            AnchorPane.bottomAnchor="0.0" />
     <Canvas fx:id="miniMapCanvas"
             AnchorPane.rightAnchor="10.0"
             AnchorPane.bottomAnchor="10.0"
             width="200"
             height="200" />
-
 </AnchorPane>
