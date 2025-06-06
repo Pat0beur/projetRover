@@ -5,14 +5,12 @@ import java.net.URL;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 /**
@@ -27,27 +25,25 @@ public class ControllerPersonnalisation {
     @FXML private Button btnValider;
     @FXML private ImageView imageView;
     private int  indice = 0;
-    private boolean suivant= false;
-    private final Image image1 = new Image(getClass().getResource("/images/kiwi.jpg").toExternalForm());
     private Image[] images = {
-    new Image(getClass().getResource("/images/kiwi.jpg").toExternalForm()),
-    new Image(getClass().getResource("/images/pamplemousse.jpg").toExternalForm())
-    // new Image(getClass().getResource("/images/kiwi.jpg").toExternalForm())
+    new Image(getClass().getResource("/images/skins/Car_AM_General_Hummer_98x164.png").toExternalForm()),
+    new Image(getClass().getResource("/images/skins/Car_Audi_Sport_Quattro_Rally_86x145.png").toExternalForm()),
+    new Image(getClass().getResource("/images/skins/Car_Chevrolet_Camaro_ZL-1_86x145.png").toExternalForm()),
+    new Image(getClass().getResource("/images/skins/Car_DeLorean_DMC_86x145.png").toExternalForm()),
+    new Image(getClass().getResource("/images/skins/Car_Ferrari_F40_86x145.png").toExternalForm()),
+    new Image(getClass().getResource("/images/skins/Car_Ford_GT40_86x145.png").toExternalForm()),
+    new Image(getClass().getResource("/images/skins/Car_Plymouth_Hemi_Quada_98x164.png").toExternalForm()),
+    new Image(getClass().getResource("/images/skins/Lancia_Delta_Integrale_Police_125x209.png").toExternalForm()),
+    new Image(getClass().getResource("/images/skins/rover.png").toExternalForm()),
     };
 
     @FXML
     public void initialize() {
-        // imageView = new ImageView();
-        URL url = getClass().getResource("/images/kiwi.jpg");
-        if (url != null) {
-            Image img = new Image(url.toExternalForm(), false);
-            imageView.setImage(img);
-            imageView.setVisible(true); 
-            imageView.setManaged(true);
-            System.out.println("Je suis là");
-        } else {
-            System.out.println("Image introuvable !");
-        }
+        
+        //Affiche par défaut le premier élément dans le tableau images
+        imageView.setImage(images[0]);
+        imageView.setVisible(true); 
+        imageView.setManaged(true);
         btnRetour.setOnAction(event -> {
             try {
                 Stage stage = (Stage) btnRetour.getScene().getWindow();
@@ -79,7 +75,6 @@ public class ControllerPersonnalisation {
         });
 
         btnDroite.setOnAction(event -> {
-            suivant = true;
             idSuivant();
         });
         btnGauche.setOnAction(event -> {
