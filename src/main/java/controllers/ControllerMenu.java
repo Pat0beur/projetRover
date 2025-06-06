@@ -1,6 +1,8 @@
 package controllers;
 
 import java.io.IOException;
+
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -13,6 +15,7 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import views.ViewMap;
 
 public class ControllerMenu {
 
@@ -61,6 +64,11 @@ public class ControllerMenu {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        });
+
+        btnJouer.setOnAction(evt -> {
+            Stage currentStage = (Stage) btnJouer.getScene().getWindow();
+            new ViewMap(currentStage).show();
         });
     }
 }
