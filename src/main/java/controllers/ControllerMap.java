@@ -24,8 +24,8 @@ public class ControllerMap {
     private static final double MAP_WIDTH  = 2000;     // taille réelle de la carte
     private static final double MAP_HEIGHT = 2000;
 
-    private static final double ROVER_DISPLAY_WIDTH  = 98;   // largeur du sprite du rover (en px)
-    private static final double ROVER_DISPLAY_HEIGHT = 164;  // hauteur du sprite du rover (en px)
+    private static final double ROVER_DISPLAY_WIDTH  = 20;   // largeur désirée du sprite
+    private static final double ROVER_DISPLAY_HEIGHT = 20 * (164.0 / 98.0);  // on garde le ratio original
 
     private static final double MINI_WIDTH  = 200;     // largeur de la minimap
     private static final double MINI_HEIGHT = 200;     // hauteur de la minimap
