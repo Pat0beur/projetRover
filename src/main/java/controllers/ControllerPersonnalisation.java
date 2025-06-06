@@ -64,7 +64,7 @@ public class ControllerPersonnalisation {
 
         btnValider.setOnAction(event -> {
             try {
-                SetVoiture(imageView.getImage());
+                SetVoiture(imageView.getImage()); // Récupère l'image 
                 Stage stage = (Stage) btnValider.getScene().getWindow();
                 FXMLLoader loader = new FXMLLoader(
                     getClass().getResource("/app/Menu.fxml")

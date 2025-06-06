@@ -13,6 +13,12 @@ public class ModeleCar {
     private int Batterie;
     private boolean EtatBatterie;
     private ControllerPersonnalisation controllerPersonnalisation;
+    public ModeleCar(){
+        this.Skin = new Image(getClass().getResource("/images/skins/Car_AM_General_Hummer_98x164.png").toExternalForm());
+        this.Batterie = 100;
+        this.EtatBatterie = true;
+        this.Inventaire = new ArrayList<>();
+    }
     public void notifyCarChanged(Image image){
         modeleCar.Skin = image;
     }
