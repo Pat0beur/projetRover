@@ -12,7 +12,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
-import models.ModeleCar;
+import models.ModelCar;
 
 /**
  * Contrôleur pour la vue Personnalisation.fxml
@@ -25,9 +25,8 @@ public class ControllerPersonnalisation {
     @FXML private Button btnRetour;
     @FXML private Button btnValider;
     @FXML private ImageView imageView;
-    private ModeleCar modeleCar;
+    private ModelCar modelCar;
     private int  indice = 0;
-    private String VoitureSelectionne;
     private Image[] images = {
     new Image(getClass().getResource("/images/skins/Car_AM_General_Hummer_98x164.png").toExternalForm()),
     new Image(getClass().getResource("/images/skins/Car_Audi_Sport_Quattro_Rally_86x145.png").toExternalForm()),
@@ -105,6 +104,6 @@ public class ControllerPersonnalisation {
         imageView.setManaged(true);
     }
     public void SetVoiture(Image image){
-        modeleCar.notifyCarChanged(image);
+        modelCar.notifyCarChanged(image);
     }
 }   

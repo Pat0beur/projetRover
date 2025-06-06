@@ -6,14 +6,14 @@ import controllers.ControllerMenu;
 import controllers.ControllerPersonnalisation;
 import javafx.scene.image.Image;
 
-public class ModeleCar {
-    private ModeleCar modeleCar;
+public class ModelCar {
+    private ModelCar modeleCar;
     private ArrayList<String> Inventaire;
     private Image Skin;
     private int Batterie;
     private boolean EtatBatterie;
     private ControllerPersonnalisation controllerPersonnalisation;
-    public ModeleCar(){
+    public ModelCar(){
         this.Skin = new Image(getClass().getResource("/images/skins/Car_AM_General_Hummer_98x164.png").toExternalForm());
         this.Batterie = 100;
         this.EtatBatterie = true;
