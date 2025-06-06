@@ -1,9 +1,9 @@
+// src/main/java/models/ModelMap.java
 package models;
 
 /**
- * MapModel : contient la taille de la carte “réelle” et la position du rover.
- * Fournit une méthode pour déplacer le rover, en s’assurant qu’il reste dans
- * les limites [0, mapWidth] × [0, mapHeight].
+ * ModelMap : stocke la taille de la carte et la position du rover.
+ * Maintenant, il contient aussi un ModelVoiture (skin) pour le rover.
  */
 public class ModelMap {
 
@@ -13,17 +13,23 @@ public class ModelMap {
     private double roverX;
     private double roverY;
 
+    // Nouveau : une instance de ModelVoiture pour le skin
+    private ModelCar car;
+
     /**
-     * @param mapWidth  largeur de la carte (en pixels “logiques”)
-     * @param mapHeight hauteur de la carte (en pixels “logiques”)
+     * @param mapWidth  largeur “réelle” de la carte (en pixels logiques)
+     * @param mapHeight hauteur “réelle” de la carte (en pixels logiques)
      */
     public ModelMap(double mapWidth, double mapHeight) {
         this.mapWidth  = mapWidth;
         this.mapHeight = mapHeight;
 
-        // Initialement, placer le rover au centre de la carte
+        // Initialiser le rover au centre de la carte
         this.roverX = mapWidth  / 2.0;
         this.roverY = mapHeight / 2.0;
+
+        // Créer le model “voiture” dès qu’on instancie ModelMap
+        car = new ModelCar();
     }
 
     public double getMapWidth() {
@@ -43,22 +49,20 @@ public class ModelMap {
     }
 
     /**
-     * Déplace le rover de (dx, dy), en veillant à ne pas dépasser la carte.
-     * @param dx déplacement en x (positif vers la droite)
-     * @param dy déplacement en y (positif vers le bas)
+     * Déplace le rover de (dx, dy) en s'assurant de rester dans les limites [0, mapWidth]×[0, mapHeight]
      */
     public void moveRover(double dx, double dy) {
         double newX = roverX + dx;
         double newY = roverY + dy;
 
-        // Bornes en X
+        // Bords horizontaux
         if (newX < 0) {
             newX = 0;
         } else if (newX > mapWidth) {
             newX = mapWidth;
         }
 
-        // Bornes en Y
+        // Bords verticaux
         if (newY < 0) {
             newY = 0;
         } else if (newY > mapHeight) {
@@ -67,5 +71,12 @@ public class ModelMap {
 
         roverX = newX;
         roverY = newY;
+    }
+
+    /**
+     * Retourne l’instance de ModelVoiture (pour obtenir le skin du rover)
+     */
+    public ModelCar getVoiture() {
+        return car;
     }
 }
