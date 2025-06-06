@@ -5,19 +5,21 @@ import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import models.ModelMap;
 
 /**
- * ControllerMap gère la logique de déplacement du rover et l'affichage
- * (vue principale + minimap). On dessine toujours un simple carré rouge.
+ * ControllerMap avec un fond “mars.png” pour la map.
+ * On dessine à chaque frame la portion de l’image correspondant
+ * à la caméra centrée sur le rover, puis on dessine le carré rouge.
  */
 public class ControllerMap {
 
     // ----- Constantes de configuration -----
-    private static final double WINDOW_WIDTH  = 800;   // taille de la fenêtre (ou du canvas principal)
+    private static final double WINDOW_WIDTH  = 800;   // taille de la fenêtre (canvas principal)
     private static final double WINDOW_HEIGHT = 600;
 
     private static final double MAP_WIDTH  = 2000;     // taille “réelle” de la carte
@@ -37,25 +39,39 @@ public class ControllerMap {
     // Modèle stockant la position du rover
     private ModelMap model;
 
+    // Image de fond (mars.png) qui couvre toute la map (2 000×2 000)
+    private Image backgroundImage;
+
     // Flags pour l’état des touches
     private boolean upPressed, downPressed, leftPressed, rightPressed;
 
     /**
      * Appelé automatiquement après le chargement du FXML.
-     * On initialise le modèle, on force la taille des Canvas, puis on lance la boucle de jeu.
+     * On initialise le modèle, on force la taille des Canvas,
+     * on charge l’image de fond et on lance la boucle de jeu.
      */
     @FXML
     public void initialize() {
         // 1) Créer le model
         model = new ModelMap(MAP_WIDTH, MAP_HEIGHT);
 
-        // 2) Forcer la taille des Canvas (au cas où le FXML ait une taille différente)
+        // 2) Forcer la taille des Canvas (au cas où le FXML en aurait mis d’autres)
         mainCanvas.setWidth(WINDOW_WIDTH);
         mainCanvas.setHeight(WINDOW_HEIGHT);
         miniMapCanvas.setWidth(MINI_WIDTH);
         miniMapCanvas.setHeight(MINI_HEIGHT);
 
-        // 3) Lancer la boucle AnimationTimer (~60 FPS)
+        // 3) Charger l’image “mars.png” en fond de map
+        //    (placer mars.png dans src/main/resources/images/planete/mars.png)
+        try {
+            backgroundImage = new Image(getClass().getResourceAsStream("/images/planete/mars.png"));
+        } catch (Exception e) {
+            // Si l’image n’est pas trouvée, on utilisera un fond gris en fallback
+            backgroundImage = null;
+            System.err.println("Impossible de charger /images/planete/mars.png, fallback gris utilisé.");
+        }
+
+        // 4) Lancer la boucle AnimationTimer (~60 FPS)
         AnimationTimer gameLoop = new AnimationTimer() {
             @Override
             public void handle(long now) {
@@ -83,7 +99,7 @@ public class ControllerMap {
     }
 
     /**
-     * Dessine d’abord la vue principale (fond + carré rouge), puis la minimap.
+     * Dessine d’abord la vue principale (fond + rover), puis la minimap.
      */
     private void drawAll() {
         drawMainView();
@@ -91,25 +107,40 @@ public class ControllerMap {
     }
 
     /**
-     * Dessine la “camera” centrée sur le rover dans mainCanvas.
-     * Le rover est toujours un carré rouge de taille ROVER_SIZE.
+     * Dessine dans mainCanvas la portion de backgroundImage correspondant à la caméra,
+     * puis dessine le rover comme un carré rouge au centre de cette caméra.
      */
     private void drawMainView() {
         GraphicsContext gc = mainCanvas.getGraphicsContext2D();
 
-        // 1) Fond gris clair
-        gc.setFill(Color.LIGHTGRAY);
-        gc.fillRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
-
-        // 2) Calculer la position de la caméra centrée sur le rover
+        // 1) Calculer la caméra centrée sur le rover
         double camX = model.getRoverX() - WINDOW_WIDTH  / 2.0;
         double camY = model.getRoverY() - WINDOW_HEIGHT / 2.0;
 
-        // 3) Contrainte de la caméra pour ne pas sortir de la carte
-        if (camX < 0)                       camX = 0;
+        // 2) Contraindre la caméra pour qu’elle ne sorte pas de la carte
+        if (camX < 0)                        camX = 0;
         if (camX + WINDOW_WIDTH > MAP_WIDTH)  camX = MAP_WIDTH - WINDOW_WIDTH;
-        if (camY < 0)                       camY = 0;
+        if (camY < 0)                        camY = 0;
         if (camY + WINDOW_HEIGHT > MAP_HEIGHT) camY = MAP_HEIGHT - WINDOW_HEIGHT;
+
+        // 3) Dessiner le fond : si l’image est chargée, on découpe la portion (camX, camY, WINDOW_WIDTH, WINDOW_HEIGHT)
+        if (backgroundImage != null) {
+            gc.drawImage(
+                backgroundImage,
+                /* sx= */ camX,                 // coin haut-gauche dans l’image
+                /* sy= */ camY,
+                /* sw= */ WINDOW_WIDTH,         // largeur de la sous-image à extraire
+                /* sh= */ WINDOW_HEIGHT,        // hauteur de la sous-image à extraire
+                /* dx= */ 0,                    // coin de dessin sur le canvas
+                /* dy= */ 0,
+                /* dw= */ WINDOW_WIDTH,         // largeur affichée sur le canvas
+                /* dh= */ WINDOW_HEIGHT         // hauteur affichée sur le canvas
+            );
+        } else {
+            // Fallback : un fond gris clair si l’image n’a pas pu être chargée
+            gc.setFill(Color.LIGHTGRAY);
+            gc.fillRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+        }
 
         // 4) Dessiner le rover comme un carré rouge
         double roverScreenX = model.getRoverX() - camX - (ROVER_SIZE / 2.0);
@@ -120,8 +151,10 @@ public class ControllerMap {
     }
 
     /**
-     * Dessine la minimap (vue d’ensemble) dans miniMapCanvas.
-     * On affiche un fond sombre et un petit carré vert () représentant la position du rover.
+     * Dessine la minimap (vue d’ensemble) dans miniMapCanvas :
+     * - fond sombre
+     * - petit carré vert indiquant la position du rover
+     * - cadre blanc autour
      */
     private void drawMiniMap() {
         GraphicsContext gc = miniMapCanvas.getGraphicsContext2D();
@@ -130,7 +163,7 @@ public class ControllerMap {
         gc.setFill(Color.rgb(30, 30, 30));
         gc.fillRect(0, 0, MINI_WIDTH, MINI_HEIGHT);
 
-        // 2) Calculer ratios carte réelle → minimap
+        // 2) Calculer les ratios réel → minimap
         double scaleX = MINI_WIDTH  / MAP_WIDTH;
         double scaleY = MINI_HEIGHT / MAP_HEIGHT;
 
@@ -138,7 +171,7 @@ public class ControllerMap {
         double roverMiniX = model.getRoverX() * scaleX;
         double roverMiniY = model.getRoverY() * scaleY;
 
-        // 4) Dessiner un petit carré vert (dotSize px) pour le rover sur la minimap
+        // 4) Dessiner un petit carré vert pour le rover
         double dotSize = 4;
         gc.setFill(Color.LIMEGREEN);
         gc.fillRect(
@@ -148,15 +181,15 @@ public class ControllerMap {
             dotSize
         );
 
-        // 5) Optionnel : tracer un cadre blanc autour de la minimap
+        // 5) Cadre blanc autour de la minimap
         gc.setStroke(Color.WHITE);
         gc.strokeRect(0, 0, MINI_WIDTH, MINI_HEIGHT);
     }
 
-    // ———————————————————————————————
-    // Gestion des touches clavier (flèches ou WASD)
-    // L’AnchorPane dans map.fxml appellera ces deux méthodes automatiquement.
-    // ———————————————————————————————
+    // ——————————————————————————————
+    // Gestion des événements clavier (flèches ou WASD) pour sets/clears des flags
+    // L’AnchorPane dans map.fxml doit avoir onKeyPressed et onKeyReleased pointant vers ces méthodes.
+    // ——————————————————————————————
 
     @FXML
     private void onKeyPressed(KeyEvent event) {
