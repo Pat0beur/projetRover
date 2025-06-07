@@ -2,6 +2,7 @@ package controllers;
 
 import java.io.IOException;
 
+import app.App;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,6 +16,7 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import models.ModelCar;
 import views.ViewMap;
 
 public class ControllerMenu {
@@ -27,11 +29,12 @@ public class ControllerMenu {
     @FXML private RadioButton radiobtnEasy;
     @FXML private RadioButton radiobtnMedium;
     @FXML private RadioButton radiobtnHard;
+    private ModelCar modelCar;
 
     @FXML
     public void initialize() {
+        this.modelCar = App.getModelCar();
         System.out.println("Contrôleur Menu.initialisé !");
-
         // Bouton Quitter : ferme l'application
         btnQuitter.setOnAction(event -> {
             System.out.println("Fermeture de l'application");

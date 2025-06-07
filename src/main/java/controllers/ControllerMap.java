@@ -1,11 +1,13 @@
 // src/main/java/app/controllers/ControllerMap.java
 package controllers;
 
+import app.App;
 import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import models.ModelMap;
@@ -38,13 +40,24 @@ public class ControllerMap {
 
     // Modèle stockant la position du rover + ModelCar
     private ModelMap model;
-
+    private ModelCar modelCar;
+    private Image roverSkin;
+    private ImageView test;
+    private Image objetTest;
+    
+    //Pour le drap and drop
+    private boolean objetAttrape = false;
+    private double objetCarteX = 500;
+    private double objetCarteY = 500;
+    private double decalageX = 0;
+    private double decalageY = 0;
+    
     // Image de fond (ici mars 4000×4000 ou 2000×2000 selon ce que vous avez chargé)
     private Image backgroundImage;
-
+    
     // Flags pour l’état des touches
     private boolean upPressed, downPressed, leftPressed, rightPressed;
-
+    
     /**
      * Appelé automatiquement après le chargement du FXML.
      * On initialise le modèle, on force la taille des Canvas, on charge l’image de fond,
@@ -54,13 +67,30 @@ public class ControllerMap {
     public void initialize() {
         // 1) Créer le modèle
         model = new ModelMap(MAP_WIDTH, MAP_HEIGHT);
-
+        this.modelCar = App.getModelCar();
+        try {
+            objetTest = new Image(getClass().getResourceAsStream("/images/objets/tournevis.png"));
+        } catch (Exception e) {
+            objetTest = null;
+        }
+        // test = new ImageView(roverSkin);
+        String skinPath = modelCar.getSkin();
+        try{
+            roverSkin = new Image(getClass().getResourceAsStream(skinPath));
+        } catch (Exception e) {
+            // Fallback si le skin n'est pas trouvé
+            roverSkin = new Image(getClass().getResourceAsStream("/images/skins/rover.png"));
+        }
+        modelCar.addCarListener(newSkin -> {
+            roverSkin = newSkin;
+        });
+        
         // 2) Forcer la taille des Canvas (au cas où le FXML ait des valeurs différentes)
         mainCanvas.setWidth(WINDOW_WIDTH);
         mainCanvas.setHeight(WINDOW_HEIGHT);
         miniMapCanvas.setWidth(MINI_WIDTH);
         miniMapCanvas.setHeight(MINI_HEIGHT);
-
+        
         // 3) Charger l’image “mars.png” : 
         //    Assurez-vous qu'elle est bien dans src/main/resources/images/planete/mars.png
         try {
@@ -69,7 +99,7 @@ public class ControllerMap {
             backgroundImage = null;
             System.err.println("Impossible de charger /images/planete/mars.png");
         }
-
+        
         // 4) Démarrer la boucle AnimationTimer (~60 FPS)
         AnimationTimer gameLoop = new AnimationTimer() {
             @Override
@@ -79,18 +109,58 @@ public class ControllerMap {
             }
         };
         gameLoop.start();
-    }
+        
+        // Ajoute ces listeners pour le drag and drop :
+        mainCanvas.setOnMousePressed(event -> {
+            // Conversion coordonnées écran → carte
+            double camX = model.getRoverX() - WINDOW_WIDTH  / 2.0;
+            double camY = model.getRoverY() - WINDOW_HEIGHT / 2.0;
+            double objetLargeur = 32; // même taille que pour l'affichage
+            double objetHauteur = 32;
+            double objetEcranX = objetCarteX - camX - objetLargeur / 2.0;
+            double objetEcranY = objetCarteY - camY - objetHauteur / 2.0;
 
+            // Vérifie si le clic est sur l'objet
+            if (event.getX() >= objetEcranX && event.getX() <= objetEcranX + objetLargeur &&
+                event.getY() >= objetEcranY && event.getY() <= objetEcranY + objetHauteur) {
+                objetAttrape = true;
+                decalageX = event.getX() - objetEcranX;
+                decalageY = event.getY() - objetEcranY;
+            }
+        });
+
+        mainCanvas.setOnMouseDragged(event -> {
+            if (objetAttrape) {
+                // Conversion coordonnées écran → carte
+                double camX = model.getRoverX() - WINDOW_WIDTH  / 2.0;
+                double camY = model.getRoverY() - WINDOW_HEIGHT / 2.0;
+                objetCarteX = camX + event.getX() + objetTest.getWidth() / 2.0 - decalageX;
+                objetCarteY = camY + event.getY() + objetTest.getHeight() / 2.0 - decalageY;
+            }
+        });
+
+        mainCanvas.setOnMouseReleased(event -> {
+            objetAttrape = false;
+            if(model.getRoverX()- WINDOW_WIDTH / 2.0 != event.getX() &&
+            model.getRoverY()- WINDOW_WIDTH / 2.0 != event.getY()){
+                objetCarteX = event.getX();
+                objetCarteY = event.getY();
+            }
+        });
+    }
+    
     /**
      * Lit l’état des flags up/down/left/right, puis déplace le rover en conséquence.
      */
     private void updateModel() {
         double dx = 0, dy = 0;
-        if (leftPressed)  dx -= ROVER_SPEED;
+        if (leftPressed){  dx -= ROVER_SPEED;
+        // test.setRotate(90);
+        }
         if (rightPressed) dx += ROVER_SPEED;
         if (upPressed)    dy -= ROVER_SPEED;
         if (downPressed)  dy += ROVER_SPEED;
-
+        
         if (dx != 0 || dy != 0) {
             model.moveRover(dx, dy);
         }
@@ -140,16 +210,24 @@ public class ControllerMap {
             // Fallback : gris si l’image n’existe pas
             gc.setFill(javafx.scene.paint.Color.LIGHTGRAY);
             gc.fillRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+        }  
+        if (objetTest != null) {
+            camX = model.getRoverX() - WINDOW_WIDTH  / 2.0;
+            camY = model.getRoverY() - WINDOW_HEIGHT / 2.0;
+            double objetLargeur = 32;
+            double objetHauteur = 32;
+            double objetEcranX = objetCarteX - camX - objetLargeur / 2.0;
+            double objetEcranY = objetCarteY - camY - objetHauteur / 2.0;
+            gc.drawImage(objetTest, objetEcranX, objetEcranY, objetLargeur, objetHauteur);
         }
 
         // 4) Dessiner le rover : récupérer son skin et le centrer
-        ModelCar car = model.getCar();
-        Image skin = car.getSkin();
-        if (skin != null) {
+
+        if (roverSkin != null) {
             // On veut centrer le sprite du rover (98×164) sur la position roverX, roverY
             double roverScreenX = model.getRoverX() - camX - (ROVER_DISPLAY_WIDTH  / 2.0);
             double roverScreenY = model.getRoverY() - camY - (ROVER_DISPLAY_HEIGHT / 2.0);
-            gc.drawImage(skin, roverScreenX, roverScreenY);
+            gc.drawImage(roverSkin, roverScreenX, roverScreenY);
         } else {
             // Si pour une raison l’image est nulle, on peut dessiner un carré rouge
             double fallbackSize = 20;
@@ -223,18 +301,18 @@ public class ControllerMap {
             default: break;
         }
     }
+    public void miseAJourSkin(String skinPath) {
+    // Actualiser l’image du skin ici
+    model.getCar().notifyCarChanged(new Image(getClass().getResource(skinPath).toExternalForm()));
+    }
+    // public void ObjetMalLacher(Objet objet){
+         // Faire une classe objet ??
+        
+    // }
 }
 
-        // btnCommandes.setOnDragDetected(event -> {
-        // Dragboard db = btnCommandes.startDragAndDrop(TransferMode.ANY);
-        
-        // /* Put a string on a dragboard */
-        // ClipboardContent content = new ClipboardContent();
-        // content.putString(btnCommandes.getText());
-        // db.setContent(content);
-        
-        // event.consume();
-        // });
+
+
         // btnJouer.setOnDragOver(event -> {
         // /* data is dragged over the target */
         // /* accept it only if it is not dragged from the same node 

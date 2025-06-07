@@ -7,7 +7,6 @@ public class Model {
     public Model() {
         this.roverName = "Curiosity";
     }
-
     public String getRoverName() {
         return roverName;
     }
