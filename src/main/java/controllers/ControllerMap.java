@@ -12,7 +12,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import models.ModelMap;
 import models.ModelCar;
-
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.Random;
 /**
  * ControllerMap affiche la carte (avec fond) et dessine l'image du rover
  * (skin) à la position du modèle. On garde en bas à droite la minimap.
@@ -43,7 +44,31 @@ public class ControllerMap {
     private ModelCar modelCar;
     private Image roverSkin;
     private ImageView test;
+
+    int min = 0;
+    int max = 1000;
+    int randomNum = ThreadLocalRandom.current().nextInt(min, max + 1); // entre min et max inclus
+    private double[] objetsX = { ThreadLocalRandom.current().nextInt(min, max + 1), 
+        ThreadLocalRandom.current().nextInt(min, max + 1), 
+        ThreadLocalRandom.current().nextInt(min, max + 1), 
+        ThreadLocalRandom.current().nextInt(min, max + 1) }; // X de chaque objet
+    private double[] objetsY = { ThreadLocalRandom.current().nextInt(min, max + 1), 
+        ThreadLocalRandom.current().nextInt(min, max + 1), 
+        ThreadLocalRandom.current().nextInt(min, max + 1), 
+        ThreadLocalRandom.current().nextInt(min, max + 1) }; // X de chaque objet
     private Image objetTest;
+    // private String[] objets = {
+    //         "/images/objets/circuit_imprime.png",
+    //         "/images/objets/panneau_solaire.png",
+    //         "/images/objets/tournevis.png",
+    //         "/images/objets/vis.png"
+    //     };
+    private Image[] objetsImages = {
+        new Image(getClass().getResourceAsStream("/images/objets/circuit_imprime.png")),
+        new Image(getClass().getResourceAsStream("/images/objets/panneau_solaire.png")),
+        new Image(getClass().getResourceAsStream("/images/objets/tournevis.png")),
+        new Image(getClass().getResourceAsStream("/images/objets/vis.png"))
+    };
     
     //Pour le drap and drop
     private boolean objetAttrape = false;
@@ -217,14 +242,16 @@ public class ControllerMap {
             gc.setFill(javafx.scene.paint.Color.LIGHTGRAY);
             gc.fillRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
         }  
-        if (objetTest != null) {
-            camX = modelmap.getRoverX() - WINDOW_WIDTH  / 2.0;
-            camY = modelmap.getRoverY() - WINDOW_HEIGHT / 2.0;
-            double objetLargeur = 32;
-            double objetHauteur = 32;
-            double objetEcranX = objetCarteX - camX - objetLargeur / 2.0;
-            double objetEcranY = objetCarteY - camY - objetHauteur / 2.0;
-            gc.drawImage(objetTest, objetEcranX, objetEcranY, objetLargeur, objetHauteur);
+        for(int i=0;i<objetsImages.length;i++){
+            if(objetsImages[i]!=null){
+                camX = modelmap.getRoverX() - WINDOW_WIDTH  / 2.0;
+                camY = modelmap.getRoverY() - WINDOW_HEIGHT / 2.0;
+                double objetLargeur = 64;
+                double objetHauteur = 64;
+                double objetEcranX = objetsX[i] - camX - objetLargeur / 2.0;
+                double objetEcranY = objetsY[i] - camY - objetHauteur / 2.0;
+                gc.drawImage(objetsImages[i], objetEcranX, objetEcranY, objetLargeur, objetHauteur);
+            }
         }
 
         // 4) Dessiner le rover : récupérer son skin et le centrer
