@@ -11,18 +11,18 @@ import java.util.function.Consumer;
 
 public class ModelCar {
     private ModelCar modelCar;
-    private ArrayList<Image> Inventaire;
+    private String[] Inventaire;
     private String Skin;
     private int Batterie;
     private boolean EtatBatterie;
-    private final List<java.util.function.Consumer<Image>> listeners = new ArrayList<>();
+    private final List<Consumer<Image>> listeners = new ArrayList<>();
 
     // private ControllerPersonnalisation controllerPersonnalisation;
-    public ModelCar(){
+    public ModelCar(int difficulté){
         this.Skin = "/images/skins/Car_AM_General_Hummer_98x164.png";
         this.Batterie = 100;
         this.EtatBatterie = true;
-        this.Inventaire = new ArrayList<>();
+        // this.Inventaire = ;
     }
     // public void notifyCarChanged(String image){
     //     Skin = image;

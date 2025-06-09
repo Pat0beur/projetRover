@@ -16,6 +16,7 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import models.Model;
 import models.ModelCar;
 import views.ViewMap;
 
@@ -30,10 +31,13 @@ public class ControllerMenu {
     @FXML private RadioButton radiobtnMedium;
     @FXML private RadioButton radiobtnHard;
     private ModelCar modelCar;
+    private Model model;
 
     @FXML
     public void initialize() {
         this.modelCar = App.getModelCar();
+        this.model = new Model(); //Initialise le modèle
+        // this.model = App.getModel();
         System.out.println("Contrôleur Menu.initialisé !");
         // Bouton Quitter : ferme l'application
         btnQuitter.setOnAction(event -> {
@@ -69,9 +73,30 @@ public class ControllerMenu {
             }
         });
 
-        btnJouer.setOnAction(evt -> {
+        btnJouer.setOnAction(event -> {
             Stage currentStage = (Stage) btnJouer.getScene().getWindow();
             new ViewMap(currentStage).show();
         });
+        radiobtnEasy.setOnAction(event -> {
+            radiobtnHard.setSelected(false);
+            radiobtnMedium.setSelected(false);
+            this.model = new Model(1);
+            this.model = App.getModel();
+        });
+        radiobtnMedium.setOnAction(event -> {
+            radiobtnHard.setSelected(false);
+            radiobtnEasy.setSelected(false);
+            this.model = new Model(2);
+            this.model = App.getModel();
+        });
+        radiobtnHard.setOnAction(event -> {
+            radiobtnEasy.setSelected(false);
+            radiobtnMedium.setSelected(false);
+            this.model = new Model(3);
+            this.model = App.getModel();
+        });
+    }
+    public Model getModel(){
+        return model;
     }
 }

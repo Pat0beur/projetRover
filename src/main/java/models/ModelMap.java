@@ -1,6 +1,9 @@
 // src/main/java/models/ModelMap.java
 package models;
 
+import app.App;
+import controllers.ControllerMenu;
+
 /**
  * ModelMap : contient la taille de la carte (mapWidth, mapHeight), 
  * la position (roverX, roverY) et une instance de ModelCar pour le skin.
@@ -15,6 +18,7 @@ public class ModelMap {
 
     // NEURO: Instance du ModelCar pour récupérer getSkin()
     private final ModelCar car;
+    private Model model;
 
     /**
      * @param mapWidth  largeur “réelle” de la carte (en pixels logiques)
@@ -29,7 +33,9 @@ public class ModelMap {
         this.roverY = mapHeight / 2.0;
 
         // Créer une instance de ModelCar
-        this.car = new ModelCar();
+        this.model = App.getModel();
+        // this.car = new ModelCar(model.getDifficulte());
+        this.car = App.getModelCar();
     }
 
     public double getMapWidth() {

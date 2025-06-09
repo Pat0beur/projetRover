@@ -39,7 +39,7 @@ public class ControllerMap {
     @FXML private Canvas miniMapCanvas;
 
     // Modèle stockant la position du rover + ModelCar
-    private ModelMap model;
+    private ModelMap modelmap;
     private ModelCar modelCar;
     private Image roverSkin;
     private ImageView test;
@@ -66,7 +66,7 @@ public class ControllerMap {
     @FXML
     public void initialize() {
         // 1) Créer le modèle
-        model = new ModelMap(MAP_WIDTH, MAP_HEIGHT);
+        modelmap = new ModelMap(MAP_WIDTH, MAP_HEIGHT);
         this.modelCar = App.getModelCar();
         try {
             objetTest = new Image(getClass().getResourceAsStream("/images/objets/tournevis.png"));
@@ -113,8 +113,8 @@ public class ControllerMap {
         // Ajoute ces listeners pour le drag and drop :
         mainCanvas.setOnMousePressed(event -> {
             // Conversion coordonnées écran → carte
-            double camX = model.getRoverX() - WINDOW_WIDTH  / 2.0;
-            double camY = model.getRoverY() - WINDOW_HEIGHT / 2.0;
+            double camX = modelmap.getRoverX() - WINDOW_WIDTH  / 2.0;
+            double camY = modelmap.getRoverY() - WINDOW_HEIGHT / 2.0;
             double objetLargeur = 32; // même taille que pour l'affichage
             double objetHauteur = 32;
             double objetEcranX = objetCarteX - camX - objetLargeur / 2.0;
@@ -132,19 +132,25 @@ public class ControllerMap {
         mainCanvas.setOnMouseDragged(event -> {
             if (objetAttrape) {
                 // Conversion coordonnées écran → carte
-                double camX = model.getRoverX() - WINDOW_WIDTH  / 2.0;
-                double camY = model.getRoverY() - WINDOW_HEIGHT / 2.0;
+                double camX = modelmap.getRoverX() - WINDOW_WIDTH  / 2.0;
+                double camY = modelmap.getRoverY() - WINDOW_HEIGHT / 2.0;
                 objetCarteX = camX + event.getX() + objetTest.getWidth() / 2.0 - decalageX;
                 objetCarteY = camY + event.getY() + objetTest.getHeight() / 2.0 - decalageY;
+                System.out.println("L'objet est en train d'être drag and drop");
             }
         });
 
         mainCanvas.setOnMouseReleased(event -> {
             objetAttrape = false;
-            if(model.getRoverX()- WINDOW_WIDTH / 2.0 != event.getX() &&
-            model.getRoverY()- WINDOW_WIDTH / 2.0 != event.getY()){
-                objetCarteX = event.getX();
-                objetCarteY = event.getY();
+            double roverX = modelmap.getRoverX();
+            double roverY = modelmap.getRoverY();
+            double tolerance = 16; // pixels
+            if (Math.abs(objetCarteX - roverX) < tolerance && Math.abs(objetCarteY - roverY) < tolerance) {
+                System.out.println("L'objet est posé sur le rover !");
+                // modelCar.inventaire.add()
+                // Ici tu pourras ajouter à l'inventaire
+            } else {
+                System.out.println("L'objet n'est PAS sur le rover.");
             }
         });
     }
@@ -162,7 +168,7 @@ public class ControllerMap {
         if (downPressed)  dy += ROVER_SPEED;
         
         if (dx != 0 || dy != 0) {
-            model.moveRover(dx, dy);
+            modelmap.moveRover(dx, dy);
         }
     }
 
@@ -183,8 +189,8 @@ public class ControllerMap {
         GraphicsContext gc = mainCanvas.getGraphicsContext2D();
 
         // 1) Calculer la caméra centrée sur le rover
-        double camX = model.getRoverX() - WINDOW_WIDTH  / 2.0;
-        double camY = model.getRoverY() - WINDOW_HEIGHT / 2.0;
+        double camX = modelmap.getRoverX() - WINDOW_WIDTH  / 2.0;
+        double camY = modelmap.getRoverY() - WINDOW_HEIGHT / 2.0;
 
         // 2) Contraindre la caméra pour qu’elle ne sorte pas de la carte
         if (camX < 0)                        camX = 0;
@@ -212,8 +218,8 @@ public class ControllerMap {
             gc.fillRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
         }  
         if (objetTest != null) {
-            camX = model.getRoverX() - WINDOW_WIDTH  / 2.0;
-            camY = model.getRoverY() - WINDOW_HEIGHT / 2.0;
+            camX = modelmap.getRoverX() - WINDOW_WIDTH  / 2.0;
+            camY = modelmap.getRoverY() - WINDOW_HEIGHT / 2.0;
             double objetLargeur = 32;
             double objetHauteur = 32;
             double objetEcranX = objetCarteX - camX - objetLargeur / 2.0;
@@ -225,14 +231,14 @@ public class ControllerMap {
 
         if (roverSkin != null) {
             // On veut centrer le sprite du rover (98×164) sur la position roverX, roverY
-            double roverScreenX = model.getRoverX() - camX - (ROVER_DISPLAY_WIDTH  / 2.0);
-            double roverScreenY = model.getRoverY() - camY - (ROVER_DISPLAY_HEIGHT / 2.0);
+            double roverScreenX = modelmap.getRoverX() - camX - (ROVER_DISPLAY_WIDTH  / 2.0);
+            double roverScreenY = modelmap.getRoverY() - camY - (ROVER_DISPLAY_HEIGHT / 2.0);
             gc.drawImage(roverSkin, roverScreenX, roverScreenY);
         } else {
             // Si pour une raison l’image est nulle, on peut dessiner un carré rouge
             double fallbackSize = 20;
-            double fx = model.getRoverX() - camX - fallbackSize / 2.0;
-            double fy = model.getRoverY() - camY - fallbackSize / 2.0;
+            double fx = modelmap.getRoverX() - camX - fallbackSize / 2.0;
+            double fy = modelmap.getRoverY() - camY - fallbackSize / 2.0;
             gc.setFill(javafx.scene.paint.Color.RED);
             gc.fillRect(fx, fy, fallbackSize, fallbackSize);
         }
@@ -256,8 +262,8 @@ public class ControllerMap {
         double scaleY = MINI_HEIGHT / MAP_HEIGHT;
 
         // 3) Position du rover sur la minimap
-        double roverMiniX = model.getRoverX() * scaleX;
-        double roverMiniY = model.getRoverY() * scaleY;
+        double roverMiniX = modelmap.getRoverX() * scaleX;
+        double roverMiniY = modelmap.getRoverY() * scaleY;
 
         // 4) Petit carré vert
         double dotSize = 4;
@@ -303,7 +309,7 @@ public class ControllerMap {
     }
     public void miseAJourSkin(String skinPath) {
     // Actualiser l’image du skin ici
-    model.getCar().notifyCarChanged(new Image(getClass().getResource(skinPath).toExternalForm()));
+    modelmap.getCar().notifyCarChanged(new Image(getClass().getResource(skinPath).toExternalForm()));
     }
     // public void ObjetMalLacher(Objet objet){
          // Faire une classe objet ??

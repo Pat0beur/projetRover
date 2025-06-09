@@ -51,14 +51,18 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import models.Model;
 import models.ModelCar;
 
 public class App extends Application {
-
-    private static ModelCar modelCar = new ModelCar();
-
+    private static ModelCar modelCar = new ModelCar(1);
+    private static Model model = new Model();
+    
     public static ModelCar getModelCar() {
         return modelCar;
+    }
+    public static Model getModel() {
+        return model;
     }
 
     @SuppressWarnings("exports")
