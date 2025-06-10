@@ -22,6 +22,7 @@ public class ModelCar {
         this.Skin = "/images/skins/Car_AM_General_Hummer_98x164.png";
         this.Batterie = 100;
         this.EtatBatterie = true;
+        this.Inventaire = new String[4];
         // this.Inventaire = ;
     }
     // public void notifyCarChanged(String image){
