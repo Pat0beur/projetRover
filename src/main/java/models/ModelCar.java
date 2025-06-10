@@ -3,8 +3,6 @@ package models;
 import java.util.ArrayList;
 import java.util.List;
 
-import controllers.ControllerMenu;
-import controllers.ControllerPersonnalisation;
 import javafx.scene.image.Image;
 import java.util.function.Consumer;
 
@@ -51,5 +49,14 @@ public class ModelCar {
     }
     public void addCarListener(Consumer<Image> listener) {
         listeners.add(listener);
+    }
+    public void add(Image objet){
+        System.out.println("je suis ici");
+        for(int i=0;i<Inventaire.length;i++){
+            if(Inventaire[i]!=""){
+
+            }
+        }
+
     }
 }

@@ -2,7 +2,6 @@
 package models;
 
 import app.App;
-import controllers.ControllerMenu;
 
 /**
  * ModelMap : contient la taille de la carte (mapWidth, mapHeight), 
@@ -19,6 +18,7 @@ public class ModelMap {
     // NEURO: Instance du ModelCar pour récupérer getSkin()
     private final ModelCar car;
     private Model model;
+    private String[] Inventaire;
 
     /**
      * @param mapWidth  largeur “réelle” de la carte (en pixels logiques)
@@ -36,6 +36,7 @@ public class ModelMap {
         this.model = App.getModel();
         // this.car = new ModelCar(model.getDifficulte());
         this.car = App.getModelCar();
+        // this.Inventaire = new String[4];
     }
 
     public double getMapWidth() {

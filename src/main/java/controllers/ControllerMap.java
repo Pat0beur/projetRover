@@ -49,6 +49,7 @@ public class ControllerMap {
     private ModelCar modelCar;
     private Image roverSkin;
     private ImageView test;
+    private Image[] Inventaire;
 
     int min = 0;
     int max = 1000;
@@ -188,15 +189,11 @@ public class ControllerMap {
         mainCanvas.setOnMouseReleased(event -> {
             for(int i=0;i<objetsImages.length;i++){
                 objetAttrape[i] = false;
-                double roverX = modelmap.getRoverX();
-                double roverY = modelmap.getRoverY();
-                double camX = modelmap.getRoverX() - WINDOW_WIDTH  / 2.0;
-                double camY = modelmap.getRoverY() - WINDOW_HEIGHT / 2.0;
-                double tolerance = 16; // pixels
                 if (Math.abs(modelmap.getRoverX() - objetsCarteX[i]) <100 && Math.abs(modelmap.getRoverY() - objetsCarteY[i]) < 100) {
                     System.out.println("L'objet est posé sur le rover !");
                     // --> Faire que la méthode add à l'inventaire le fasse disparaitre de la scène
-                    // modelCar.inventaire.add()
+                    Inventaire[i] = objetsImages[i];
+
                     // Ici tu pourras ajouter à l'inventaire
                 } else {
                     System.out.println("Voici la position du rover :"+modelmap.getRoverX()+" , "+modelmap.getRoverY());
@@ -230,7 +227,7 @@ public class ControllerMap {
             //     e.printStackTrace();
             // }
         }
-        
+        // if()
         if (dx != 0 || dy != 0) {
             modelmap.moveRover(dx, dy);
         }
@@ -244,7 +241,6 @@ public class ControllerMap {
         drawMainView();
         drawMiniMap();
     }
-
     /**
      * Dessine la portion de fond correspondant à la position du rover, 
      * puis place le sprite du rover au centre de la caméra.
