@@ -72,14 +72,14 @@ public class ControllerPersonnalisation {
         }
         imageView.setImage(images[indice]);
         btnRetour.setOnAction(event -> {
+            String target = App.isFromPause() ? "/app/pause.fxml" : "/app/menu.fxml";
             try {
                 Stage stage = (Stage) btnRetour.getScene().getWindow();
                 FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/app/menu.fxml")
+                    getClass().getResource(target)
                 );
                 Parent root = loader.load();
-                Scene scene = new Scene(root);
-                stage.setScene(scene);
+                stage.setScene(new Scene(root));
                 stage.show();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -87,16 +87,15 @@ public class ControllerPersonnalisation {
         });
 
         btnValider.setOnAction(event -> {
+            SetVoiture(images[indice]);
+            String target = App.isFromPause() ? "/app/pause.fxml" : "/app/menu.fxml";
             try {
-                System.out.println("L'image est celle là : "+indice);
-                SetVoiture(images[indice]); // Récupère l'image 
                 Stage stage = (Stage) btnValider.getScene().getWindow();
                 FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/app/menu.fxml")
+                    getClass().getResource(target)
                 );
                 Parent root = loader.load();
-                Scene scene = new Scene(root);
-                stage.setScene(scene);
+                stage.setScene(new Scene(root));
                 stage.show();
             } catch (IOException e) {
                 e.printStackTrace();

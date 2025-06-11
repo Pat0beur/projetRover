@@ -57,6 +57,7 @@ import models.ModelCar;
 public class App extends Application {
     private static ModelCar modelCar = new ModelCar(1);
     private static Model model = new Model();
+    private static boolean fromPause = false;
     
     public static ModelCar getModelCar() {
         return modelCar;
@@ -75,6 +76,10 @@ public class App extends Application {
         primaryStage.setTitle("Menu");
         primaryStage.show();
     }
+
+
+    public static void setFromPause(boolean b) { fromPause = b;}
+    public static boolean isFromPause(){ return fromPause;}
 
     public static void main(String[] args) {
         launch(args);

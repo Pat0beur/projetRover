@@ -43,6 +43,7 @@ public class ControllerMenu {
         // Bouton Personnaliser : charge la vue Personnalisation.fxml
         btnPersonnaliser.setOnAction(event -> {
             try {
+                App.setFromPause(false);
                 Stage stage = (Stage) btnPersonnaliser.getScene().getWindow();
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/app/personnalisation.fxml"));
                 Parent root = loader.load();
@@ -57,6 +58,7 @@ public class ControllerMenu {
         // Bouton Commandes : charge la vue Commandes.fxml
         btnCommandes.setOnAction(event -> {
             try {
+                App.setFromPause(false);
                 Stage stage = (Stage) btnCommandes.getScene().getWindow();
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/app/commandes.fxml"));
                 Parent root = loader.load();
