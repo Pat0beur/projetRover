@@ -34,8 +34,8 @@ public class ControllerMap {
     private static final double MAP_WIDTH  = 2000;     // taille réelle de la carte
     private static final double MAP_HEIGHT = 2000;
 
-    private static final double ROVER_DISPLAY_WIDTH  = 20;   // largeur désirée du sprite
-    private static final double ROVER_DISPLAY_HEIGHT = 33.5;  // on garde le ratio original
+    private static final double ROVER_DISPLAY_WIDTH  = 40;   // largeur désirée du sprite
+    private static final double ROVER_DISPLAY_HEIGHT = 40 * (164.0 / 98.0);  // on garde le ratio original
 
     private static final double MINI_WIDTH  = 200;     // largeur de la minimap
     private static final double MINI_HEIGHT = 200;     // hauteur de la minimap
@@ -457,7 +457,7 @@ private void drawMainView() {
         }
     }
     // 6) Dessiner l’antenne
-    double antW = 64, antH = 64;
+    double antW = 128, antH = 128;
     double ax = antenneCarteX - camX - antW / 2.0;
     double ay = antenneCarteY - camY - antH / 2.0;
     gc.drawImage(antenneImages[0], ax, ay, antW, antH);
