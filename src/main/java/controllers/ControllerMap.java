@@ -31,8 +31,8 @@ public class ControllerMap {
     private static final double WINDOW_WIDTH  = 800;   // taille de la fenêtre (canvas principal)
     private static final double WINDOW_HEIGHT = 600;
 
-    private static final double MAP_WIDTH  = 2000;     // taille réelle de la carte
-    private static final double MAP_HEIGHT = 2000;
+    private static final double MAP_WIDTH  = 2048;     // taille réelle de la carte
+    private static final double MAP_HEIGHT = 2048;
 
     private static final double ROVER_DISPLAY_WIDTH  = 40;   // largeur désirée du sprite
     private static final double ROVER_DISPLAY_HEIGHT = 40 * (164.0 / 98.0);  // on garde le ratio original
