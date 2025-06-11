@@ -57,13 +57,9 @@ public class ControllerMap {
     private int remainingSeconds = 120;
     private boolean isDraggingFromInventory = false;
     private int draggingInventoryIndex = -1;
-<<<<<<< HEAD
-    
     private int etatAntenne = 0;
     private boolean[] depose = {false,false,false,false};
-=======
     private long lastNanoTime;
->>>>>>> 5b15ca7627cb01fab8ab3b3ee1a83ed51d2954b0
 
 
 
