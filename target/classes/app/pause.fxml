@@ -31,14 +31,6 @@
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </VBox.margin>
       </Button>
-      <Button fx:id="btnSynopsis" layoutX="220.0" layoutY="220.0" minHeight="30.0" minWidth="180.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="180.0" text="Synopsis">
-         <font>
-            <Font size="19.0" />
-         </font>
-         <VBox.margin>
-            <Insets top="10.0" />
-         </VBox.margin>
-      </Button>
       <Button fx:id="btnQuitter" minHeight="40.0" minWidth="140.0" mnemonicParsing="false" text="Quitter">
          <font>
             <Font size="19.0" />
