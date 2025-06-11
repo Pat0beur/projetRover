@@ -83,9 +83,9 @@ public class ControllerMap {
     private double antenneCarteX = ThreadLocalRandom.current().nextInt(min, max + 1);
     private double antenneCarteY = ThreadLocalRandom.current().nextInt(min, max + 1);
     private Image[] antenneImages = {
-        new Image(getClass().getResourceAsStream("/images/antenne/antenne.png")),
+        new Image(getClass().getResourceAsStream("/images/antenne/antenne_cassee.png")),
         new Image(getClass().getResourceAsStream("/images/antenne/antenne_un_peu_cassee.png")),
-        new Image(getClass().getResourceAsStream("/images/antenne/antenne_cassee.png"))
+        new Image(getClass().getResourceAsStream("/images/antenne/antenne.png"))
     };
     private boolean[] objetAttrape ={false,false,false,false};
     private double[] objetEcranX = new double[5];
@@ -116,7 +116,8 @@ public class ControllerMap {
         this.modelCar = App.getModelCar();
         progressBar.setProgress(100F);
         GraphicsContext gc1 = chronoCanvas.getGraphicsContext2D();
-        gc1.setStroke(javafx.scene.paint.Color.WHITE);
+        gc1.setGlobalAlpha(0.2);
+        gc1.setStroke(javafx.scene.paint.Color.GRAY);
         gc1.strokeRect(0, 0, MINI_WIDTH, MINI_HEIGHT);
         gc1.setFill(javafx.scene.paint.Color.WHITE);
         gc1.fillRect(0, 0, MINI_WIDTH, MINI_HEIGHT);
@@ -370,7 +371,7 @@ public class ControllerMap {
             dotSize
         );
         //Position de l'antenne
-        gc.setFill(javafx.scene.paint.Color.BLUEVIOLET);
+        gc.setFill(javafx.scene.paint.Color.BLUE);
         gc.fillRect(
             antenneMiniX - dotSize / 2.0,
             antenneMiniY - dotSize / 2.0,

@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane fx:id="textArea" onKeyPressed="#onKeyPressed" onKeyReleased="#onKeyReleased" prefHeight="600" prefWidth="800" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ControllerMap">
 
@@ -12,5 +13,8 @@
     <Canvas fx:id="miniMapCanvas" height="200" width="200" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" />
    <Canvas fx:id="chronoCanvas" height="63.0" layoutX="590.0" layoutY="14.0" width="200.0" />
    <ProgressBar fx:id="progressBar" layoutX="-157.0" layoutY="291.0" prefHeight="18.0" prefWidth="360.0" progress="0.0" rotate="-90.0" />
-   <Label fx:id="label" layoutX="631.0" layoutY="26.0" prefHeight="40.0" prefWidth="118.0" text="" />
+   <Label fx:id="label" layoutX="631.0" layoutY="26.0" prefHeight="40.0" prefWidth="118.0">
+      <font>
+         <Font size="24.0" />
+      </font></Label>
 </AnchorPane>
