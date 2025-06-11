@@ -57,6 +57,7 @@ public class ControllerMap {
     private int remainingSeconds = 120;
     private boolean isDraggingFromInventory = false;
     private int draggingInventoryIndex = -1;
+    private long lastNanoTime;
 
 
 
@@ -126,6 +127,7 @@ public class ControllerMap {
         modelmap = new ModelMap(MAP_WIDTH, MAP_HEIGHT);
         // mainCanvas = new Canvas();
         this.modelCar = App.getModelCar();
+        lastNanoTime = System.nanoTime();
         GraphicsContext gc1 = chronoCanvas.getGraphicsContext2D();
 
         gc1.setStroke(javafx.scene.paint.Color.GRAY);
@@ -170,6 +172,30 @@ public class ControllerMap {
         AnimationTimer gameLoop = new AnimationTimer() {
             @Override
             public void handle(long now) {
+                // 1) calculer dt en secondes
+                double dt = (now - lastNanoTime) / 1_000_000_000.0;
+                lastNanoTime = now;
+
+                // 2) si sur la base (distance < rayon), recharge, sinon dépense
+                double dxBase = modelmap.getRoverX() - baseCarteX;
+                double dyBase = modelmap.getRoverY() - baseCarteY;
+                double distance = Math.hypot(dxBase, dyBase);
+                double rechargeRadius = 100; // ou un autre rayon
+                if (distance <= rechargeRadius) {
+                    modelCar.recharge(dt);
+                } else {
+                    modelCar.tick(dt);
+                }
+
+                // 3) mettre à jour la ProgressBar
+                progressBar.setProgress(modelCar.getBatteryPercentage());
+
+                // 4) si batterie vide → quitter
+                if (modelCar.isEmpty()) {
+                    System.exit(0);
+                }
+
+                // 5) le reste : déplacer et dessiner
                 updateModel();
                 drawAll();
             }
