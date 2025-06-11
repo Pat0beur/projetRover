@@ -6,6 +6,9 @@ import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ProgressBar;
@@ -15,11 +18,15 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import models.ModelMap;
 import models.ModelCar;
+
+import java.io.IOException;
 import java.util.concurrent.ThreadLocalRandom;
 import javafx.util.Duration;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 /**
  * ControllerMap affiche la carte (avec fond) et dessine l'image du rover
@@ -53,6 +60,8 @@ public class ControllerMap {
     @FXML private Canvas secondCanvas;
     @FXML private Canvas thirdCanvas;
     @FXML private Canvas fourthCanvas;
+    @FXML private Button btnRejouer;
+    @FXML private Button btnQuitter;
 
     private int remainingSeconds = 120;
     private boolean isDraggingFromInventory = false;
@@ -68,6 +77,7 @@ public class ControllerMap {
     private ModelCar modelCar;
     private Image roverSkin;
     // private ImageView test;
+    private boolean EndGame = false;
 
     // Tout ce qui se rapporte aux objets
     private Image[] Inventaire = new Image[4];
@@ -121,9 +131,16 @@ public class ControllerMap {
      * Appelé automatiquement après le chargement du FXML.
      * On initialise le modèle, on force la taille des Canvas, on charge l’image de fond,
      * puis on lance la boucle de rendu.
+     * @throws IOException 
      */
     @FXML
-    public void initialize() {
+    public void initialize() throws IOException {
+        if(EndGame){
+            btnRejouer = new Button();
+            btnQuitter = new Button();
+            EndGame = false;
+        }
+        else{
         // 1) Créer le modèle
         startTimer();
         modelmap = new ModelMap(MAP_WIDTH, MAP_HEIGHT);
@@ -193,9 +210,23 @@ public class ControllerMap {
                 progressBar.setProgress(modelCar.getBatteryPercentage());
 
                 // 4) si batterie vide → quitter
-                if (modelCar.isEmpty()) {
-                    System.exit(0);
-                }
+                    if (modelCar.isEmpty()&& !EndGame) {
+                        EndGame = true;
+                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/app/gagne.fxml"));
+                        Parent root = null;
+                        try {
+                            root = fxmlLoader.load();
+                        } catch (IOException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
+                        // Création de la fenêtre
+                        Stage stage = new Stage();
+                        stage.setTitle("Game Over");
+                        stage.setScene(new Scene(root));
+                        stage.initModality(Modality.APPLICATION_MODAL);
+                        stage.show();
+                    }
 
                 // 5) le reste : déplacer et dessiner
                 updateModel();
@@ -389,7 +420,7 @@ public class ControllerMap {
         }
         });
     }
-    
+}
     /**
      * Lit l’état des flags up/down/left/right, puis déplace le rover en conséquence.
      */
@@ -633,4 +664,5 @@ private void drawMainView() {
         timeline.setCycleCount(remainingSeconds);
         timeline.play();
         }
+        
     }
