@@ -328,7 +328,7 @@ private void drawMainView() {
         }
     }
     // 6) Dessiner l’antenne
-    double antW = 64, antH = 64;
+    double antW = 128, antH = 128;
     double ax = antenneCarteX - camX - antW / 2.0;
     double ay = antenneCarteY - camY - antH / 2.0;
     gc.drawImage(antenneImages[0], ax, ay, antW, antH);
