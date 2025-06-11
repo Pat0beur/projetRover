@@ -55,6 +55,9 @@ public class ControllerMap {
     @FXML private Canvas fourthCanvas;
 
     private int remainingSeconds = 120;
+    private boolean isDraggingFromInventory = false;
+    private int draggingInventoryIndex = -1;
+
 
 
     // Modèle stockant la position du rover + ModelCar
@@ -187,12 +190,120 @@ public class ControllerMap {
                     decalageX = event.getX() - objetEcranX[i];
                     decalageY = event.getY() - objetEcranY[i];
                 }
-                // else if (event.getX() >= )
+                // else if (((event.getX() < 267) && (event.getX()> 182)) && ((event.getY() < 512) && (event.getY()> 552))){
+                //     objetAttrape[i] = true;
+                //     //Permet de savoir qu'il s'agît de cet item qui est déplacé
+                //     currentIndex = i;
+                //     decalageX = event.getX() - objetEcranX[i];
+                //     decalageY = event.getY() - objetEcranY[i];
+                // }
+            }
+        });
+        // firstCanvas.setOnMousePressed(event -> {
+        //     if (Inventaire[0] != null) {
+        //         isDraggingFromInventory = true;
+        //         draggingInventoryIndex = 0;
+        //         currentIndex = 0; // pour réutiliser ton code
+        //     }
+        // });
+        firstCanvas.setOnMousePressed(event -> {
+            if (Inventaire[0] != null) {
+                isDraggingFromInventory = true;
+                draggingInventoryIndex = 0;
+                currentIndex = 0; // réutilise ta logique existante
+
+                // On met l'objet sur la carte à la position du clic (centrée)
+                double camX = modelmap.getRoverX() - WINDOW_WIDTH / 2.0;
+                double camY = modelmap.getRoverY() - WINDOW_HEIGHT / 2.0;
+
+                GraphicsContext gc = firstCanvas.getGraphicsContext2D();
+                gc.clearRect(0, 0, firstCanvas.getWidth(), firstCanvas.getHeight());
+
+                // Supprime l'objet de l'inventaire
+                Inventaire[0] = null;
+
+                objetsCarteX[currentIndex] = camX + event.getSceneX() - 24;
+                objetsCarteY[currentIndex] = camY + event.getSceneY() - 24;
+                Ramasser[currentIndex] = false; // il n'est plus dans l'inventaire
+                drawAll();
             }
         });
         
+        secondCanvas.setOnMousePressed(event -> {
+            if (Inventaire[1] != null) {
+                isDraggingFromInventory = true;
+                draggingInventoryIndex = 1;
+                currentIndex = 1; // réutilise ta logique existante
+
+                // On met l'objet sur la carte à la position du clic (centrée)
+                double camX = modelmap.getRoverX() - WINDOW_WIDTH / 2.0;
+                double camY = modelmap.getRoverY() - WINDOW_HEIGHT / 2.0;
+
+                GraphicsContext gc = secondCanvas.getGraphicsContext2D();
+                gc.clearRect(0, 0, secondCanvas.getWidth(), secondCanvas.getHeight());
+
+                // Supprime l'objet de l'inventaire
+                Inventaire[1] = null;
+
+                objetsCarteX[currentIndex] = camX + event.getSceneX() - 24;
+                objetsCarteY[currentIndex] = camY + event.getSceneY() - 24;
+                Ramasser[currentIndex] = false; // il n'est plus dans l'inventaire
+                drawAll();
+            }
+        });
+        thirdCanvas.setOnMousePressed(event -> {
+            if (Inventaire[2] != null) {
+                isDraggingFromInventory = true;
+                draggingInventoryIndex = 2;
+                currentIndex = 2; // réutilise ta logique existante
+
+                // On met l'objet sur la carte à la position du clic (centrée)
+                double camX = modelmap.getRoverX() - WINDOW_WIDTH / 2.0;
+                double camY = modelmap.getRoverY() - WINDOW_HEIGHT / 2.0;
+
+                GraphicsContext gc = thirdCanvas.getGraphicsContext2D();
+                gc.clearRect(0, 0, thirdCanvas.getWidth(), thirdCanvas.getHeight());
+
+                // Supprime l'objet de l'inventaire
+                Inventaire[2] = null;
+
+                objetsCarteX[currentIndex] = camX + event.getSceneX() - 24;
+                objetsCarteY[currentIndex] = camY + event.getSceneY() - 24;
+                Ramasser[currentIndex] = false; // il n'est plus dans l'inventaire
+                drawAll();
+            }
+        });
+        fourthCanvas.setOnMousePressed(event -> {
+            if (Inventaire[3] != null) {
+                isDraggingFromInventory = true;
+                draggingInventoryIndex = 3;
+                currentIndex = 3; // réutilise ta logique existante
+
+                // On met l'objet sur la carte à la position du clic (centrée)
+                double camX = modelmap.getRoverX() - WINDOW_WIDTH / 2.0;
+                double camY = modelmap.getRoverY() - WINDOW_HEIGHT / 2.0;
+                GraphicsContext gc = fourthCanvas.getGraphicsContext2D();
+                gc.clearRect(0, 0, fourthCanvas.getWidth(), fourthCanvas.getHeight());
+
+                // Supprime l'objet de l'inventaire
+                Inventaire[3] = null;
+
+                objetsCarteX[currentIndex] = camX + event.getSceneX() - 24;
+                objetsCarteY[currentIndex] = camY + event.getSceneY() - 24;
+                Ramasser[currentIndex] = false; // il n'est plus dans l'inventaire
+                drawAll();
+            }
+        });
         mainCanvas.setOnMouseDragged(event -> {
-            if (objetAttrape[currentIndex]) {
+            if (isDraggingFromInventory) {
+                double camX = modelmap.getRoverX() - WINDOW_WIDTH  / 2.0;
+                double camY = modelmap.getRoverY() - WINDOW_HEIGHT / 2.0;
+                
+                objetsCarteX[draggingInventoryIndex] = camX + event.getX() - 24;
+                objetsCarteY[draggingInventoryIndex] = camY + event.getY() - 24;
+
+                drawAll(); // Redessine la map
+            } else if (objetAttrape[currentIndex]) {
                 // Conversion coordonnées écran → carte
                 double camX = modelmap.getRoverX() - WINDOW_WIDTH  / 2.0;
                 double camY = modelmap.getRoverY() - WINDOW_HEIGHT / 2.0;
@@ -203,6 +314,22 @@ public class ControllerMap {
         });
         // Position du rover relative ??
         mainCanvas.setOnMouseReleased(event -> {
+            if (isDraggingFromInventory) {
+                isDraggingFromInventory = false;
+                draggingInventoryIndex = -1;
+                drawAll(); // Redessine avec l'objet relâché
+            // Place l’objet sur la carte si valide
+            if (Math.abs(modelmap.getRoverX() - objetsCarteX[draggingInventoryIndex]) < 100 &&
+                Math.abs(modelmap.getRoverY() - objetsCarteY[draggingInventoryIndex]) < 100) {
+                System.out.println("L'objet de l'inventaire a été placé sur la carte !");
+                Ramasser[draggingInventoryIndex] = false;
+                drawAll();
+            } else {
+                System.out.println("Objet relâché hors zone.");
+            }
+
+            draggingInventoryIndex = -1;
+            } else {
             objetAttrape[currentIndex] = false;
             if (Math.abs(modelmap.getRoverX() - objetsCarteX[currentIndex]) <20 && Math.abs(modelmap.getRoverY() - objetsCarteY[currentIndex]) < 100) {
                 System.out.println("L'objet est posé sur le rover !");
@@ -233,6 +360,7 @@ public class ControllerMap {
                 System.out.println("Voici la position de l'objet :"+ objetsCarteX[currentIndex]+" , "+objetsCarteY[currentIndex]);
                 System.out.println("L'objet n'est PAS sur le rover.");
             }
+        }
         });
     }
     
