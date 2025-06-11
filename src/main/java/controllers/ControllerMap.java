@@ -187,6 +187,7 @@ public class ControllerMap {
                     decalageX = event.getX() - objetEcranX[i];
                     decalageY = event.getY() - objetEcranY[i];
                 }
+                // else if (event.getX() >= )
             }
         });
         
@@ -399,78 +400,78 @@ private void drawMainView() {
             dotSize,
             dotSize
             );
-            //Position de l'antenne
-            gc.setFill(javafx.scene.paint.Color.BLUE);
-            gc.fillRect(
-                antenneMiniX - dotSize / 2.0,
-                antenneMiniY - dotSize / 2.0,
-                dotSize,
-                dotSize
-                );
+        //Position de l'antenne
+        gc.setFill(javafx.scene.paint.Color.BLUE);
+        gc.fillRect(
+            antenneMiniX - dotSize / 2.0,
+            antenneMiniY - dotSize / 2.0,
+            dotSize,
+            dotSize
+            );
                 
-                //Position des objets
-                for(int i=0;i<objetsImages.length;i++){
-                    if(!Ramasser[i]){
-                        gc.setFill(javafx.scene.paint.Color.RED);
-                        gc.fillRect(
-                            objetsMiniX[i] - dotSize / 2.0,
-                            objetsMiniY[i] - dotSize / 2.0,
-                            dotSize,
-                            dotSize
-                            );
-                        }
-                    }
-                    
-                    // 5) Cadre blanc
-                    gc.setStroke(javafx.scene.paint.Color.WHITE);
-                    gc.strokeRect(0, 0, MINI_WIDTH, MINI_HEIGHT);
+        //Position des objets
+        for(int i=0;i<objetsImages.length;i++){
+            if(!Ramasser[i]){
+                gc.setFill(javafx.scene.paint.Color.RED);
+                gc.fillRect(
+                    objetsMiniX[i] - dotSize / 2.0,
+                    objetsMiniY[i] - dotSize / 2.0,
+                    dotSize,
+                    dotSize
+                    );
                 }
+            }
+            
+            // 5) Cadre blanc
+            gc.setStroke(javafx.scene.paint.Color.WHITE);
+            gc.strokeRect(0, 0, MINI_WIDTH, MINI_HEIGHT);
+        }
                 
                 // ————————————————————————————
                 // Gestion des événements clavier (onKeyPressed/onKeyReleased)
                 // ————————————————————————————
                 
-                @FXML
-                private void onKeyPressed(KeyEvent event) {
-                    KeyCode code = event.getCode();
-                    switch (code) {
-                        case LEFT:  case A: leftPressed  = true; break;
-                        case RIGHT: case D: rightPressed = true; break;
-                        case UP:    case W: upPressed    = true; break;
-                        case DOWN:  case S: downPressed  = true; break;
-                        case ESCAPE: escapePressed = true; break;
-                        default: break;
-                    }
-                }
+        @FXML
+        private void onKeyPressed(KeyEvent event) {
+            KeyCode code = event.getCode();
+            switch (code) {
+                case LEFT:  case A: leftPressed  = true; break;
+                case RIGHT: case D: rightPressed = true; break;
+                case UP:    case W: upPressed    = true; break;
+                case DOWN:  case S: downPressed  = true; break;
+                case ESCAPE: escapePressed = true; break;
+                default: break;
+            }
+        }
                 
-                @FXML
-                private void onKeyReleased(KeyEvent event) {
-                    KeyCode code = event.getCode();
-                    switch (code) {
-                        case LEFT:  case A: leftPressed  = false; break;
-                        case RIGHT: case D: rightPressed = false; break;
-                        case UP:    case W: upPressed    = false; break;
-                        case DOWN:  case S: downPressed  = false; break;
-                        case ESCAPE: escapePressed = false; break;
-                        default: break;
-                    }
-                }
-                public void miseAJourSkin(String skinPath) {
-                    // Actualiser l’image du skin ici
-                    modelmap.getCar().notifyCarChanged(new Image(getClass().getResource(skinPath).toExternalForm()));
-                }
+        @FXML
+        private void onKeyReleased(KeyEvent event) {
+            KeyCode code = event.getCode();
+            switch (code) {
+                case LEFT:  case A: leftPressed  = false; break;
+                case RIGHT: case D: rightPressed = false; break;
+                case UP:    case W: upPressed    = false; break;
+                case DOWN:  case S: downPressed  = false; break;
+                case ESCAPE: escapePressed = false; break;
+                default: break;
+            }
+        }
+        public void miseAJourSkin(String skinPath) {
+            // Actualiser l’image du skin ici
+            modelmap.getCar().notifyCarChanged(new Image(getClass().getResource(skinPath).toExternalForm()));
+        }
                 
-                private void startTimer() {
-                    Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
-                        if (remainingSeconds > 0) {
-                            remainingSeconds--;
-                            int minutes = remainingSeconds / 60;
+        private void startTimer() {
+            Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+            if (remainingSeconds > 0) {
+                    remainingSeconds--;
+                int minutes = remainingSeconds / 60;
                 int seconds = remainingSeconds % 60;
                 label.setText(String.format("%02d:%02d", minutes, seconds));
             } else {
                 label.setText("Temps écoulé !");
             }
-        }));
+            }));
         timeline.setCycleCount(remainingSeconds);
         timeline.play();
     }
