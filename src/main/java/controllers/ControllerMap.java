@@ -57,6 +57,9 @@ public class ControllerMap {
     private int remainingSeconds = 120;
     private boolean isDraggingFromInventory = false;
     private int draggingInventoryIndex = -1;
+    
+    private int etatAntenne = 0;
+    private boolean[] depose = {false,false,false,false};
 
 
 
@@ -190,22 +193,8 @@ public class ControllerMap {
                     decalageX = event.getX() - objetEcranX[i];
                     decalageY = event.getY() - objetEcranY[i];
                 }
-                // else if (((event.getX() < 267) && (event.getX()> 182)) && ((event.getY() < 512) && (event.getY()> 552))){
-                //     objetAttrape[i] = true;
-                //     //Permet de savoir qu'il s'agît de cet item qui est déplacé
-                //     currentIndex = i;
-                //     decalageX = event.getX() - objetEcranX[i];
-                //     decalageY = event.getY() - objetEcranY[i];
-                // }
             }
         });
-        // firstCanvas.setOnMousePressed(event -> {
-        //     if (Inventaire[0] != null) {
-        //         isDraggingFromInventory = true;
-        //         draggingInventoryIndex = 0;
-        //         currentIndex = 0; // pour réutiliser ton code
-        //     }
-        // });
         firstCanvas.setOnMousePressed(event -> {
             if (Inventaire[0] != null) {
                 isDraggingFromInventory = true;
@@ -316,24 +305,23 @@ public class ControllerMap {
         mainCanvas.setOnMouseReleased(event -> {
             if (isDraggingFromInventory) {
                 isDraggingFromInventory = false;
-                draggingInventoryIndex = -1;
+                // draggingInventoryIndex = -1;
                 drawAll(); // Redessine avec l'objet relâché
             // Place l’objet sur la carte si valide
-            if (Math.abs(modelmap.getRoverX() - objetsCarteX[draggingInventoryIndex]) < 100 &&
-                Math.abs(modelmap.getRoverY() - objetsCarteY[draggingInventoryIndex]) < 100) {
-                System.out.println("L'objet de l'inventaire a été placé sur la carte !");
-                Ramasser[draggingInventoryIndex] = false;
-                drawAll();
-            } else {
-                System.out.println("Objet relâché hors zone.");
-            }
+                if (Math.abs(modelmap.getRoverX() - objetsCarteX[draggingInventoryIndex]) < 100 &&
+                    Math.abs(modelmap.getRoverY() - objetsCarteY[draggingInventoryIndex]) < 100) {
+                    System.out.println("L'objet de l'inventaire a été placé sur la carte !");
+                    Ramasser[draggingInventoryIndex] = false;
+                    drawAll();
+                } else {
+                    System.out.println("Objet relâché hors zone.");
+                }
 
             draggingInventoryIndex = -1;
             } else {
             objetAttrape[currentIndex] = false;
             if (Math.abs(modelmap.getRoverX() - objetsCarteX[currentIndex]) <20 && Math.abs(modelmap.getRoverY() - objetsCarteY[currentIndex]) < 100) {
                 System.out.println("L'objet est posé sur le rover !");
-                // --> Faire que la méthode add à l'inventaire le fasse disparaitre de la scène
                 Inventaire[currentIndex] = objetsImages[currentIndex];
                 Ramasser[currentIndex] = true;
                 if(currentIndex ==0){
@@ -355,7 +343,14 @@ public class ControllerMap {
                 System.out.println("Voici ce qu'il y a dans l'Inventaire"+Inventaire[0]+" "+Inventaire[1]+" "+Inventaire[2]+" "+Inventaire[3]+" ");
                 drawAll();
                 // Ici tu pourras ajouter à l'inventaire
-            } else {
+            } else if(Math.abs(antenneCarteX - objetsCarteX[currentIndex]) <20 && Math.abs(antenneCarteY - objetsCarteY[currentIndex]) < 20) {
+                System.out.println("Bravo vous avez déposé l'objet sur l'antenne !");
+                depose[currentIndex] = true;
+                etatAntenne++;
+                System.out.println("La valeur d'etatAntenne : "+etatAntenne);
+                drawAll();
+            }
+            else{                
                 System.out.println("Voici la position du rover :"+ modelmap.getRoverX()+" , "+modelmap.getRoverY());
                 System.out.println("Voici la position de l'objet :"+ objetsCarteX[currentIndex]+" , "+objetsCarteY[currentIndex]);
                 System.out.println("L'objet n'est PAS sur le rover.");
@@ -450,7 +445,7 @@ private void drawMainView() {
     // 5) Dessiner les objets
     double objetW = 64, objetH = 64;
     for (int i = 0; i < objetsImages.length; i++) {
-        if (!Ramasser[i] && objetsImages[i] != null) {
+        if (!Ramasser[i] && !depose[i] && objetsImages[i] != null) {
             double ox = objetsCarteX[i] - camX - objetW / 2.0;
             double oy = objetsCarteY[i] - camY - objetH / 2.0;
             gc.drawImage(objetsImages[i], ox, oy, objetW, objetH);
@@ -539,7 +534,7 @@ private void drawMainView() {
                 
         //Position des objets
         for(int i=0;i<objetsImages.length;i++){
-            if(!Ramasser[i]){
+            if(!Ramasser[i] && !depose[i]){
                 gc.setFill(javafx.scene.paint.Color.RED);
                 gc.fillRect(
                     objetsMiniX[i] - dotSize / 2.0,
@@ -602,7 +597,5 @@ private void drawMainView() {
             }));
         timeline.setCycleCount(remainingSeconds);
         timeline.play();
-    }
-
-
+        }
     }
