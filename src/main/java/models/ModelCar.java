@@ -2,7 +2,6 @@ package models;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import javafx.scene.image.Image;
 import java.util.function.Consumer;
 
@@ -14,6 +13,8 @@ public class ModelCar {
     private int Batterie;
     private boolean EtatBatterie;
     private final List<Consumer<Image>> listeners = new ArrayList<>();
+    private final double maxBatterySeconds = 20.0;
+    private double batterySecondsRemaining = maxBatterySeconds;
 
     // private ControllerPersonnalisation controllerPersonnalisation;
     public ModelCar(int difficulté){
@@ -26,6 +27,29 @@ public class ModelCar {
     // public void notifyCarChanged(String image){
     //     Skin = image;
     // }
+
+    /** Appelée chaque frame pour dépenser dt secondes de batterie. */
+    public void tick(double dt) {
+        batterySecondsRemaining -= dt;
+        if (batterySecondsRemaining < 0) batterySecondsRemaining = 0;
+    }
+
+     /** Appelée quand on recharge dt secondes (sur la base). */
+    public void recharge(double dt) {
+        batterySecondsRemaining += dt;
+        if (batterySecondsRemaining > maxBatterySeconds)
+            batterySecondsRemaining = maxBatterySeconds;
+    }
+
+    /** % restant entre 0 et 1. */
+    public double getBatteryPercentage() {
+        return batterySecondsRemaining / maxBatterySeconds;
+    }
+
+    /** True si la batterie est totalement vide. */
+    public boolean isEmpty() {
+        return batterySecondsRemaining <= 0;
+    }
     
     public String getSkin(){
         return Skin;
