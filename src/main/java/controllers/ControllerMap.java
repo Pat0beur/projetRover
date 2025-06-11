@@ -260,78 +260,83 @@ public class ControllerMap {
      * Dessine la portion de fond correspondant à la position du rover, 
      * puis place le sprite du rover au centre de la caméra.
      */
-    private void drawMainView() {
-        GraphicsContext gc = mainCanvas.getGraphicsContext2D();
-        
-        // 1) Calculer la caméra centrée sur le rover
-        double camX = modelmap.getRoverX() - WINDOW_WIDTH  / 2.0;
-        double camY = modelmap.getRoverY() - WINDOW_HEIGHT / 2.0;
-        
-        // 2) Contraindre la caméra pour qu’elle ne sorte pas de la carte
-        if (camX < 0)                        camX = 0;
-        if (camX + WINDOW_WIDTH > MAP_WIDTH)  camX = MAP_WIDTH - WINDOW_WIDTH;
-        if (camY < 0)                        camY = 0;
-        if (camY + WINDOW_HEIGHT > MAP_HEIGHT) camY = MAP_HEIGHT - WINDOW_HEIGHT;
-        
-        // 3) Afficher la portion de l’image de fond (si chargée)
-        if (backgroundImage != null) {
-            gc.clearRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
-            gc.drawImage(
-                backgroundImage,
-                /* sx= */ camX,                   // coin haut-gauche dans l’image
-                /* sy= */ camY,
-                /* sw= */ WINDOW_WIDTH,           // largeur à découper
-                /* sh= */ WINDOW_HEIGHT,          // hauteur à découper
-                /* dx= */ 0,                      // affichage à (0,0) sur le canvas
-                /* dy= */ 0,
-                /* dw= */ WINDOW_WIDTH,           // affiché en 800×600
-                /* dh= */ WINDOW_HEIGHT
-                );
-            } else {
-                // Fallback : gris si l’image n’existe pas
-                gc.setFill(javafx.scene.paint.Color.LIGHTGRAY);
-                gc.fillRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
-            }  
-            //Dessine tous les objets
-        for(int i=0;i<objetsImages.length;i++){
-            //Vérifie que l'objet n'a pas déjà été ramassé
-            if(!Ramasser[i]){
-                //Vérifie que le chemin de l'image n'est pas nulle
-                if(objetsImages[i]!=null){
-                    camX = modelmap.getRoverX() - WINDOW_WIDTH  / 2.0;
-                    camY = modelmap.getRoverY() - WINDOW_HEIGHT / 2.0;
-                    double objetLargeur = 64;
-                    double objetHauteur = 64;
-                    double objetEcranX = objetsCarteX[i] - camX - objetLargeur / 2.0;
-                    double objetEcranY = objetsCarteY[i] - camY - objetHauteur / 2.0;
-                    gc.drawImage(objetsImages[i], objetEcranX, objetEcranY, objetLargeur, objetHauteur);
-                }
-            }
-        }
-        // Dessine l'antenne --> ajouter si deux objets sont poser dessus alors l'antenne change d'image
-        camX = modelmap.getRoverX() - WINDOW_WIDTH  / 2.0;
-        camY = modelmap.getRoverY() - WINDOW_HEIGHT / 2.0;
-        double objetLargeur = 64;
-        double objetHauteur = 64;
-        double objetEcranX = antenneCarteX - camX - objetLargeur / 2.0;
-        double objetEcranY = antenneCarteY - camY - objetHauteur / 2.0;
-        gc.drawImage(antenneImages[0], objetEcranX, objetEcranY, objetLargeur, objetHauteur);
-        // 4) Dessiner le rover : récupérer son skin et le centrer
-        
-        if (roverSkin != null) {
-            // On veut centrer le sprite du rover (98×164) sur la position roverX, roverY
-            double roverScreenX = modelmap.getRoverX() - camX - (ROVER_DISPLAY_WIDTH  / 2.0);
-            double roverScreenY = modelmap.getRoverY() - camY - (ROVER_DISPLAY_HEIGHT / 2.0);
-            gc.drawImage(roverSkin, roverScreenX, roverScreenY);
-        } else {
-            // Si pour une raison l’image est nulle, on peut dessiner un carré rouge
-            double fallbackSize = 20;
-            double fx = modelmap.getRoverX() - camX - fallbackSize / 2.0;
-            double fy = modelmap.getRoverY() - camY - fallbackSize / 2.0;
-            gc.setFill(javafx.scene.paint.Color.RED);
-            gc.fillRect(fx, fy, fallbackSize, fallbackSize);
+    /**
+ * Dessine la vue principale :
+ *  - le fond (backgroundImage) recadré ou étiré selon la taille du Canvas,
+ *  - tous les objets à leurs positions relatives à la caméra,
+ *  - le rover (skin) centré sur sa position.
+ */
+private void drawMainView() {
+    GraphicsContext gc = mainCanvas.getGraphicsContext2D();
+
+    // 1) Dimensions dynamiques du Canvas principal
+    double windowW = mainCanvas.getWidth();
+    double windowH = mainCanvas.getHeight();
+    if (windowW <= 0 || windowH <= 0) return;  // pas encore dimensionné
+
+    // 2) Calculer la “caméra” centrée sur le rover
+    double camX = modelmap.getRoverX() - windowW  / 2.0;
+    double camY = modelmap.getRoverY() - windowH / 2.0;
+
+    // 3) Clamp dynamique : jamais sortir de [0 .. mapWidth-windowW] et [0 .. mapHeight-windowH]
+    if (camX < 0)                       camX = 0;
+    else if (camX + windowW > MAP_WIDTH) camX = MAP_WIDTH - windowW;
+
+    if (camY < 0)                       camY = 0;
+    else if (camY + windowH > MAP_HEIGHT) camY = MAP_HEIGHT - windowH;
+
+    // 4) Afficher le fond
+    if (backgroundImage != null) {
+        gc.clearRect(0, 0, windowW, windowH);
+        // Extraire la portion [camX,camY, windowW×windowH] de l’image
+        gc.drawImage(
+            backgroundImage,
+            /* sx= */ camX,             /* sy= */ camY,
+            /* sw= */ windowW,          /* sh= */ windowH,
+            /* dx= */ 0,                /* dy= */ 0,
+            /* dw= */ windowW,          /* dh= */ windowH
+        );
+    } else {
+        // Fallback : fond gris
+        gc.setFill(Color.LIGHTGRAY);
+        gc.fillRect(0, 0, windowW, windowH);
+    }
+
+    // 5) Dessiner les objets
+    double objetW = 64, objetH = 64;
+    for (int i = 0; i < objetsImages.length; i++) {
+        if (!Ramasser[i] && objetsImages[i] != null) {
+            double ox = objetsCarteX[i] - camX - objetW / 2.0;
+            double oy = objetsCarteY[i] - camY - objetH / 2.0;
+            gc.drawImage(objetsImages[i], ox, oy, objetW, objetH);
         }
     }
+    // 6) Dessiner l’antenne
+    double antW = 64, antH = 64;
+    double ax = antenneCarteX - camX - antW / 2.0;
+    double ay = antenneCarteY - camY - antH / 2.0;
+    gc.drawImage(antenneImages[0], ax, ay, antW, antH);
+
+    // 7) Dessiner le rover (skin)
+    if (roverSkin != null) {
+        double rx = modelmap.getRoverX() - camX - (ROVER_DISPLAY_WIDTH / 2.0);
+        double ry = modelmap.getRoverY() - camY - (ROVER_DISPLAY_HEIGHT / 2.0);
+        gc.drawImage(
+            roverSkin,
+            rx, ry,
+            ROVER_DISPLAY_WIDTH,
+            ROVER_DISPLAY_HEIGHT
+        );
+    } else {
+        // Fallback : petit carré rouge
+        double sz = 10;
+        double fx = modelmap.getRoverX() - camX - sz / 2.0;
+        double fy = modelmap.getRoverY() - camY - sz / 2.0;
+        gc.setFill(Color.RED);
+        gc.fillRect(fx, fy, sz, sz);
+    }
+}
+
     
     /**
      * Dessine la minimap (vue d’ensemble) dans miniMapCanvas :
