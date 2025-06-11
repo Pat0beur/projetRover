@@ -208,6 +208,22 @@ public class ControllerMap {
                 // --> Faire que la méthode add à l'inventaire le fasse disparaitre de la scène
                 Inventaire[currentIndex] = objetsImages[currentIndex];
                 Ramasser[currentIndex] = true;
+                if(currentIndex ==0){
+                    GraphicsContext gcobjet = firstCanvas.getGraphicsContext2D();
+                    gcobjet.drawImage(Inventaire[currentIndex], 15, -5);
+                }
+                else if(currentIndex ==1){
+                    GraphicsContext gcobjet = secondCanvas.getGraphicsContext2D();
+                    gcobjet.drawImage(Inventaire[currentIndex], 15, -5);
+                }
+                else if(currentIndex ==2){
+                    GraphicsContext gcobjet = thirdCanvas.getGraphicsContext2D();
+                    gcobjet.drawImage(Inventaire[currentIndex], 15, -5);
+                }
+                else if(currentIndex ==3){
+                    GraphicsContext gcobjet = fourthCanvas.getGraphicsContext2D();
+                    gcobjet.drawImage(Inventaire[currentIndex], 15, -5);
+                }
                 System.out.println("Voici ce qu'il y a dans l'Inventaire"+Inventaire[0]+" "+Inventaire[1]+" "+Inventaire[2]+" "+Inventaire[3]+" ");
                 drawAll();
                 // Ici tu pourras ajouter à l'inventaire

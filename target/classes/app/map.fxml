@@ -23,7 +23,7 @@
    <Canvas fx:id="secondCanvas" height="40.0" layoutX="267.0" layoutY="512.0" width="85.0" />
    <Canvas fx:id="thirdCanvas" height="40.0" layoutX="352.0" layoutY="512.0" width="85.0" />
    <Canvas fx:id="fourthCanvas" height="40.0" layoutX="437.0" layoutY="512.0" width="85.0" />
-   <Line fx:id="firstLine" endX="100.0" layoutX="167.0" layoutY="552.0" startX="100.0" startY="-40.0" />
-   <Line fx:id="secondLine" endX="100.0" layoutX="252.0" layoutY="552.0" startX="100.0" startY="-40.0" />
-   <Line fx:id="thirdLine" endX="100.0" layoutX="337.0" layoutY="552.0" startX="100.0" startY="-40.0" />
+   <Line fx:id="firstLine" endX="100.0" layoutX="167.0" layoutY="552.0" startX="100.0" startY="-40.0" strokeWidth="3.0" />
+   <Line fx:id="secondLine" endX="100.0" layoutX="252.0" layoutY="552.0" startX="100.0" startY="-40.0" strokeWidth="3.0" />
+   <Line fx:id="thirdLine" endX="100.0" layoutX="337.0" layoutY="552.0" startX="100.0" startY="-40.0" strokeWidth="3.0" />
 </AnchorPane>
