@@ -69,6 +69,7 @@ public class ControllerMap {
     private int etatAntenne = 0;
     private boolean[] depose = {false,false,false,false};
     private long lastNanoTime;
+    private AnimationTimer gameLoop;
 
 
 
@@ -188,7 +189,7 @@ public class ControllerMap {
         }
         
         // 4) Démarrer la boucle AnimationTimer (~60 FPS)
-        AnimationTimer gameLoop = new AnimationTimer() {
+        gameLoop = new AnimationTimer() {
             @Override
             public void handle(long now) {
                 // 1) calculer dt en secondes
@@ -234,6 +235,18 @@ public class ControllerMap {
             }
         };
         gameLoop.start();
+
+        // Capturer Échap une fois la Scene attachée
+       mainCanvas.sceneProperty().addListener((obs, oldS, newS) -> {
+        if (newS != null) {
+            newS.addEventFilter(KeyEvent.KEY_PRESSED, ev -> {
+            if (ev.getCode() == KeyCode.ESCAPE) {
+              showPauseDialog();
+               ev.consume();
+             }
+           });
+         }
+        });
         
         // Ajoute ces listeners pour le drag and drop :
         mainCanvas.setOnMousePressed(event -> {
@@ -663,6 +676,34 @@ private void drawMainView() {
             }));
         timeline.setCycleCount(remainingSeconds);
         timeline.play();
+        }
+
+        private void showPauseDialog() {
+            // 1) Stoppe l'animation
+            gameLoop.stop();
+
+            try {
+                // 2) Charge pause.fxml
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/app/pause.fxml"));
+                Parent root = loader.load();
+
+                // 3) Récupère le controller de la pause et passe-lui une référence si besoin
+                ControllerPause ctrl = loader.getController();
+                ctrl.setParent(this);
+
+                // 4) Ouvre une fenêtre modale
+                Stage pauseStage = new Stage();
+                pauseStage.initModality(Modality.APPLICATION_MODAL);
+                pauseStage.setTitle("Pause");
+                pauseStage.setScene(new Scene(root));
+                pauseStage.showAndWait();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            // 5) Relance le jeu quand la fenêtre de pause se ferme
+            gameLoop.start();
         }
         
     }
