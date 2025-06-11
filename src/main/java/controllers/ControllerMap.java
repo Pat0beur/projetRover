@@ -6,22 +6,19 @@ import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+// import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import models.ModelMap;
 import models.ModelCar;
 import java.util.concurrent.ThreadLocalRandom;
-import java.io.IOException;
-import java.util.Random;
 import javafx.util.Duration;
 import javafx.scene.control.Label;
 /**
@@ -51,6 +48,11 @@ public class ControllerMap {
     @FXML private Canvas chronoCanvas;
     @FXML private ProgressBar progressBar;
     @FXML private Label label;
+    @FXML private Canvas borderCanvas;
+    @FXML private Canvas firstCanvas;
+    @FXML private Canvas secondCanvas;
+    @FXML private Canvas thirdCanvas;
+    @FXML private Canvas fourthCanvas;
 
     private int remainingSeconds = 120;
 
@@ -59,7 +61,7 @@ public class ControllerMap {
     private ModelMap modelmap;
     private ModelCar modelCar;
     private Image roverSkin;
-    private ImageView test;
+    // private ImageView test;
 
     // Tout ce qui se rapporte aux objets
     private Image[] Inventaire = new Image[4];
@@ -111,16 +113,23 @@ public class ControllerMap {
     @FXML
     public void initialize() {
         // 1) Créer le modèle
+        startTimer();
         modelmap = new ModelMap(MAP_WIDTH, MAP_HEIGHT);
         // mainCanvas = new Canvas();
         this.modelCar = App.getModelCar();
-        progressBar.setProgress(100F);
         GraphicsContext gc1 = chronoCanvas.getGraphicsContext2D();
-        gc1.setGlobalAlpha(0.2);
+
         gc1.setStroke(javafx.scene.paint.Color.GRAY);
+        gc1.setGlobalAlpha(0.2);
+        gc1.fillText(null, MAP_WIDTH, MAP_HEIGHT);
         gc1.strokeRect(0, 0, MINI_WIDTH, MINI_HEIGHT);
         gc1.setFill(javafx.scene.paint.Color.WHITE);
         gc1.fillRect(0, 0, MINI_WIDTH, MINI_HEIGHT);
+        progressBar.setProgress(100F);
+        GraphicsContext gc2 = borderCanvas.getGraphicsContext2D();
+        gc2.setLineWidth(8F);
+        gc2.strokeRect(0,0,340,40);
+
         // test = new ImageView(roverSkin);
         String skinPath = modelCar.getSkin();
         try{
@@ -180,35 +189,34 @@ public class ControllerMap {
                 }
             }
         });
-
+        
         mainCanvas.setOnMouseDragged(event -> {
-                if (objetAttrape[currentIndex]) {
-                    // Conversion coordonnées écran → carte
-                    double camX = modelmap.getRoverX() - WINDOW_WIDTH  / 2.0;
-                    double camY = modelmap.getRoverY() - WINDOW_HEIGHT / 2.0;
-                    objetsCarteX[currentIndex] = camX + event.getX() + objetsImages[currentIndex].getWidth() / 2.0 - decalageX;
-                    objetsCarteY[currentIndex] = camY + event.getY() + objetsImages[currentIndex].getHeight() / 2.0 - decalageY;
-                    System.out.println("L'objet est en train d'être drag and drop");
-                }
+            if (objetAttrape[currentIndex]) {
+                // Conversion coordonnées écran → carte
+                double camX = modelmap.getRoverX() - WINDOW_WIDTH  / 2.0;
+                double camY = modelmap.getRoverY() - WINDOW_HEIGHT / 2.0;
+                objetsCarteX[currentIndex] = camX + event.getX() + objetsImages[currentIndex].getWidth() / 2.0 - decalageX;
+                objetsCarteY[currentIndex] = camY + event.getY() + objetsImages[currentIndex].getHeight() / 2.0 - decalageY;
+                System.out.println("L'objet est en train d'être drag and drop");
+            }
         });
         // Position du rover relative ??
         mainCanvas.setOnMouseReleased(event -> {
-                objetAttrape[currentIndex] = false;
-                if (Math.abs(modelmap.getRoverX() - objetsCarteX[currentIndex]) <20 && Math.abs(modelmap.getRoverY() - objetsCarteY[currentIndex]) < 100) {
-                    System.out.println("L'objet est posé sur le rover !");
-                    // --> Faire que la méthode add à l'inventaire le fasse disparaitre de la scène
-                    Inventaire[currentIndex] = objetsImages[currentIndex];
-                    Ramasser[currentIndex] = true;
-                    System.out.println("Voici ce qu'il y a dans l'Inventaire"+Inventaire[0]+" "+Inventaire[1]+" "+Inventaire[2]+" "+Inventaire[3]+" ");
-                    drawAll();
-                    // Ici tu pourras ajouter à l'inventaire
-                } else {
-                    System.out.println("Voici la position du rover :"+ modelmap.getRoverX()+" , "+modelmap.getRoverY());
-                    System.out.println("Voici la position de l'objet :"+ objetsCarteX[currentIndex]+" , "+objetsCarteY[currentIndex]);
-                    System.out.println("L'objet n'est PAS sur le rover.");
-                }
+            objetAttrape[currentIndex] = false;
+            if (Math.abs(modelmap.getRoverX() - objetsCarteX[currentIndex]) <20 && Math.abs(modelmap.getRoverY() - objetsCarteY[currentIndex]) < 100) {
+                System.out.println("L'objet est posé sur le rover !");
+                // --> Faire que la méthode add à l'inventaire le fasse disparaitre de la scène
+                Inventaire[currentIndex] = objetsImages[currentIndex];
+                Ramasser[currentIndex] = true;
+                System.out.println("Voici ce qu'il y a dans l'Inventaire"+Inventaire[0]+" "+Inventaire[1]+" "+Inventaire[2]+" "+Inventaire[3]+" ");
+                drawAll();
+                // Ici tu pourras ajouter à l'inventaire
+            } else {
+                System.out.println("Voici la position du rover :"+ modelmap.getRoverX()+" , "+modelmap.getRoverY());
+                System.out.println("Voici la position de l'objet :"+ objetsCarteX[currentIndex]+" , "+objetsCarteY[currentIndex]);
+                System.out.println("L'objet n'est PAS sur le rover.");
+            }
         });
-        startTimer();
     }
     
     /**
@@ -217,7 +225,7 @@ public class ControllerMap {
     private void updateModel() {
         double dx = 0, dy = 0;
         if (leftPressed){  dx -= ROVER_SPEED;
-        // test.setRotate(90);
+            // test.setRotate(90);
         }
         if (rightPressed) dx += ROVER_SPEED;
         if (upPressed)    dy -= ROVER_SPEED;
@@ -225,46 +233,46 @@ public class ControllerMap {
         if (escapePressed){
             System.exit(0);
             // try {
-            //     Stage stage = (Stage) roverSkin.getScene().getWindow();
-            //     FXMLLoader loader = new FXMLLoader(getClass().getResource("/app/pause.fxml"));
-            //     Parent root = loader.load();
-            //     Scene scene = new Scene(root);
-            //     stage.setScene(scene);
-            //     stage.show();
-            // } catch (IOException e) {
-            //     e.printStackTrace();
-            // }
-        }
-        if (dx != 0 || dy != 0) {
-            modelmap.moveRover(dx, dy);
-        }
-    }
-
-    /**
-     * Dessine à chaque frame la vue principale (fond + image du rover) 
-     * puis la minimap avec un petit carré vert.
-     */
-    private void drawAll() {
-        drawMainView();
-        drawMiniMap();
-    }
+                //     Stage stage = (Stage) roverSkin.getScene().getWindow();
+                //     FXMLLoader loader = new FXMLLoader(getClass().getResource("/app/pause.fxml"));
+                //     Parent root = loader.load();
+                //     Scene scene = new Scene(root);
+                //     stage.setScene(scene);
+                //     stage.show();
+                // } catch (IOException e) {
+                    //     e.printStackTrace();
+                    // }
+                }
+                if (dx != 0 || dy != 0) {
+                    modelmap.moveRover(dx, dy);
+                }
+            }
+            
+            /**
+             * Dessine à chaque frame la vue principale (fond + image du rover) 
+             * puis la minimap avec un petit carré vert.
+             */
+            private void drawAll() {
+                drawMainView();
+                drawMiniMap();
+            }
     /**
      * Dessine la portion de fond correspondant à la position du rover, 
      * puis place le sprite du rover au centre de la caméra.
      */
     private void drawMainView() {
         GraphicsContext gc = mainCanvas.getGraphicsContext2D();
-
+        
         // 1) Calculer la caméra centrée sur le rover
         double camX = modelmap.getRoverX() - WINDOW_WIDTH  / 2.0;
         double camY = modelmap.getRoverY() - WINDOW_HEIGHT / 2.0;
-
+        
         // 2) Contraindre la caméra pour qu’elle ne sorte pas de la carte
         if (camX < 0)                        camX = 0;
         if (camX + WINDOW_WIDTH > MAP_WIDTH)  camX = MAP_WIDTH - WINDOW_WIDTH;
         if (camY < 0)                        camY = 0;
         if (camY + WINDOW_HEIGHT > MAP_HEIGHT) camY = MAP_HEIGHT - WINDOW_HEIGHT;
-
+        
         // 3) Afficher la portion de l’image de fond (si chargée)
         if (backgroundImage != null) {
             gc.clearRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -278,13 +286,13 @@ public class ControllerMap {
                 /* dy= */ 0,
                 /* dw= */ WINDOW_WIDTH,           // affiché en 800×600
                 /* dh= */ WINDOW_HEIGHT
-            );
-        } else {
-            // Fallback : gris si l’image n’existe pas
-            gc.setFill(javafx.scene.paint.Color.LIGHTGRAY);
-            gc.fillRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
-        }  
-        //Dessine tous les objets
+                );
+            } else {
+                // Fallback : gris si l’image n’existe pas
+                gc.setFill(javafx.scene.paint.Color.LIGHTGRAY);
+                gc.fillRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+            }  
+            //Dessine tous les objets
         for(int i=0;i<objetsImages.length;i++){
             //Vérifie que l'objet n'a pas déjà été ramassé
             if(!Ramasser[i]){
@@ -309,7 +317,7 @@ public class ControllerMap {
         double objetEcranY = antenneCarteY - camY - objetHauteur / 2.0;
         gc.drawImage(antenneImages[0], objetEcranX, objetEcranY, objetLargeur, objetHauteur);
         // 4) Dessiner le rover : récupérer son skin et le centrer
-
+        
         if (roverSkin != null) {
             // On veut centrer le sprite du rover (98×164) sur la position roverX, roverY
             double roverScreenX = modelmap.getRoverX() - camX - (ROVER_DISPLAY_WIDTH  / 2.0);
@@ -324,7 +332,7 @@ public class ControllerMap {
             gc.fillRect(fx, fy, fallbackSize, fallbackSize);
         }
     }
-
+    
     /**
      * Dessine la minimap (vue d’ensemble) dans miniMapCanvas :
      * - fond sombre
@@ -333,35 +341,35 @@ public class ControllerMap {
      */
     private void drawMiniMap() {
         GraphicsContext gc = miniMapCanvas.getGraphicsContext2D();
-
+        
         // 1) Fond sombre
         gc.setFill(javafx.scene.paint.Color.rgb(30, 30, 30));
         gc.fillRect(0, 0, MINI_WIDTH, MINI_HEIGHT);
-
+        
         // 2) Calculer le ratio réel → minimap
         double scaleX = MINI_WIDTH  / MAP_WIDTH;
         double scaleY = MINI_HEIGHT / MAP_HEIGHT;
-
+        
         // 3) Position du rover sur la minimap
         double roverMiniX = modelmap.getRoverX() * scaleX;
         double roverMiniY = modelmap.getRoverY() * scaleY;
-
+        
         // Récupère les coordonnées de l'antenne sur la minimap
         double antenneMiniX = antenneCarteX * scaleX;
         double antenneMiniY = antenneCarteY * scaleY;
-
+        
         double[] objetsMiniX = new double[4];
         double[] objetsMiniY = new double[4];
-
+        
         // Récupère les coordonnées des objets sur la minimap
         for(int i=0;i<objetsImages.length;i++){
             objetsMiniX[i] = objetsCarteX[i] * scaleX;
             objetsMiniY[i] = objetsCarteY[i] * scaleY;
         }
-
+        
         // 4) Petit carré vert
         double dotSize = 4;
-
+        
         //Position du rover
         gc.setFill(javafx.scene.paint.Color.LIMEGREEN);
         gc.fillRect(
@@ -369,73 +377,73 @@ public class ControllerMap {
             roverMiniY - dotSize / 2.0,
             dotSize,
             dotSize
-        );
-        //Position de l'antenne
-        gc.setFill(javafx.scene.paint.Color.BLUE);
-        gc.fillRect(
-            antenneMiniX - dotSize / 2.0,
-            antenneMiniY - dotSize / 2.0,
-            dotSize,
-            dotSize
-        );
-
-        //Position des objets
-        for(int i=0;i<objetsImages.length;i++){
-            if(!Ramasser[i]){
-                gc.setFill(javafx.scene.paint.Color.RED);
-                gc.fillRect(
-                    objetsMiniX[i] - dotSize / 2.0,
-                    objetsMiniY[i] - dotSize / 2.0,
-                    dotSize,
-                    dotSize
+            );
+            //Position de l'antenne
+            gc.setFill(javafx.scene.paint.Color.BLUE);
+            gc.fillRect(
+                antenneMiniX - dotSize / 2.0,
+                antenneMiniY - dotSize / 2.0,
+                dotSize,
+                dotSize
                 );
-            }
-        }
-
-        // 5) Cadre blanc
-        gc.setStroke(javafx.scene.paint.Color.WHITE);
-        gc.strokeRect(0, 0, MINI_WIDTH, MINI_HEIGHT);
-    }
-
-    // ————————————————————————————
-    // Gestion des événements clavier (onKeyPressed/onKeyReleased)
-    // ————————————————————————————
-
-    @FXML
-    private void onKeyPressed(KeyEvent event) {
-        KeyCode code = event.getCode();
-        switch (code) {
-            case LEFT:  case A: leftPressed  = true; break;
-            case RIGHT: case D: rightPressed = true; break;
-            case UP:    case W: upPressed    = true; break;
-            case DOWN:  case S: downPressed  = true; break;
-            case ESCAPE: escapePressed = true; break;
-            default: break;
-        }
-    }
-
-    @FXML
-    private void onKeyReleased(KeyEvent event) {
-        KeyCode code = event.getCode();
-        switch (code) {
-            case LEFT:  case A: leftPressed  = false; break;
-            case RIGHT: case D: rightPressed = false; break;
-            case UP:    case W: upPressed    = false; break;
-            case DOWN:  case S: downPressed  = false; break;
-            case ESCAPE: escapePressed = false; break;
-            default: break;
-        }
-    }
-    public void miseAJourSkin(String skinPath) {
-    // Actualiser l’image du skin ici
-    modelmap.getCar().notifyCarChanged(new Image(getClass().getResource(skinPath).toExternalForm()));
-    }
-
-    private void startTimer() {
-        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
-            if (remainingSeconds > 0) {
-                remainingSeconds--;
-                int minutes = remainingSeconds / 60;
+                
+                //Position des objets
+                for(int i=0;i<objetsImages.length;i++){
+                    if(!Ramasser[i]){
+                        gc.setFill(javafx.scene.paint.Color.RED);
+                        gc.fillRect(
+                            objetsMiniX[i] - dotSize / 2.0,
+                            objetsMiniY[i] - dotSize / 2.0,
+                            dotSize,
+                            dotSize
+                            );
+                        }
+                    }
+                    
+                    // 5) Cadre blanc
+                    gc.setStroke(javafx.scene.paint.Color.WHITE);
+                    gc.strokeRect(0, 0, MINI_WIDTH, MINI_HEIGHT);
+                }
+                
+                // ————————————————————————————
+                // Gestion des événements clavier (onKeyPressed/onKeyReleased)
+                // ————————————————————————————
+                
+                @FXML
+                private void onKeyPressed(KeyEvent event) {
+                    KeyCode code = event.getCode();
+                    switch (code) {
+                        case LEFT:  case A: leftPressed  = true; break;
+                        case RIGHT: case D: rightPressed = true; break;
+                        case UP:    case W: upPressed    = true; break;
+                        case DOWN:  case S: downPressed  = true; break;
+                        case ESCAPE: escapePressed = true; break;
+                        default: break;
+                    }
+                }
+                
+                @FXML
+                private void onKeyReleased(KeyEvent event) {
+                    KeyCode code = event.getCode();
+                    switch (code) {
+                        case LEFT:  case A: leftPressed  = false; break;
+                        case RIGHT: case D: rightPressed = false; break;
+                        case UP:    case W: upPressed    = false; break;
+                        case DOWN:  case S: downPressed  = false; break;
+                        case ESCAPE: escapePressed = false; break;
+                        default: break;
+                    }
+                }
+                public void miseAJourSkin(String skinPath) {
+                    // Actualiser l’image du skin ici
+                    modelmap.getCar().notifyCarChanged(new Image(getClass().getResource(skinPath).toExternalForm()));
+                }
+                
+                private void startTimer() {
+                    Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+                        if (remainingSeconds > 0) {
+                            remainingSeconds--;
+                            int minutes = remainingSeconds / 60;
                 int seconds = remainingSeconds % 60;
                 label.setText(String.format("%02d:%02d", minutes, seconds));
             } else {
@@ -445,4 +453,6 @@ public class ControllerMap {
         timeline.setCycleCount(remainingSeconds);
         timeline.play();
     }
-}
+
+
+    }
