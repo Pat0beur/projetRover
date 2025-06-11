@@ -22,6 +22,7 @@ public class ViewMap {
      * Constructeur : on passe le Stage existant (par exemple celui du menu).
      * @param stageStage le Stage sur lequel on veut afficher la carte.
      */
+    @SuppressWarnings ("exports")
     public ViewMap(Stage stageStage) {
         this.stage = stageStage;
     }

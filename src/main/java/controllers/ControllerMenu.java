@@ -10,11 +10,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
-import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.TransferMode;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import models.Model;
 import models.ModelCar;
@@ -49,7 +44,7 @@ public class ControllerMenu {
         btnPersonnaliser.setOnAction(event -> {
             try {
                 Stage stage = (Stage) btnPersonnaliser.getScene().getWindow();
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/app/Personnalisation.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/app/personnalisation.fxml"));
                 Parent root = loader.load();
                 Scene scene = new Scene(root);
                 stage.setScene(scene);
@@ -63,7 +58,7 @@ public class ControllerMenu {
         btnCommandes.setOnAction(event -> {
             try {
                 Stage stage = (Stage) btnCommandes.getScene().getWindow();
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/app/Commandes.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/app/commandes.fxml"));
                 Parent root = loader.load();
                 Scene scene = new Scene(root);
                 stage.setScene(scene);

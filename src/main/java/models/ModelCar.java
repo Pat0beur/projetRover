@@ -50,13 +50,11 @@ public class ModelCar {
     public void addCarListener(Consumer<Image> listener) {
         listeners.add(listener);
     }
-    public void add(Image objet){
-        System.out.println("je suis ici");
-        for(int i=0;i<Inventaire.length;i++){
-            if(Inventaire[i]!=""){
-
-            }
-        }
-
-    }
+    // public void add(Image objet){
+    //     System.out.println("je suis ici");
+    //     for(int i=0;i<Inventaire.length;i++){
+    //         if(Inventaire[i]!=""){
+    //         }
+    //     }
+    // }
 }

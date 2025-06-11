@@ -22,7 +22,7 @@ public class ControllerCommandes {
                 Stage stage = (Stage) btnRetour.getScene().getWindow();
 
                 // Charger Menu.fxml depuis src/resources/app/Menu.fxml
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/app/Menu.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/app/menu.fxml"));
                 Parent root = loader.load();
 
                 // Créer une nouvelle Scene et l’assigner à la Stage

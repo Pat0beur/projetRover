@@ -3,12 +3,15 @@ package controllers;
 
 import app.App;
 import javafx.animation.AnimationTimer;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -19,6 +22,8 @@ import models.ModelCar;
 import java.util.concurrent.ThreadLocalRandom;
 import java.io.IOException;
 import java.util.Random;
+import javafx.util.Duration;
+import javafx.scene.control.Label;
 /**
  * ControllerMap affiche la carte (avec fond) et dessine l'image du rover
  * (skin) à la position du modèle. On garde en bas à droite la minimap.
@@ -33,7 +38,7 @@ public class ControllerMap {
     private static final double MAP_HEIGHT = 2000;
 
     private static final double ROVER_DISPLAY_WIDTH  = 20;   // largeur désirée du sprite
-    private static final double ROVER_DISPLAY_HEIGHT = 20 * (164.0 / 98.0);  // on garde le ratio original
+    private static final double ROVER_DISPLAY_HEIGHT = 33.5;  // on garde le ratio original
 
     private static final double MINI_WIDTH  = 200;     // largeur de la minimap
     private static final double MINI_HEIGHT = 200;     // hauteur de la minimap
@@ -43,16 +48,23 @@ public class ControllerMap {
     // ----- Injection des deux Canvas depuis map.fxml -----
     @FXML private Canvas mainCanvas;
     @FXML private Canvas miniMapCanvas;
+    @FXML private Canvas chronoCanvas;
+    @FXML private ProgressBar progressBar;
+    @FXML private Label label;
+
+    private int remainingSeconds = 120;
+
 
     // Modèle stockant la position du rover + ModelCar
     private ModelMap modelmap;
     private ModelCar modelCar;
     private Image roverSkin;
     private ImageView test;
-    private Image[] Inventaire;
 
+    // Tout ce qui se rapporte aux objets
+    private Image[] Inventaire = new Image[4];
     int min = 0;
-    int max = 1000;
+    int max = 2000;
     // int randomNum = ThreadLocalRandom.current().nextInt(min, max + 1); // entre min et max inclus
     private double[] objetsCarteX = { ThreadLocalRandom.current().nextInt(min, max + 1), 
         ThreadLocalRandom.current().nextInt(min, max + 1), 
@@ -61,20 +73,27 @@ public class ControllerMap {
     private double[] objetsCarteY = { ThreadLocalRandom.current().nextInt(min, max + 1), 
         ThreadLocalRandom.current().nextInt(min, max + 1), 
         ThreadLocalRandom.current().nextInt(min, max + 1), 
-        ThreadLocalRandom.current().nextInt(min, max + 1) }; // X de chaque objet
+        ThreadLocalRandom.current().nextInt(min, max + 1) }; // Y de chaque objet
     private Image[] objetsImages = {
         new Image(getClass().getResourceAsStream("/images/objets/circuit_imprime_test.png")),
         new Image(getClass().getResourceAsStream("/images/objets/panneau_solaire.png")),
         new Image(getClass().getResourceAsStream("/images/objets/tournevis_test.png")),
         new Image(getClass().getResourceAsStream("/images/objets/vis_test.png"))
     };
-    
-    //Pour le drap and drop
+    private double antenneCarteX = ThreadLocalRandom.current().nextInt(min, max + 1);
+    private double antenneCarteY = ThreadLocalRandom.current().nextInt(min, max + 1);
+    private Image[] antenneImages = {
+        new Image(getClass().getResourceAsStream("/images/antenne/antenne.png")),
+        new Image(getClass().getResourceAsStream("/images/antenne/antenne_un_peu_cassee.png")),
+        new Image(getClass().getResourceAsStream("/images/antenne/antenne_cassee.png"))
+    };
     private boolean[] objetAttrape ={false,false,false,false};
-    private double objetCarteX = 500;
-    private double objetCarteY = 500;
-    double[] objetEcranX = new double[5];
-    double[] objetEcranY = new double[5];
+    private double[] objetEcranX = new double[5];
+    private double[] objetEcranY = new double[5];
+    private boolean[] Ramasser = new boolean[4];
+    private int currentIndex;
+
+
     private double decalageX = 0;
     private double decalageY = 0;
     
@@ -95,6 +114,12 @@ public class ControllerMap {
         modelmap = new ModelMap(MAP_WIDTH, MAP_HEIGHT);
         // mainCanvas = new Canvas();
         this.modelCar = App.getModelCar();
+        progressBar.setProgress(100F);
+        GraphicsContext gc1 = chronoCanvas.getGraphicsContext2D();
+        gc1.setStroke(javafx.scene.paint.Color.WHITE);
+        gc1.strokeRect(0, 0, MINI_WIDTH, MINI_HEIGHT);
+        gc1.setFill(javafx.scene.paint.Color.WHITE);
+        gc1.fillRect(0, 0, MINI_WIDTH, MINI_HEIGHT);
         // test = new ImageView(roverSkin);
         String skinPath = modelCar.getSkin();
         try{
@@ -138,70 +163,51 @@ public class ControllerMap {
             for(int i=0;i<objetsImages.length;i++){
                 double camX = modelmap.getRoverX() - WINDOW_WIDTH  / 2.0;
                 double camY = modelmap.getRoverY() - WINDOW_HEIGHT / 2.0;
-                double objetLargeur = 32; // même taille que pour l'affichage
-                double objetHauteur = 32;
+                double objetLargeur = 48; // même taille que pour l'affichage
+                double objetHauteur = 48;
                 objetEcranX[i]= objetsCarteX[i] - camX - objetLargeur / 2.0;
-                objetEcranY[i]= objetsCarteY[i] - camY - objetLargeur / 2.0;
+                objetEcranY[i]= objetsCarteY[i] - camY - objetHauteur / 2.0;
                 
                 // Vérifie si le clic est sur l'objet
-                // --> Ne fonctionne pas
                 if (event.getX() >= objetEcranX[i] && event.getX() <= objetEcranX[i] + objetLargeur &&
                 event.getY() >= objetEcranY[i] && event.getY() <= objetEcranY[i] + objetHauteur) {
                     objetAttrape[i] = true;
+                    //Permet de savoir qu'il s'agît de cet item qui est déplacé
+                    currentIndex = i;
                     decalageX = event.getX() - objetEcranX[i];
                     decalageY = event.getY() - objetEcranY[i];
                 }
             }
         });
-        //         mainCanvas.setOnMousePressed(event -> {
-        //     // Conversion coordonnées écran → carte
-        //     for(int i=0;i<objetsImages.length;i++){
-        //         double camX = modelmap.getRoverX() - WINDOW_WIDTH  / 2.0;
-        //         double camY = modelmap.getRoverY() - WINDOW_HEIGHT / 2.0;
-        //         double objetLargeur = 32; // même taille que pour l'affichage
-        //         double objetHauteur = 32;
-        //         double objetEcranX = objetsX[i] - camX - objetLargeur / 2.0;
-        //         double objetEcranY = objetsY[i] - camY - objetHauteur / 2.0;
-                
-        //         // Vérifie si le clic est sur l'objet
-        //         if (event.getX() >= objetEcranX && event.getX() <= objetEcranX + objetLargeur &&
-        //         event.getY() >= objetEcranY && event.getY() <= objetEcranY + objetHauteur) {
-        //             objetAttrape = true;
-        //             decalageX = event.getX() - objetEcranX;
-        //             decalageY = event.getY() - objetEcranY;
-        //         }
-        //     }
-        // });
 
         mainCanvas.setOnMouseDragged(event -> {
-            for(int i=0;i<objetsImages.length;i++){
-                if (objetAttrape[i]) {
+                if (objetAttrape[currentIndex]) {
                     // Conversion coordonnées écran → carte
                     double camX = modelmap.getRoverX() - WINDOW_WIDTH  / 2.0;
                     double camY = modelmap.getRoverY() - WINDOW_HEIGHT / 2.0;
-                    objetsCarteX[i] = camX + event.getX() + objetsImages[i].getWidth() / 2.0 - decalageX;
-                    objetsCarteY[i] = camY + event.getY() + objetsImages[i].getHeight() / 2.0 - decalageY;
+                    objetsCarteX[currentIndex] = camX + event.getX() + objetsImages[currentIndex].getWidth() / 2.0 - decalageX;
+                    objetsCarteY[currentIndex] = camY + event.getY() + objetsImages[currentIndex].getHeight() / 2.0 - decalageY;
                     System.out.println("L'objet est en train d'être drag and drop");
                 }
-            }
         });
         // Position du rover relative ??
         mainCanvas.setOnMouseReleased(event -> {
-            for(int i=0;i<objetsImages.length;i++){
-                objetAttrape[i] = false;
-                if (Math.abs(modelmap.getRoverX() - objetsCarteX[i]) <100 && Math.abs(modelmap.getRoverY() - objetsCarteY[i]) < 100) {
+                objetAttrape[currentIndex] = false;
+                if (Math.abs(modelmap.getRoverX() - objetsCarteX[currentIndex]) <20 && Math.abs(modelmap.getRoverY() - objetsCarteY[currentIndex]) < 100) {
                     System.out.println("L'objet est posé sur le rover !");
                     // --> Faire que la méthode add à l'inventaire le fasse disparaitre de la scène
-                    Inventaire[i] = objetsImages[i];
-
+                    Inventaire[currentIndex] = objetsImages[currentIndex];
+                    Ramasser[currentIndex] = true;
+                    System.out.println("Voici ce qu'il y a dans l'Inventaire"+Inventaire[0]+" "+Inventaire[1]+" "+Inventaire[2]+" "+Inventaire[3]+" ");
+                    drawAll();
                     // Ici tu pourras ajouter à l'inventaire
                 } else {
-                    System.out.println("Voici la position du rover :"+modelmap.getRoverX()+" , "+modelmap.getRoverY());
-                    System.out.println("Voici la position de l'objet :"+objetsCarteX[i]+" , "+objetsCarteY[i]);
+                    System.out.println("Voici la position du rover :"+ modelmap.getRoverX()+" , "+modelmap.getRoverY());
+                    System.out.println("Voici la position de l'objet :"+ objetsCarteX[currentIndex]+" , "+objetsCarteY[currentIndex]);
                     System.out.println("L'objet n'est PAS sur le rover.");
                 }
-            }
         });
+        startTimer();
     }
     
     /**
@@ -216,6 +222,7 @@ public class ControllerMap {
         if (upPressed)    dy -= ROVER_SPEED;
         if (downPressed)  dy += ROVER_SPEED;
         if (escapePressed){
+            System.exit(0);
             // try {
             //     Stage stage = (Stage) roverSkin.getScene().getWindow();
             //     FXMLLoader loader = new FXMLLoader(getClass().getResource("/app/pause.fxml"));
@@ -227,7 +234,6 @@ public class ControllerMap {
             //     e.printStackTrace();
             // }
         }
-        // if()
         if (dx != 0 || dy != 0) {
             modelmap.moveRover(dx, dy);
         }
@@ -277,18 +283,30 @@ public class ControllerMap {
             gc.setFill(javafx.scene.paint.Color.LIGHTGRAY);
             gc.fillRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
         }  
+        //Dessine tous les objets
         for(int i=0;i<objetsImages.length;i++){
-            if(objetsImages[i]!=null){
-                camX = modelmap.getRoverX() - WINDOW_WIDTH  / 2.0;
-                camY = modelmap.getRoverY() - WINDOW_HEIGHT / 2.0;
-                double objetLargeur = 64;
-                double objetHauteur = 64;
-                double objetEcranX = objetsCarteX[i] - camX - objetLargeur / 2.0;
-                double objetEcranY = objetsCarteY[i] - camY - objetHauteur / 2.0;
-                gc.drawImage(objetsImages[i], objetEcranX, objetEcranY, objetLargeur, objetHauteur);
+            //Vérifie que l'objet n'a pas déjà été ramassé
+            if(!Ramasser[i]){
+                //Vérifie que le chemin de l'image n'est pas nulle
+                if(objetsImages[i]!=null){
+                    camX = modelmap.getRoverX() - WINDOW_WIDTH  / 2.0;
+                    camY = modelmap.getRoverY() - WINDOW_HEIGHT / 2.0;
+                    double objetLargeur = 64;
+                    double objetHauteur = 64;
+                    double objetEcranX = objetsCarteX[i] - camX - objetLargeur / 2.0;
+                    double objetEcranY = objetsCarteY[i] - camY - objetHauteur / 2.0;
+                    gc.drawImage(objetsImages[i], objetEcranX, objetEcranY, objetLargeur, objetHauteur);
+                }
             }
         }
-
+        // Dessine l'antenne --> ajouter si deux objets sont poser dessus alors l'antenne change d'image
+        camX = modelmap.getRoverX() - WINDOW_WIDTH  / 2.0;
+        camY = modelmap.getRoverY() - WINDOW_HEIGHT / 2.0;
+        double objetLargeur = 64;
+        double objetHauteur = 64;
+        double objetEcranX = antenneCarteX - camX - objetLargeur / 2.0;
+        double objetEcranY = antenneCarteY - camY - objetHauteur / 2.0;
+        gc.drawImage(antenneImages[0], objetEcranX, objetEcranY, objetLargeur, objetHauteur);
         // 4) Dessiner le rover : récupérer son skin et le centrer
 
         if (roverSkin != null) {
@@ -326,12 +344,18 @@ public class ControllerMap {
         // 3) Position du rover sur la minimap
         double roverMiniX = modelmap.getRoverX() * scaleX;
         double roverMiniY = modelmap.getRoverY() * scaleY;
+
+        // Récupère les coordonnées de l'antenne sur la minimap
+        double antenneMiniX = antenneCarteX * scaleX;
+        double antenneMiniY = antenneCarteY * scaleY;
+
         double[] objetsMiniX = new double[4];
         double[] objetsMiniY = new double[4];
+
+        // Récupère les coordonnées des objets sur la minimap
         for(int i=0;i<objetsImages.length;i++){
             objetsMiniX[i] = objetsCarteX[i] * scaleX;
             objetsMiniY[i] = objetsCarteY[i] * scaleY;
-
         }
 
         // 4) Petit carré vert
@@ -345,14 +369,26 @@ public class ControllerMap {
             dotSize,
             dotSize
         );
+        //Position de l'antenne
+        gc.setFill(javafx.scene.paint.Color.BLUEVIOLET);
+        gc.fillRect(
+            antenneMiniX - dotSize / 2.0,
+            antenneMiniY - dotSize / 2.0,
+            dotSize,
+            dotSize
+        );
+
+        //Position des objets
         for(int i=0;i<objetsImages.length;i++){
-            gc.setFill(javafx.scene.paint.Color.RED);
-            gc.fillRect(
-                objetsMiniX[i] - dotSize / 2.0,
-                objetsMiniY[i] - dotSize / 2.0,
-                dotSize,
-                dotSize
-            );
+            if(!Ramasser[i]){
+                gc.setFill(javafx.scene.paint.Color.RED);
+                gc.fillRect(
+                    objetsMiniX[i] - dotSize / 2.0,
+                    objetsMiniY[i] - dotSize / 2.0,
+                    dotSize,
+                    dotSize
+                );
+            }
         }
 
         // 5) Cadre blanc
@@ -393,57 +429,19 @@ public class ControllerMap {
     // Actualiser l’image du skin ici
     modelmap.getCar().notifyCarChanged(new Image(getClass().getResource(skinPath).toExternalForm()));
     }
+
+    private void startTimer() {
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+            if (remainingSeconds > 0) {
+                remainingSeconds--;
+                int minutes = remainingSeconds / 60;
+                int seconds = remainingSeconds % 60;
+                label.setText(String.format("%02d:%02d", minutes, seconds));
+            } else {
+                label.setText("Temps écoulé !");
+            }
+        }));
+        timeline.setCycleCount(remainingSeconds);
+        timeline.play();
+    }
 }
-
-
-
-        // btnJouer.setOnDragOver(event -> {
-        // /* data is dragged over the target */
-        // /* accept it only if it is not dragged from the same node 
-        //  * and if it has a string data */
-        // if (event.getGestureSource() != btnJouer &&
-        //         event.getDragboard().hasString()) {
-        //     /* allow for both copying and moving, whatever user chooses */
-        //     event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
-        // }
-        
-        // event.consume();
-        // });
-        // btnJouer.setOnDragEntered(event -> {
-        // /* the drag-and-drop gesture entered the target */
-        // /* show to the user that it is an actual gesture target */
-        //     if (event.getGestureSource() != btnJouer &&
-        //             event.getDragboard().hasString()) {
-        //         btnJouer.setTextFill(Color.GREEN);
-        //     } 
-        //     event.consume();
-        // });
-        // btnJouer.setOnDragExited(event -> {
-        //     /* mouse moved away, remove the graphical cues */
-        //     btnJouer.setTextFill(Color.BLACK);
-
-        //     event.consume();
-        // });
-        // btnJouer.setOnDragDropped(event -> {
-        // /* data dropped */
-        // /* if there is a string data on dragboard, read it and use it */
-        // Dragboard db = event.getDragboard();
-        // boolean success = false;
-        // if (db.hasString()) {
-        //    btnJouer.setText(db.getString());
-        //    success = true;
-        // }
-        // /* let the source know whether the string was successfully 
-        //  * transferred and used */
-        // event.setDropCompleted(success);
-        
-        // event.consume();
-        // });
-        // btnCommandes.setOnDragDone(event -> {
-        // /* the drag and drop gesture ended */
-        // /* if the data was successfully moved, clear it */
-        // if (event.getTransferMode() == TransferMode.MOVE) {
-        //     btnCommandes.setText("");
-        // }
-        // event.consume();
-        // });

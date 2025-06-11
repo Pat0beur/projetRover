@@ -75,7 +75,7 @@ public class ControllerPersonnalisation {
             try {
                 Stage stage = (Stage) btnRetour.getScene().getWindow();
                 FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/app/Menu.fxml")
+                    getClass().getResource("/app/menu.fxml")
                 );
                 Parent root = loader.load();
                 Scene scene = new Scene(root);
@@ -92,7 +92,7 @@ public class ControllerPersonnalisation {
                 SetVoiture(images[indice]); // Récupère l'image 
                 Stage stage = (Stage) btnValider.getScene().getWindow();
                 FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/app/Menu.fxml")
+                    getClass().getResource("/app/menu.fxml")
                 );
                 Parent root = loader.load();
                 Scene scene = new Scene(root);
