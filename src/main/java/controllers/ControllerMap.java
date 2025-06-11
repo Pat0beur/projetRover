@@ -104,6 +104,12 @@ public class ControllerMap {
     
     // Image de fond (ici mars 4000×4000 ou 2000×2000 selon ce que vous avez chargé)
     private Image backgroundImage;
+
+    private double baseCarteX = 1000;  
+    private double baseCarteY = 900;
+    private Image marsBase = new Image(getClass().getResourceAsStream("/images/objets/Base.png"));
+    private static final double BASE_DISPLAY_WIDTH  = 256;
+    private static final double BASE_DISPLAY_HEIGHT = 256; 
     
     // Flags pour l’état des touches
     private boolean upPressed, downPressed, leftPressed, rightPressed, escapePressed;
@@ -456,6 +462,10 @@ private void drawMainView() {
             gc.drawImage(objetsImages[i], ox, oy, objetW, objetH);
         }
     }
+   double bx = baseCarteX - camX - (BASE_DISPLAY_WIDTH  / 2.0);
+    double by = baseCarteY - camY - (BASE_DISPLAY_HEIGHT / 2.0);
+    gc.drawImage(marsBase, bx, by, BASE_DISPLAY_WIDTH, BASE_DISPLAY_HEIGHT);
+
     // 6) Dessiner l’antenne
     double antW = 128, antH = 128;
     double ax = antenneCarteX - camX - antW / 2.0;
