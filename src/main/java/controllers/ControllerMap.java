@@ -182,7 +182,7 @@ public class ControllerMap {
                 double dxBase = modelmap.getRoverX() - baseCarteX;
                 double dyBase = modelmap.getRoverY() - baseCarteY;
                 double distance = Math.hypot(dxBase, dyBase);
-                double rechargeRadius = 100; // ou un autre rayon
+                double rechargeRadius = 150t; // ou un autre rayon
                 if (distance <= rechargeRadius) {
                     modelCar.recharge(dt);
                 } else {
