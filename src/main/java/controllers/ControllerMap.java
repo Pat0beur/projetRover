@@ -69,7 +69,7 @@ public class ControllerMap {
     private boolean isDraggingFromInventory = false;
     private int draggingInventoryIndex = -1;
     private int etatAntenne = 0;
-    private boolean[] depose = {false,false,false,false};
+
     private long lastNanoTime;
     private AnimationTimer gameLoop;
     private Timeline countdownTimeline;
@@ -438,9 +438,9 @@ public class ControllerMap {
                 // Ici tu pourras ajouter à l'inventaire
             } else if(Math.abs(antenneCarteX - objetsCarteX[currentIndex]) <20 && Math.abs(antenneCarteY - objetsCarteY[currentIndex]) < 20) {
                 System.out.println("Bravo vous avez déposé l'objet sur l'antenne !");
-                depose[currentIndex] = true;
-                etatAntenne++;
-                if(etatAntenne == 4){
+                // depose[currentIndex] = true;
+                modelmap.setdepose(true, currentIndex);
+                if(modelmap.getdepose(0) == true && modelmap.getdepose(1) == true && modelmap.getdepose(2) == true && modelmap.getdepose(3) == true){
                     modelmap.setEndGame(true);
                     modelmap.setJeuArrete(true);
                     // System.out.println("Les valeurs de EndGame et de setJeuArrete on bien été modifié");
@@ -556,7 +556,7 @@ private void drawMainView() {
     // 5) Dessiner les objets
     double objetW = 64, objetH = 64;
     for (int i = 0; i < objetsImages.length; i++) {
-        if (!Ramasser[i] && !depose[i] && objetsImages[i] != null) {
+        if (!Ramasser[i] && !modelmap.getdepose(i) && objetsImages[i] != null) {
             double ox = objetsCarteX[i] - camX - objetW / 2.0;
             double oy = objetsCarteY[i] - camY - objetH / 2.0;
             gc.drawImage(objetsImages[i], ox, oy, objetW, objetH);
@@ -649,7 +649,7 @@ private void drawMainView() {
                 
         //Position des objets
         for(int i=0;i<objetsImages.length;i++){
-            if(!Ramasser[i] && !depose[i]){
+            if(!Ramasser[i] && !modelmap.getdepose(i)){
                 gc.setFill(javafx.scene.paint.Color.RED);
                 gc.fillRect(
                     objetsMiniX[i] - dotSize / 2.0,
@@ -747,8 +747,4 @@ private void drawMainView() {
             gameLoop.start();
             countdownTimeline.play();
         }
-        // @FXML
-        // public void setProgressBar(double a){
-        //     this.progressBar.setProgress(a);
-        // }
     }

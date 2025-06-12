@@ -22,6 +22,7 @@ public class ModelMap {
     private boolean EndGame = false;
     private int indiceFinPartie;
     private boolean JeuArrete;
+    private boolean[] depose = {false,false,false,false};
 
 
 
@@ -80,6 +81,15 @@ public class ModelMap {
     }
     public boolean getJeuArrete(){
         return JeuArrete;
+    }
+    public void setdepose(boolean a,int indice){
+        this.depose[indice] = a;
+    }
+    public boolean[] getdepose(){
+        return depose;
+    }
+    public boolean getdepose(int indice){
+        return depose[indice];
     }
 
     /**
