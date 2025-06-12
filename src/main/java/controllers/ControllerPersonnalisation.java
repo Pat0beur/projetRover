@@ -93,7 +93,6 @@ public class ControllerPersonnalisation {
                         e.printStackTrace();
                     }
                 });
-                
             btnValider.setOnAction(event -> {
                 SetVoiture(images[indice]);
                 String target = App.isFromPause() ? "/app/pause.fxml" : "/app/menu.fxml";
