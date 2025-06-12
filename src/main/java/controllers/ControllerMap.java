@@ -193,6 +193,7 @@ public class ControllerMap {
         
         // 4) Démarrer la boucle AnimationTimer (~60 FPS)
         gameLoop = new AnimationTimer() {
+            private long startTime = 120;
             @Override
             public void handle(long now) {
                 // 1) calculer dt en secondes
@@ -208,11 +209,31 @@ public class ControllerMap {
                 } else {
                     modelCar.tick(dt);
                 }
-
+                if(remainingSeconds == 0 && !modelmap.getEndGame()){
+                    gameLoop.stop();
+                    countdownTimeline.pause();
+                    modelmap.setIndiceFinPartie(0); // Faire test ici
+                    modelmap.setEndGame(true);
+                    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/app/perdu.fxml"));
+                    Parent root = null;
+                    try {
+                        root = fxmlLoader.load();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    // Création de la fenêtre
+                    Stage stage = new Stage();
+                    stage.setTitle("Game Over");
+                    stage.setScene(new Scene(root));
+                    stage.initModality(Modality.APPLICATION_MODAL);
+                    stage.show();
+                }
                 // 3) mettre à jour la ProgressBar à chaque frame
                 progressBar.setProgress(modelCar.getBatteryPercentage());
                 // 4) si batterie vide → quitter
                 if (modelCar.isEmpty() && !modelmap.getEndGame()) {
+                    gameLoop.stop();
+                    countdownTimeline.pause();
                     modelmap.setIndiceFinPartie(1); // Faire test ici
                     modelmap.setEndGame(true);
                     gameLoop.stop();
@@ -241,10 +262,6 @@ public class ControllerMap {
                     stage.initModality(Modality.APPLICATION_MODAL);
                     stage.show();
                 }
-                // 4) game over si vide
-                // if (modelCar.isEmpty()) {
-                //     System.exit(0);
-                // }
 
                 // 5) le reste : déplacer et dessiner
                 updateModel();
