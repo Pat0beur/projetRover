@@ -2,22 +2,25 @@ package controllers;
 
 import java.io.IOException;
 
+import app.App;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
+import models.ModelMap;
 import views.ViewMap;
 
 public class ControllerFinPartie {
     @FXML private Button btnPersonnalisation;
     @FXML private Button btnQuitter;
     @FXML private Button btnRejouer;
-    private ControllerMap parent;
+    private ModelMap modelMap;
 
     @FXML
     public void initialize(){
+        modelMap = App.getModelMap();
         btnPersonnalisation.setOnAction(event -> {
             try {
                 Stage stage = (Stage) btnPersonnalisation.getScene().getWindow();
@@ -37,8 +40,5 @@ public class ControllerFinPartie {
         btnQuitter.setOnAction(event -> {
             System.exit(0);
         });
-    }
-    public void setParent(ControllerMap parent) {
-    this.parent = parent;
     }
 }

@@ -20,6 +20,8 @@ public class ModelMap {
     private Model model;
     private String[] Inventaire;
     private boolean EndGame = false;
+    private int indiceFinPartie;
+    private boolean JeuArrete;
 
 
     /**
@@ -61,6 +63,21 @@ public class ModelMap {
     }
     public void setEndGame(boolean a){
         this.EndGame = a;
+    }
+    public ModelMap getModelMap(){
+        return this;
+    }
+    public void setIndiceFinPartie(int a){
+        this.indiceFinPartie = a;
+    }
+    public int getIndiceFinPartie(){
+        return indiceFinPartie;
+    }
+    public void setJeuArrete(boolean a){
+        this.JeuArrete = a;
+    }
+    public boolean getJeuArrete(){
+        return JeuArrete;
     }
 
     /**

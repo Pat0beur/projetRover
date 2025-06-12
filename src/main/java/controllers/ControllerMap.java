@@ -141,14 +141,11 @@ public class ControllerMap {
      */
     @FXML
     public void initialize() throws IOException {
-        modelmap = new ModelMap(MAP_WIDTH, MAP_HEIGHT);
-        if(modelmap.getEndGame()){
-            btnRejouer = new Button();
-            btnQuitter = new Button();
-            // EndGame = false;
-            modelmap.setEndGame(false);
-        }
-        else{
+        modelmap = App.getModelMap();
+        // if(modelmap.getEndGame()){
+        //     modelmap.setEndGame(false);
+        // }
+        // else{
         // 1) Créer le modèle
         startTimer();
         // mainCanvas = new Canvas();
@@ -216,17 +213,16 @@ public class ControllerMap {
                 progressBar.setProgress(modelCar.getBatteryPercentage());
                 // 4) si batterie vide → quitter
                 if (modelCar.isEmpty() && !modelmap.getEndGame()) {
-                    // EndGame = true;
+                    modelmap.setIndiceFinPartie(1); // Faire test ici
                     modelmap.setEndGame(true);
+                    modelmap.setJeuArrete(true);
+                    System.out.println("Les valeurs de EndGame et de setJeuArrete on bien été modifié");
                     FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/app/perdu.fxml"));
                     Parent root = null;
 
-                    // ControllerFinPartie controllerFinPartie = fxmlLoader.getController();
-                    // controllerFinPartie.setParent(this);
                     try {
                         root = fxmlLoader.load();
                     } catch (IOException e) {
-                        // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
                     // Création de la fenêtre
@@ -447,7 +443,7 @@ public class ControllerMap {
             }
         }
         });
-    }
+    // }
 }
     /**
      * Lit l’état des flags up/down/left/right, puis déplace le rover en conséquence.

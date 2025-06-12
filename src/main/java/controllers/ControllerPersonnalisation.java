@@ -18,6 +18,7 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import models.ModelCar;
+import models.ModelMap;
 
 /**
  * Contrôleur pour la vue Personnalisation.fxml
@@ -30,6 +31,7 @@ public class ControllerPersonnalisation {
     @FXML private Button btnRetour;
     @FXML private Button btnValider;
     @FXML private ImageView imageView;
+    private ModelMap modelmap = new ModelMap(0, 0);
     private ModelCar modelCar;
     private int  indice = 0;
     private Image[] images;
@@ -46,65 +48,71 @@ public class ControllerPersonnalisation {
     };
     @FXML
     public void initialize() {
-        //Affiche par défaut le premier élément dans le tableau images
-    
+        modelmap = App.getModelMap();
         images = new Image[skinPaths.length];
         for(int i=0;i<skinPaths.length;i++){
-            // images[i] = new Image(skinPaths[i]);
             try {
                 this.images[i] = new Image(getClass().getResourceAsStream(
-        skinPaths[i]));
-                System.out.println("Réussi");
-            } catch (Exception e) {
-                System.out.println("Raté");
-                images[i] = getDefaultImage();
+                    skinPaths[i]));
+                    System.out.println("Réussi");
+                } catch (Exception e) {
+                    System.out.println("Raté");
+                    images[i] = getDefaultImage();
+                }
             }
-        }
-        this.modelCar = App.getModelCar();
-        String currentSkin = modelCar.getSkin();
-
-
-        for (int i = 0; i < skinPaths.length; i++) {
-            if (skinPaths[i].equals(currentSkin)) {
-                indice = i;
-                break;
-            }
-        }
-        imageView.setImage(images[indice]);
-        btnRetour.setOnAction(event -> {
-            String target = App.isFromPause() ? "/app/pause.fxml" : "/app/menu.fxml";
-            try {
-                Stage stage = (Stage) btnRetour.getScene().getWindow();
-                FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource(target)
-                );
-                Parent root = loader.load();
-                stage.setScene(new Scene(root));
-                stage.show();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-
-        btnValider.setOnAction(event -> {
-            SetVoiture(images[indice]);
-            String target = App.isFromPause() ? "/app/pause.fxml" : "/app/menu.fxml";
+            this.modelCar = App.getModelCar();
+            String currentSkin = modelCar.getSkin();
             
-            // if(EndGame){
-
-            // }
-            try {
-                Stage stage = (Stage) btnValider.getScene().getWindow();
-                FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource(target)
-                );
-                Parent root = loader.load();
-                stage.setScene(new Scene(root));
-                stage.show();
-            } catch (IOException e) {
-                e.printStackTrace();
+            
+            for (int i = 0; i < skinPaths.length; i++) {
+                if (skinPaths[i].equals(currentSkin)) {
+                    indice = i;
+                    break;
+                }
             }
-        });
+            imageView.setImage(images[indice]);
+            btnRetour.setOnAction(event -> {
+                String target = App.isFromPause() ? "/app/pause.fxml" : "/app/menu.fxml";
+                try {
+                    Stage stage = (Stage) btnRetour.getScene().getWindow();
+                    FXMLLoader loader = new FXMLLoader(
+                        getClass().getResource(target)
+                        );
+                        Parent root = loader.load();
+                        stage.setScene(new Scene(root));
+                        stage.show();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+                
+            btnValider.setOnAction(event -> {
+                SetVoiture(images[indice]);
+                String target = null;
+            // String target = App.isFromPause() ? "/app/pause.fxml" : "/app/menu.fxml";
+            
+                if(modelmap.getJeuArrete()){
+                    if(modelmap.getIndiceFinPartie()==1 || modelmap.getIndiceFinPartie()==0){
+                        target = "/app/perdu.fxml";
+                    }
+                    if(modelmap.getIndiceFinPartie()==2){
+                        target = "/app/gagne.fxml";
+                    }
+
+                }
+                try {
+                    Stage stage = (Stage) btnValider.getScene().getWindow();
+                    System.out.println("La valeur de target est : "+target+" les valeurs de IndiceFinPartie : "+modelmap.getIndiceFinPartie()+" et la valeur de JeuArrete : "+modelmap.getJeuArrete());
+                    FXMLLoader loader = new FXMLLoader(
+                        getClass().getResource(target)
+                    );
+                    Parent root = loader.load();
+                    stage.setScene(new Scene(root));
+                    stage.show();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
 
         btnDroite.setOnAction(event -> {
             idSuivant();
