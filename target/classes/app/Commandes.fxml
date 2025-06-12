@@ -46,7 +46,7 @@
                   </Text>
                </children>
             </HBox>
-            <HBox prefHeight="161.0" prefWidth="600.0">
+            <HBox prefHeight="116.0" prefWidth="600.0">
                <children>
                   <VBox prefHeight="200.0" prefWidth="100.0">
                      <children>
@@ -72,6 +72,14 @@
                   </ImageView>
                </children>
             </HBox>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="- Rester à proximité de la base pour recharger la batterie." wrappingWidth="476.697265625">
+               <font>
+                  <Font size="17.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="15.0" />
+               </VBox.margin>
+            </Text>
             <AnchorPane prefHeight="41.0" prefWidth="600.0">
                <children>
                   <Button fx:id="btnRetour" alignment="CENTER" contentDisplay="CENTER" layoutX="261.0" mnemonicParsing="false" text="Retour" textAlignment="CENTER">
@@ -79,7 +87,7 @@
                         <Font size="18.0" />
                      </font>
                      <opaqueInsets>
-                        <Insets />
+                        <Insets top="10.0" />
                      </opaqueInsets>
                   </Button>
                </children>
