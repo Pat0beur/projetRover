@@ -13,20 +13,16 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
-// import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
-// import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import models.ModelMap;
 import models.Model;
-// import views.ViewMap;
 import models.ModelCar;
 
 import java.io.IOException;
-import java.util.concurrent.ThreadLocalRandom;
 import javafx.util.Duration;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -93,12 +89,8 @@ public class ControllerMap {
 
 
     private boolean[] objetAttrape ={false,false,false,false};
-    private double[] objetEcranX = new double[5];
-    private double[] objetEcranY = new double[5];
     private boolean[] Ramasser = new boolean[4];
     private int currentIndex;
-
-    private ControllerMenu controllerMenu;
 
     private double decalageX = 0;
     private double decalageY = 0;
@@ -125,13 +117,8 @@ public class ControllerMap {
     public void initialize() throws IOException {
         modelmap = App.getModelMap();
         model = App.getModel();
-        // if(modelmap.getEndGame()){
-        //     modelmap.setEndGame(false);
-        // }
-        // else{
         // 1) Créer le modèle
         startTimer();
-        // mainCanvas = new Canvas();
         this.modelCar = App.getModelCar();
         lastNanoTime = System.nanoTime();
         GraphicsContext gc1 = chronoCanvas.getGraphicsContext2D();
@@ -175,7 +162,7 @@ public class ControllerMap {
         
         // 4) Démarrer la boucle AnimationTimer (~60 FPS)
         gameLoop = new AnimationTimer() {
-            private long startTime = 120;
+            // private long startTime = 120;
             @Override
             public void handle(long now) {
                 // 1) calculer dt en secondes
@@ -275,17 +262,17 @@ public class ControllerMap {
                 double camY = modelmap.getRoverY() - WINDOW_HEIGHT / 2.0;
                 double objetLargeur = 48; // même taille que pour l'affichage
                 double objetHauteur = 48;
-                objetEcranX[i]= modelmap.getObjetsCarteX(i) - camX - objetLargeur / 2.0;
-                objetEcranY[i]= modelmap.getObjetsCarteY(i) - camY - objetHauteur / 2.0;
+                modelmap.setObjetEcranX(modelmap.getObjetsCarteX(i) - camX - objetLargeur / 2.0, i);
+                modelmap.setObjetEcranY(modelmap.getObjetsCarteY(i) - camY - objetHauteur / 2.0, i);
                 
                 // Vérifie si le clic est sur l'objet
-                if (event.getX() >= objetEcranX[i] && event.getX() <= objetEcranX[i] + objetLargeur &&
-                event.getY() >= objetEcranY[i] && event.getY() <= objetEcranY[i] + objetHauteur) {
+                if (event.getX() >= modelmap.getObjetEcranX(i) && event.getX() <= modelmap.getObjetEcranX(i) + objetLargeur &&
+                event.getY() >= modelmap.getObjetEcranY(i) && event.getY() <= modelmap.getObjetEcranY(i) + objetHauteur) {
                     objetAttrape[i] = true;
                     //Permet de savoir qu'il s'agît de cet item qui est déplacé
                     currentIndex = i;
-                    decalageX = event.getX() - objetEcranX[i];
-                    decalageY = event.getY() - objetEcranY[i];
+                    decalageX = event.getX() - modelmap.getObjetEcranX(i);
+                    decalageY = event.getY() - modelmap.getObjetEcranY(i);
                 }
             }
         });

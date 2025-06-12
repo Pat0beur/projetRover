@@ -21,7 +21,6 @@ public class ModelMap {
     // NEURO: Instance du ModelCar pour récupérer getSkin()
     private final ModelCar car;
     private Model model;
-    private String[] Inventaire;
     private boolean EndGame = false;
     private int indiceFinPartie;
     private boolean JeuArrete;
@@ -29,6 +28,8 @@ public class ModelMap {
     private double roverAngle = 0; // en degrés
     private double[] objetsCarteX;
     private double[] objetsCarteY;
+    private double[] objetEcranX = new double[5];
+    private double[] objetEcranY = new double[5];
         private Image[] objetsImages = {
         new Image(getClass().getResourceAsStream("/images/objets/circuit_imprime_test.png")),
         new Image(getClass().getResourceAsStream("/images/objets/panneau_solaire.png")),
@@ -91,6 +92,22 @@ public class ModelMap {
         this.car = App.getModelCar();
         // this.Inventaire = new String[4];
     }
+
+
+    public void setObjetEcranX(double a, int indice){
+        this.objetEcranX[indice] = a;
+    }
+    public double getObjetEcranX(int indice){
+        return objetEcranX[indice];
+    }
+
+    public void setObjetEcranY(double a, int indice){
+        this.objetEcranY[indice] = a;
+    }
+    public double getObjetEcranY(int indice){
+        return objetEcranY[indice];
+    }
+    
 
     public Image getAntennneImages(int indice){
         return antenneImages[indice];
