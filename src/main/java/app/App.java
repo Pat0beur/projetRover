@@ -13,14 +13,8 @@ public class App extends Application {
     private static final double MAP_HEIGHT = 2048;
     private static ModelCar modelCar = new ModelCar();
     private static Model model = new Model();
-    private static ModelMap modelMap;
+    private static ModelMap modelMap = new ModelMap(MAP_WIDTH, MAP_HEIGHT);
     private static boolean fromPause = false;
-
-    public static void resetGame() {
-        // recrée la map et remet la batterie de la voiture à 100
-        modelMap = new ModelMap(MAP_WIDTH, MAP_HEIGHT);
-        modelCar.resetBattery();
-    }
     
     public static ModelCar getModelCar() {
         return modelCar;
@@ -30,6 +24,12 @@ public class App extends Application {
     }
     public static ModelMap getModelMap(){
         return modelMap;
+    }
+
+    public static void resetGame() {
+        // recrée la map et remet la batterie de la voiture à 100
+        modelMap = new ModelMap(MAP_WIDTH, MAP_HEIGHT);
+        modelCar.resetBattery();
     }
 
     @Override
