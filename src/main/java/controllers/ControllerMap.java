@@ -482,23 +482,12 @@ public class ControllerMap {
         if (rightPressed) dx += ROVER_SPEED;
         if (upPressed)    dy -= ROVER_SPEED;
         if (downPressed)  dy += ROVER_SPEED;
-        if (escapePressed){
-            System.exit(0);
-            // try {
-                //     Stage stage = (Stage) roverSkin.getScene().getWindow();
-                //     FXMLLoader loader = new FXMLLoader(getClass().getResource("/app/pause.fxml"));
-                //     Parent root = loader.load();
-                //     Scene scene = new Scene(root);
-                //     stage.setScene(scene);
-                //     stage.show();
-                // } catch (IOException e) {
-                    //     e.printStackTrace();
-                    // }
-                }
-                if (dx != 0 || dy != 0) {
-                    modelmap.moveRover(dx, dy);
-                }
-            }
+        if (dx != 0 || dy != 0) {
+            modelmap.moveRover(dx, dy);
+
+            modelmap.setroverAngle(Math.toDegrees(Math.atan2(dy, dx)));
+        }
+    }
             
             /**
              * Dessine à chaque frame la vue principale (fond + image du rover) 
@@ -518,94 +507,97 @@ public class ControllerMap {
  *  - tous les objets à leurs positions relatives à la caméra,
  *  - le rover (skin) centré sur sa position.
  */
-private void drawMainView() {
-    GraphicsContext gc = mainCanvas.getGraphicsContext2D();
+    private void drawMainView() {
+        GraphicsContext gc = mainCanvas.getGraphicsContext2D();
 
-    // 1) Dimensions dynamiques du Canvas principal
-    double windowW = mainCanvas.getWidth();
-    double windowH = mainCanvas.getHeight();
-    if (windowW <= 0 || windowH <= 0) return;  // pas encore dimensionné
+        // 1) Dimensions dynamiques du Canvas principal
+        double windowW = mainCanvas.getWidth();
+        double windowH = mainCanvas.getHeight();
+        if (windowW <= 0 || windowH <= 0) return;  // pas encore dimensionné
 
-    // 2) Calculer la “caméra” centrée sur le rover
-    double camX = modelmap.getRoverX() - windowW  / 2.0;
-    double camY = modelmap.getRoverY() - windowH / 2.0;
+        // 2) Calculer la “caméra” centrée sur le rover
+        double camX = modelmap.getRoverX() - windowW  / 2.0;
+        double camY = modelmap.getRoverY() - windowH / 2.0;
 
-    // 3) Clamp dynamique : jamais sortir de [0 .. mapWidth-windowW] et [0 .. mapHeight-windowH]
-    if (camX < 0)                       camX = 0;
-    else if (camX + windowW > MAP_WIDTH) camX = MAP_WIDTH - windowW;
+        // 3) Clamp dynamique : jamais sortir de [0 .. mapWidth-windowW] et [0 .. mapHeight-windowH]
+        if (camX < 0)                       camX = 0;
+        else if (camX + windowW > MAP_WIDTH) camX = MAP_WIDTH - windowW;
 
-    if (camY < 0)                       camY = 0;
-    else if (camY + windowH > MAP_HEIGHT) camY = MAP_HEIGHT - windowH;
+        if (camY < 0)                       camY = 0;
+        else if (camY + windowH > MAP_HEIGHT) camY = MAP_HEIGHT - windowH;
 
-    // 4) Afficher le fond
-    if (backgroundImage != null) {
-        gc.clearRect(0, 0, windowW, windowH);
-        // Extraire la portion [camX,camY, windowW×windowH] de l’image
-        gc.drawImage(
-            backgroundImage,
-            /* sx= */ camX,             /* sy= */ camY,
-            /* sw= */ windowW,          /* sh= */ windowH,
-            /* dx= */ 0,                /* dy= */ 0,
-            /* dw= */ windowW,          /* dh= */ windowH
-        );
-    } else {
-        // Fallback : fond gris
-        gc.setFill(Color.LIGHTGRAY);
-        gc.fillRect(0, 0, windowW, windowH);
-    }
+        // 4) Afficher le fond
+        if (backgroundImage != null) {
+            gc.clearRect(0, 0, windowW, windowH);
+            // Extraire la portion [camX,camY, windowW×windowH] de l’image
+            gc.drawImage(
+                backgroundImage,
+                /* sx= */ camX,             /* sy= */ camY,
+                /* sw= */ windowW,          /* sh= */ windowH,
+                /* dx= */ 0,                /* dy= */ 0,
+                /* dw= */ windowW,          /* dh= */ windowH
+            );
+        } else {
+            // Fallback : fond gris
+            gc.setFill(Color.LIGHTGRAY);
+            gc.fillRect(0, 0, windowW, windowH);
+        }
 
-    // 5) Dessiner les objets
-    double objetW = 64, objetH = 64;
-    for (int i = 0; i < objetsImages.length; i++) {
-        if (!Ramasser[i] && !modelmap.getdepose(i) && objetsImages[i] != null) {
-            double ox = objetsCarteX[i] - camX - objetW / 2.0;
-            double oy = objetsCarteY[i] - camY - objetH / 2.0;
-            gc.drawImage(objetsImages[i], ox, oy, objetW, objetH);
+        // 5) Dessiner les objets
+        double objetW = 64, objetH = 64;
+        for (int i = 0; i < objetsImages.length; i++) {
+            if (!Ramasser[i] && !modelmap.getdepose(i) && objetsImages[i] != null) {
+                double ox = objetsCarteX[i] - camX - objetW / 2.0;
+                double oy = objetsCarteY[i] - camY - objetH / 2.0;
+                gc.drawImage(objetsImages[i], ox, oy, objetW, objetH);
+            }
+        }
+    double bx = baseCarteX - camX - (BASE_DISPLAY_WIDTH  / 2.0);
+        double by = baseCarteY - camY - (BASE_DISPLAY_HEIGHT / 2.0);
+        gc.drawImage(marsBase, bx, by, BASE_DISPLAY_WIDTH, BASE_DISPLAY_HEIGHT);
+
+        // 6) Dessiner l’antenne
+        if(VerifObjetDepose(modelmap.getdepose())<2){
+            double antW = 128, antH = 128;
+            double ax = antenneCarteX - camX - antW / 2.0;
+            double ay = antenneCarteY - camY - antH / 2.0;
+            gc.drawImage(antenneImages[0], ax, ay, antW, antH);
+        }
+        else if(VerifObjetDepose(modelmap.getdepose())<4){
+            double antW = 128, antH = 128;
+            double ax = antenneCarteX - camX - antW / 2.0;
+            double ay = antenneCarteY - camY - antH / 2.0;
+            gc.drawImage(antenneImages[1], ax, ay, antW, antH);
+        }
+        else if(VerifObjetDepose(modelmap.getdepose())==4){
+            double antW = 128, antH = 128;
+            double ax = antenneCarteX - camX - antW / 2.0;
+            double ay = antenneCarteY - camY - antH / 2.0;
+            gc.drawImage(antenneImages[2], ax, ay, antW, antH);
+        }
+
+        // 7) Dessiner le rover (skin)
+        if (roverSkin != null) {
+            double rx = modelmap.getRoverX() - camX - (ROVER_DISPLAY_WIDTH / 2.0);
+            double ry = modelmap.getRoverY() - camY - (ROVER_DISPLAY_HEIGHT / 2.0);
+            gc.save(); // Sauvegarde l’état du contexte graphique
+            gc.translate(rx + ROVER_DISPLAY_WIDTH / 2.0, ry + ROVER_DISPLAY_HEIGHT / 2.0); // Centre de rotation
+            gc.rotate(modelmap.getroverAngle()+90); // Applique la rotation
+            gc.drawImage(
+                roverSkin,
+                -ROVER_DISPLAY_WIDTH / 2.0, -ROVER_DISPLAY_HEIGHT / 2.0,
+                ROVER_DISPLAY_WIDTH, ROVER_DISPLAY_HEIGHT
+            );
+    gc.restore(); // Restaure l’état initial
+        } else {
+            // Fallback : petit carré rouge
+            double sz = 10;
+            double fx = modelmap.getRoverX() - camX - sz / 2.0;
+            double fy = modelmap.getRoverY() - camY - sz / 2.0;
+            gc.setFill(Color.RED);
+            gc.fillRect(fx, fy, sz, sz);
         }
     }
-   double bx = baseCarteX - camX - (BASE_DISPLAY_WIDTH  / 2.0);
-    double by = baseCarteY - camY - (BASE_DISPLAY_HEIGHT / 2.0);
-    gc.drawImage(marsBase, bx, by, BASE_DISPLAY_WIDTH, BASE_DISPLAY_HEIGHT);
-
-    // 6) Dessiner l’antenne
-    if(VerifObjetDepose(modelmap.getdepose())<2){
-        double antW = 128, antH = 128;
-        double ax = antenneCarteX - camX - antW / 2.0;
-        double ay = antenneCarteY - camY - antH / 2.0;
-        gc.drawImage(antenneImages[0], ax, ay, antW, antH);
-    }
-    else if(VerifObjetDepose(modelmap.getdepose())<4){
-        double antW = 128, antH = 128;
-        double ax = antenneCarteX - camX - antW / 2.0;
-        double ay = antenneCarteY - camY - antH / 2.0;
-        gc.drawImage(antenneImages[1], ax, ay, antW, antH);
-    }
-    else if(VerifObjetDepose(modelmap.getdepose())==4){
-        double antW = 128, antH = 128;
-        double ax = antenneCarteX - camX - antW / 2.0;
-        double ay = antenneCarteY - camY - antH / 2.0;
-        gc.drawImage(antenneImages[2], ax, ay, antW, antH);
-    }
-
-    // 7) Dessiner le rover (skin)
-    if (roverSkin != null) {
-        double rx = modelmap.getRoverX() - camX - (ROVER_DISPLAY_WIDTH / 2.0);
-        double ry = modelmap.getRoverY() - camY - (ROVER_DISPLAY_HEIGHT / 2.0);
-        gc.drawImage(
-            roverSkin,
-            rx, ry,
-            ROVER_DISPLAY_WIDTH,
-            ROVER_DISPLAY_HEIGHT
-        );
-    } else {
-        // Fallback : petit carré rouge
-        double sz = 10;
-        double fx = modelmap.getRoverX() - camX - sz / 2.0;
-        double fy = modelmap.getRoverY() - camY - sz / 2.0;
-        gc.setFill(Color.RED);
-        gc.fillRect(fx, fy, sz, sz);
-    }
-}
 
     
     /**
@@ -684,91 +676,91 @@ private void drawMainView() {
                 // Gestion des événements clavier (onKeyPressed/onKeyReleased)
                 // ————————————————————————————
                 
-        @FXML
-        private void onKeyPressed(KeyEvent event) {
-            KeyCode code = event.getCode();
-            switch (code) {
-                case LEFT:  case A: leftPressed  = true; break;
-                case RIGHT: case D: rightPressed = true; break;
-                case UP:    case W: upPressed    = true; break;
-                case DOWN:  case S: downPressed  = true; break;
-                case ESCAPE: escapePressed = true; break;
-                default: break;
-            }
+    @FXML
+    private void onKeyPressed(KeyEvent event) {
+        KeyCode code = event.getCode();
+        switch (code) {
+            case LEFT:  case A: leftPressed  = true; break;
+            case RIGHT: case D: rightPressed = true; break;
+            case UP:    case W: upPressed    = true; break;
+            case DOWN:  case S: downPressed  = true; break;
+            case ESCAPE: escapePressed = true; break;
+            default: break;
         }
+    }
                 
-        @FXML
-        private void onKeyReleased(KeyEvent event) {
-            KeyCode code = event.getCode();
-            switch (code) {
-                case LEFT:  case A: leftPressed  = false; break;
-                case RIGHT: case D: rightPressed = false; break;
-                case UP:    case W: upPressed    = false; break;
-                case DOWN:  case S: downPressed  = false; break;
-                case ESCAPE: escapePressed = false; break;
-                default: break;
+    @FXML
+    private void onKeyReleased(KeyEvent event) {
+        KeyCode code = event.getCode();
+        switch (code) {
+            case LEFT:  case A: leftPressed  = false; break;
+            case RIGHT: case D: rightPressed = false; break;
+            case UP:    case W: upPressed    = false; break;
+            case DOWN:  case S: downPressed  = false; break;
+            case ESCAPE: escapePressed = false; break;
+            default: break;
+        }
+    }
+    public void miseAJourSkin(String skinPath) {
+        // Actualiser l’image du skin ici
+        modelmap.getCar().notifyCarChanged(new Image(getClass().getResource(skinPath).toExternalForm()));
+    }
+            
+    private void startTimer() {
+        countdownTimeline = new Timeline(
+        new KeyFrame(Duration.seconds(1), ev -> {
+            if (remainingSeconds > 0) {
+            remainingSeconds--;
+            int m = remainingSeconds / 60;
+            int s = remainingSeconds % 60;
+            label.setText(String.format("%02d:%02d", m, s));
+            } else {
+            label.setText("Temps écoulé !");
+            }
+        })
+        );
+        countdownTimeline.setCycleCount(Timeline.INDEFINITE);
+        countdownTimeline.play();
+    }
+
+    private void showPauseDialog() {
+        // 1) Stoppe l'animation
+        gameLoop.stop();
+        countdownTimeline.pause();
+
+        try {
+            // 2) Charge pause.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/app/pause.fxml"));
+            Parent root = loader.load();
+
+            // 3) Récupère le controller de la pause et passe-lui une référence si besoin
+            ControllerPause ctrl = loader.getController();
+            ctrl.setParent(this);
+
+            // 4) Ouvre une fenêtre modale
+            Stage pauseStage = new Stage();
+            pauseStage.initModality(Modality.APPLICATION_MODAL);
+            pauseStage.setTitle("Pause");
+            pauseStage.setScene(new Scene(root));
+            pauseStage.showAndWait();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        lastNanoTime = System.nanoTime();
+
+        // 5) Relance le jeu quand la fenêtre de pause se ferme
+        gameLoop.start();
+        countdownTimeline.play();
+    }
+    public int VerifObjetDepose(boolean[] a){
+        int acc = 0;
+        for(int i=0;i<a.length;i++){
+            if(a[i]==true){
+                acc++;
             }
         }
-        public void miseAJourSkin(String skinPath) {
-            // Actualiser l’image du skin ici
-            modelmap.getCar().notifyCarChanged(new Image(getClass().getResource(skinPath).toExternalForm()));
-        }
-                
-        private void startTimer() {
-            countdownTimeline = new Timeline(
-            new KeyFrame(Duration.seconds(1), ev -> {
-                if (remainingSeconds > 0) {
-                remainingSeconds--;
-                int m = remainingSeconds / 60;
-                int s = remainingSeconds % 60;
-                label.setText(String.format("%02d:%02d", m, s));
-                } else {
-                label.setText("Temps écoulé !");
-                }
-            })
-            );
-            countdownTimeline.setCycleCount(Timeline.INDEFINITE);
-            countdownTimeline.play();
-        }
-
-        private void showPauseDialog() {
-            // 1) Stoppe l'animation
-            gameLoop.stop();
-            countdownTimeline.pause();
-
-            try {
-                // 2) Charge pause.fxml
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/app/pause.fxml"));
-                Parent root = loader.load();
-
-                // 3) Récupère le controller de la pause et passe-lui une référence si besoin
-                ControllerPause ctrl = loader.getController();
-                ctrl.setParent(this);
-
-                // 4) Ouvre une fenêtre modale
-                Stage pauseStage = new Stage();
-                pauseStage.initModality(Modality.APPLICATION_MODAL);
-                pauseStage.setTitle("Pause");
-                pauseStage.setScene(new Scene(root));
-                pauseStage.showAndWait();
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            lastNanoTime = System.nanoTime();
-
-            // 5) Relance le jeu quand la fenêtre de pause se ferme
-            gameLoop.start();
-            countdownTimeline.play();
-        }
-        public int VerifObjetDepose(boolean[] a){
-            int acc = 0;
-            for(int i=0;i<a.length;i++){
-                if(a[i]==true){
-                    acc++;
-                }
-            }
-            return acc;
-        }
+        return acc;
+    }
     }

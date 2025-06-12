@@ -23,6 +23,7 @@ public class ModelMap {
     private int indiceFinPartie;
     private boolean JeuArrete;
     private boolean[] depose = {false,false,false,false};
+    private double roverAngle = 0; // en degrés
 
 
 
@@ -90,6 +91,12 @@ public class ModelMap {
     }
     public boolean getdepose(int indice){
         return depose[indice];
+    }
+    public void setroverAngle(double a){
+        this.roverAngle = a;
+    }
+    public double getroverAngle(){
+        return roverAngle;
     }
 
     /**
