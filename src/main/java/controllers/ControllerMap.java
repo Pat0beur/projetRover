@@ -143,14 +143,13 @@ public class ControllerMap {
             roverSkin = newSkin;
         });
         
-        // 2) Forcer la taille des Canvas (au cas où le FXML ait des valeurs différentes)
+        // 2) Forcer la taille des Canvas 
         mainCanvas.setWidth(WINDOW_WIDTH);
         mainCanvas.setHeight(WINDOW_HEIGHT);
         miniMapCanvas.setWidth(MINI_WIDTH);
         miniMapCanvas.setHeight(MINI_HEIGHT);
         
         // 3) Charger l’image “mars.png” : 
-        //    Assurez-vous qu'elle est bien dans src/main/resources/images/planete/mars.png
         try {
             backgroundImage = new Image(getClass().getResourceAsStream("/images/planete/mars.png"));
         } catch (Exception e) {
@@ -158,7 +157,7 @@ public class ControllerMap {
             System.err.println("Impossible de charger /images/planete/mars.png");
         }
         
-        // 4) Démarrer la boucle AnimationTimer (~60 FPS)
+        // 4) Démarrer la boucle AnimationTimer (60 FPS
         gameLoop = new AnimationTimer() {
             @Override
             public void handle(long now) {
@@ -196,7 +195,7 @@ public class ControllerMap {
                 }
                 // 3) mettre à jour la ProgressBar à chaque frame
                 progressBar.setProgress(modelCar.getBatteryPercentage());
-                // 4) si batterie vide → quitter
+                // 4) si batterie vide on quitter
                 if (modelCar.isEmpty() && !modelmap.getEndGame()) {
                     gameLoop.stop();
                     countdownTimeline.pause();
@@ -252,7 +251,7 @@ public class ControllerMap {
         
         // Ajoute ces listeners pour le drag and drop :
         mainCanvas.setOnMousePressed(event -> {
-            // Conversion coordonnées écran → carte
+            // Conversion coordonnées écran carte
             for(int i=0;i<modelmap.getObjetsImages().length;i++){
                 double camX = modelmap.getRoverX() - WINDOW_WIDTH  / 2.0;
                 double camY = modelmap.getRoverY() - WINDOW_HEIGHT / 2.0;
@@ -382,7 +381,7 @@ public class ControllerMap {
                 System.out.println("L'objet est en train d'être drag and drop");
             }
         });
-        // Position du rover relative ??
+        // Position du rover 
         mainCanvas.setOnMouseReleased(event -> {
             if (isDraggingFromInventory) {
                 isDraggingFromInventory = false;
@@ -502,7 +501,7 @@ public class ControllerMap {
         double camX = modelmap.getRoverX() - windowW  / 2.0;
         double camY = modelmap.getRoverY() - windowH / 2.0;
 
-        // 3) Clamp dynamique : jamais sortir de [0 .. mapWidth-windowW] et [0 .. mapHeight-windowH]
+        // 3) Clamp dynamique 
         if (camX < 0)                       camX = 0;
         else if (camX + windowW > MAP_WIDTH) camX = MAP_WIDTH - windowW;
 
@@ -539,7 +538,7 @@ public class ControllerMap {
         }
 
 
-        // 6) Dessiner l’antenne
+        // Dessiner l’antenne
         //En fonction du nombre d'objet déposé cela dessine un skin différent
         if(VerifObjetDepose(modelmap.getdepose())<2){
             double antW = 128, antH = 128;
@@ -560,7 +559,7 @@ public class ControllerMap {
             gc.drawImage(modelmap.getAntennneImages(2), ax, ay, antW, antH);
         }
 
-        // 7) Dessiner le rover (skin)
+        // Dessiner le rover (skin)
         if (roverSkin != null) {
             double rx = modelmap.getRoverX() - camX - (ROVER_DISPLAY_WIDTH / 2.0);
             double ry = modelmap.getRoverY() - camY - (ROVER_DISPLAY_HEIGHT / 2.0);
@@ -593,15 +592,15 @@ public class ControllerMap {
     private void drawMiniMap() {
         GraphicsContext gc = miniMapCanvas.getGraphicsContext2D();
         
-        // 1) Fond sombre
+        //  Fond sombre
         gc.setFill(javafx.scene.paint.Color.rgb(30, 30, 30));
         gc.fillRect(0, 0, MINI_WIDTH, MINI_HEIGHT);
         
-        // 2) Calculer le ratio réel → minimap
+        // Calculer le ratio réel en minimap
         double scaleX = MINI_WIDTH  / MAP_WIDTH;
         double scaleY = MINI_HEIGHT / MAP_HEIGHT;
         
-        // 3) Position du rover sur la minimap
+        // Position du rover sur la minimap
         double roverMiniX = modelmap.getRoverX() * scaleX;
         double roverMiniY = modelmap.getRoverY() * scaleY;
         
@@ -618,7 +617,7 @@ public class ControllerMap {
             objetsMiniY[i] = modelmap.getObjetsCarteY(i) * scaleY;
         }
         
-        // 4) Petit carré vert
+        // Petit carré vert
         double dotSize = 4;
         
         //Position du rover
@@ -652,7 +651,7 @@ public class ControllerMap {
                 }
             }
             
-            // 5) Cadre blanc
+            // Cadre blanc
             gc.setStroke(javafx.scene.paint.Color.WHITE);
             gc.strokeRect(0, 0, MINI_WIDTH, MINI_HEIGHT);
         }
@@ -710,15 +709,15 @@ public class ControllerMap {
         countdownTimeline.pause();
 
         try {
-            // 2) Charge pause.fxml
+            //  Charge pause.fxml
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/app/pause.fxml"));
             Parent root = loader.load();
 
-            // 3) Récupère le controller de la pause et passe-lui une référence si besoin
+            //  Récupère le controller de la pause 
             ControllerPause ctrl = loader.getController();
             ctrl.setParent(this);
 
-            // 4) Ouvre une fenêtre modale
+            // Ouvre une fenêtre modale
             Stage pauseStage = new Stage();
             pauseStage.initModality(Modality.APPLICATION_MODAL);
             pauseStage.setTitle("Pause");
@@ -731,7 +730,7 @@ public class ControllerMap {
 
         lastNanoTime = System.nanoTime();
 
-        // 5) Relance le jeu quand la fenêtre de pause se ferme
+        // Relance le jeu quand la fenêtre de pause se ferme
         gameLoop.start();
         countdownTimeline.play();
     }

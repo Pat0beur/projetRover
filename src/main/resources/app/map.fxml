@@ -8,8 +8,6 @@
 <?import javafx.scene.text.Font?>
 
 <AnchorPane fx:id="textArea" onKeyPressed="#onKeyPressed" onKeyReleased="#onKeyReleased" prefHeight="600" prefWidth="800" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ControllerMap">
-
-    <!-- Canvas principal : occupe toute la surface de l'AnchorPane -->
     <Canvas fx:id="mainCanvas" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
     <Canvas fx:id="miniMapCanvas" height="200" width="200" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" />
    <Canvas fx:id="chronoCanvas" height="63.0" layoutX="672.0" layoutY="14.0" width="118.0" />

@@ -35,7 +35,7 @@ public class ViewMap {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(FXML_PATH));
             Parent root = loader.load();
 
-            // Créer la scène à 800×600 (on peut ajuster si besoin)
+            // Créer la scène à 800×600
             Scene sceneMap = new Scene(root, 800, 600);
 
             // Donner le focus au root pour que ControllerMap capte le clavier
@@ -51,7 +51,6 @@ public class ViewMap {
 
         } catch (IOException e) {
             e.printStackTrace();
-            // Vous pouvez logger ou afficher une alerte ici
         }
     }
 }

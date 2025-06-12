@@ -18,7 +18,7 @@ public class ModelMap {
     private double roverX;
     private double roverY;
 
-    // NEURO: Instance du ModelCar pour récupérer getSkin()
+    // Instance du ModelCar pour récupérer getSkin()
     private final ModelCar car;
     private Model model;
     private boolean EndGame = false;
@@ -49,8 +49,8 @@ public class ModelMap {
 
 
     /**
-     * @param mapWidth  largeur “réelle” de la carte (en pixels logiques)
-     * @param mapHeight hauteur “réelle” de la carte (en pixels logiques)
+     * @param mapWidth  largeur “réelle” de la carte (en pixels
+     * @param mapHeight hauteur “réelle” de la carte (en pixels)
      */
     public ModelMap(double mapWidth, double mapHeight) {
         this.mapWidth = mapWidth;
@@ -203,7 +203,7 @@ public class ModelMap {
     }
 
     /**
-     * Déplace le rover de (dx, dy) en s'assurant de rester dans les limites [0..mapWidth]×[0..mapHeight]
+     * Déplace le rover de (dx, dy) en s'assurant de rester dans les limites 
      */
     public void moveRover(double dx, double dy) {
         double newX = roverX + dx;
