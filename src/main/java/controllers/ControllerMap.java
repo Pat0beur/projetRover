@@ -210,6 +210,8 @@ public class ControllerMap {
                     modelCar.tick(dt);
                 }
                 if(remainingSeconds == 0 && !modelmap.getEndGame()){
+                    gameLoop.stop();
+                    countdownTimeline.pause();
                     modelmap.setIndiceFinPartie(0); // Faire test ici
                     modelmap.setEndGame(true);
                     FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/app/perdu.fxml"));
@@ -230,6 +232,8 @@ public class ControllerMap {
                 progressBar.setProgress(modelCar.getBatteryPercentage());
                 // 4) si batterie vide → quitter
                 if (modelCar.isEmpty() && !modelmap.getEndGame()) {
+                    gameLoop.stop();
+                    countdownTimeline.pause();
                     modelmap.setIndiceFinPartie(1); // Faire test ici
                     modelmap.setEndGame(true);
                     // modelmap.setJeuArrete(true);
@@ -256,10 +260,6 @@ public class ControllerMap {
                     stage.initModality(Modality.APPLICATION_MODAL);
                     stage.show();
                 }
-                // 4) game over si vide
-                // if (modelCar.isEmpty()) {
-                //     System.exit(0);
-                // }
 
                 // 5) le reste : déplacer et dessiner
                 updateModel();
