@@ -438,12 +438,13 @@ public class ControllerMap {
                 // Ici tu pourras ajouter à l'inventaire
             } else if(Math.abs(antenneCarteX - objetsCarteX[currentIndex]) <20 && Math.abs(antenneCarteY - objetsCarteY[currentIndex]) < 20) {
                 System.out.println("Bravo vous avez déposé l'objet sur l'antenne !");
-                // depose[currentIndex] = true;
                 modelmap.setdepose(true, currentIndex);
-                if(modelmap.getdepose(0) == true && modelmap.getdepose(1) == true && modelmap.getdepose(2) == true && modelmap.getdepose(3) == true){
+                if(modelmap.getdepose(0) == true 
+                    && modelmap.getdepose(1) == true 
+                    && modelmap.getdepose(2) == true 
+                    && modelmap.getdepose(3) == true){
                     modelmap.setEndGame(true);
                     modelmap.setJeuArrete(true);
-                    // System.out.println("Les valeurs de EndGame et de setJeuArrete on bien été modifié");
                     FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/app/gagne.fxml"));
                     Parent root = null;
                     try {
@@ -567,10 +568,24 @@ private void drawMainView() {
     gc.drawImage(marsBase, bx, by, BASE_DISPLAY_WIDTH, BASE_DISPLAY_HEIGHT);
 
     // 6) Dessiner l’antenne
-    double antW = 128, antH = 128;
-    double ax = antenneCarteX - camX - antW / 2.0;
-    double ay = antenneCarteY - camY - antH / 2.0;
-    gc.drawImage(antenneImages[0], ax, ay, antW, antH);
+    if(VerifObjetDepose(modelmap.getdepose())<2){
+        double antW = 128, antH = 128;
+        double ax = antenneCarteX - camX - antW / 2.0;
+        double ay = antenneCarteY - camY - antH / 2.0;
+        gc.drawImage(antenneImages[0], ax, ay, antW, antH);
+    }
+    else if(VerifObjetDepose(modelmap.getdepose())<4){
+        double antW = 128, antH = 128;
+        double ax = antenneCarteX - camX - antW / 2.0;
+        double ay = antenneCarteY - camY - antH / 2.0;
+        gc.drawImage(antenneImages[1], ax, ay, antW, antH);
+    }
+    else if(VerifObjetDepose(modelmap.getdepose())==4){
+        double antW = 128, antH = 128;
+        double ax = antenneCarteX - camX - antW / 2.0;
+        double ay = antenneCarteY - camY - antH / 2.0;
+        gc.drawImage(antenneImages[2], ax, ay, antW, antH);
+    }
 
     // 7) Dessiner le rover (skin)
     if (roverSkin != null) {
@@ -746,5 +761,14 @@ private void drawMainView() {
             // 5) Relance le jeu quand la fenêtre de pause se ferme
             gameLoop.start();
             countdownTimeline.play();
+        }
+        public int VerifObjetDepose(boolean[] a){
+            int acc = 0;
+            for(int i=0;i<a.length;i++){
+                if(a[i]==true){
+                    acc++;
+                }
+            }
+            return acc;
         }
     }
