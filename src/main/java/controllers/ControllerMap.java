@@ -440,6 +440,7 @@ public class ControllerMap {
                     modelmap.setJeuArrete(true);
                     gameLoop.stop();
                     countdownTimeline.pause();
+                    model.setScore(remainingSeconds);
                     FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/app/gagne.fxml"));
                     Parent root = null;
                     try {

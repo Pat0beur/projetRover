@@ -1,17 +1,17 @@
 package controllers;
 
 import java.io.IOException;
-import java.lang.classfile.Label;
-
 import app.App;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import models.ModelMap;
 import views.ViewMap;
+import models.Model;
 import models.ModelCar; 
 
 public class ControllerFinPartie {
@@ -21,11 +21,14 @@ public class ControllerFinPartie {
     @FXML private Label scoreLabel;
     private ModelMap modelMap;
     private ModelCar modelCar;
+    private Model model;
 
     @FXML
     public void initialize(){
         modelMap = App.getModelMap();
         modelCar = App.getModelCar();
+        model = App.getModel();
+        scoreLabel.setText(model.getScore()+"");
         btnPersonnalisation.setOnAction(event -> {
             try {
                 Stage stage = (Stage) btnPersonnalisation.getScene().getWindow();

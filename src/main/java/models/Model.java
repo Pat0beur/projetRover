@@ -6,6 +6,7 @@ public class Model {
     private int difficulte;
     private ModelCar modelCar;
     private Model model;
+    private int Score;
 
     public Model() {
         this.roverName = "Curiosity";
@@ -17,6 +18,14 @@ public class Model {
         this.difficulte = a;
         this.modelCar = new ModelCar();
     }
+
+    public void setScore(int a){
+        this.Score = a;
+    }
+    public int getScore(){
+        return Score;
+    }
+
     public String getRoverName() {
         return roverName;
     }
