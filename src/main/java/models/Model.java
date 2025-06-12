@@ -4,10 +4,14 @@ public class Model {
     // Exemple de donnée
     private String roverName;
     private int difficulte;
+    private ModelCar modelCar;
+    private Model model;
 
     public Model() {
         this.roverName = "Curiosity";
-        this.difficulte = 1;
+        this.difficulte = getDifficulte();
+        this.model = new Model(getDifficulte());
+        this.modelCar = new ModelCar();
     }
     public Model(int a) {
         this.roverName = "Curiosity";
@@ -16,9 +20,6 @@ public class Model {
     public String getRoverName() {
         return roverName;
     }
-    // public Model setModel(){
-    //     return model;
-    // }
     public int getDifficulte(){
         return this.difficulte;
     }
@@ -27,5 +28,11 @@ public class Model {
     }
     public void setRoverName(String name) {
         this.roverName = name;
+    }
+    public void setModel(Model model){
+        this.model = model;
+    }
+    public void setModelCar(ModelCar modelCar){
+        this.modelCar = modelCar;
     }
 }

@@ -73,7 +73,6 @@ public class ControllerMap {
     private long lastNanoTime;
     private AnimationTimer gameLoop;
     private Timeline countdownTimeline;
-    private Timeline batteryTimeline;
 
 
 
@@ -334,7 +333,7 @@ public class ControllerMap {
             if (Inventaire[1] != null) {
                 isDraggingFromInventory = true;
                 draggingInventoryIndex = 1;
-                currentIndex = 1; // réutilise ta logique existante
+                currentIndex = 1; 
 
                 // On met l'objet sur la carte à la position du clic (centrée)
                 double camX = modelmap.getRoverX() - WINDOW_WIDTH / 2.0;
@@ -356,7 +355,7 @@ public class ControllerMap {
             if (Inventaire[2] != null) {
                 isDraggingFromInventory = true;
                 draggingInventoryIndex = 2;
-                currentIndex = 2; // réutilise ta logique existante
+                currentIndex = 2; 
 
                 // On met l'objet sur la carte à la position du clic (centrée)
                 double camX = modelmap.getRoverX() - WINDOW_WIDTH / 2.0;
@@ -378,7 +377,7 @@ public class ControllerMap {
             if (Inventaire[3] != null) {
                 isDraggingFromInventory = true;
                 draggingInventoryIndex = 3;
-                currentIndex = 3; // réutilise ta logique existante
+                currentIndex = 3; 
 
                 // On met l'objet sur la carte à la position du clic (centrée)
                 double camX = modelmap.getRoverX() - WINDOW_WIDTH / 2.0;
@@ -396,12 +395,13 @@ public class ControllerMap {
             }
         });
         mainCanvas.setOnMouseDragged(event -> {
+            //Vérifie si l'objet était dans l'inventaire
             if (isDraggingFromInventory) {
                 double camX = modelmap.getRoverX() - WINDOW_WIDTH  / 2.0;
                 double camY = modelmap.getRoverY() - WINDOW_HEIGHT / 2.0;
                 
-                objetsCarteX[draggingInventoryIndex] = camX + event.getX() - 24;
-                objetsCarteY[draggingInventoryIndex] = camY + event.getY() - 24;
+                objetsCarteX[draggingInventoryIndex] = camX + event.getX() - 48;
+                objetsCarteY[draggingInventoryIndex] = camY + event.getY() - 48;
 
                 drawAll(); // Redessine la map
             } else if (objetAttrape[currentIndex]) {

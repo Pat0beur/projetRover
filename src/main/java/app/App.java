@@ -58,9 +58,10 @@ import models.ModelMap;
 public class App extends Application {
     private static final double MAP_WIDTH  = 2048;     // taille réelle de la carte
     private static final double MAP_HEIGHT = 2048;
-    private static ModelCar modelCar = new ModelCar(1);
+    private static ModelCar modelCar = new ModelCar();
     private static Model model = new Model();
     private static ModelMap modelMap = new ModelMap(MAP_WIDTH, MAP_HEIGHT);
+    // private static ModelMenu modelMenu = new ModelMenu();
     private static boolean fromPause = false;
 
     public static void resetGame() {
@@ -78,6 +79,7 @@ public class App extends Application {
     public static ModelMap getModelMap(){
         return modelMap;
     }
+    
     public static ModelMap setModelMap(){
         modelMap = new ModelMap(MAP_WIDTH, MAP_HEIGHT);
         return modelMap;

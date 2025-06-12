@@ -17,7 +17,7 @@ public class ModelCar {
     private double batterySecondsRemaining = maxBatterySeconds;
 
     // private ControllerPersonnalisation controllerPersonnalisation;
-    public ModelCar(int difficulté){
+    public ModelCar(){
         this.Skin = "/images/skins/Car_AM_General_Hummer_98x164.png";
         this.Batterie = 100;
         this.EtatBatterie = true;

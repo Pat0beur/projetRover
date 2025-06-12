@@ -12,6 +12,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.stage.Stage;
 import models.Model;
+// import models.ModelMenu;
 import models.ModelCar;
 import views.ViewMap;
 
@@ -25,13 +26,14 @@ public class ControllerMenu {
     @FXML private RadioButton radiobtnEasy;
     @FXML private RadioButton radiobtnMedium;
     @FXML private RadioButton radiobtnHard;
-    private ModelCar modelCar;
     private Model model;
+    private ModelCar modelCar;
+
 
     @FXML
     public void initialize() {
-        this.modelCar = App.getModelCar();
-        this.model = new Model(); //Initialise le modèle
+        modelCar = App.getModelCar();
+        model = App.getModel(); //Initialise le modèle
         // this.model = App.getModel();
         System.out.println("Contrôleur Menu.initialisé !");
         // Bouton Quitter : ferme l'application
@@ -73,29 +75,32 @@ public class ControllerMenu {
         btnJouer.setOnAction(event -> {
             Stage currentStage = (Stage) btnJouer.getScene().getWindow();
             new ViewMap(currentStage).show();
+            System.out.println("La difficulté :"+model.getDifficulte());
         });
         radiobtnEasy.setOnAction(event -> {
             radiobtnHard.setSelected(false);
             radiobtnMedium.setSelected(false);
-            this.model = new Model(1);
-            this.model = App.getModel();
+            model.setDifficulte(1);
+            model.setModel(new Model(1));
+            // this.model = App.getModel();
         });
         radiobtnMedium.setOnAction(event -> {
             radiobtnHard.setSelected(false);
             radiobtnEasy.setSelected(false);
-            this.model = new Model(2);
-            this.model = App.getModel();
+            model.setDifficulte(2);
+            // this.model = App.getModel();
         });
         radiobtnHard.setOnAction(event -> {
             radiobtnEasy.setSelected(false);
             radiobtnMedium.setSelected(false);
-            this.model = new Model(3);
-            this.model = App.getModel();
+            model.setDifficulte(3);
+            model.setModel(new Model(3));
+            // this.model = App.getModel();
         });
     }
-    public Model getModel(){
-        return model;
-    }
+    // public Model getModel(){
+    //     return model;
+    // }
     public void Jouer(){
         Stage currentStage = (Stage) btnJouer.getScene().getWindow();
         new ViewMap(currentStage).show();
