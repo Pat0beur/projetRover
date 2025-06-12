@@ -35,6 +35,13 @@ public class ModelMap {
         new Image(getClass().getResourceAsStream("/images/objets/tournevis_test.png")),
         new Image(getClass().getResourceAsStream("/images/objets/vis_test.png"))
     };
+    private double antenneCarteX;
+    private double antenneCarteY;
+    private Image[] antenneImages = {
+        new Image(getClass().getResourceAsStream("/images/antenne/antenne_cassee.png")),
+        new Image(getClass().getResourceAsStream("/images/antenne/antenne_un_peu_cassee.png")),
+        new Image(getClass().getResourceAsStream("/images/antenne/antenne.png"))
+    };
 
 
 
@@ -71,6 +78,9 @@ public class ModelMap {
             ThreadLocalRandom.current().nextInt(min, max + 1), 
             ThreadLocalRandom.current().nextInt(min, max + 1) }; // Y de chaque objet
 
+         this.antenneCarteX = ThreadLocalRandom.current().nextInt(min, max + 1);
+         this.antenneCarteY = ThreadLocalRandom.current().nextInt(min, max + 1);
+
         // Initialiser le rover au centre
         this.roverX = mapWidth / 2.0;
         this.roverY = mapHeight / 2.0;
@@ -81,11 +91,31 @@ public class ModelMap {
         this.car = App.getModelCar();
         // this.Inventaire = new String[4];
     }
+
+    public Image getAntennneImages(int indice){
+        return antenneImages[indice];
+    }
+    public Image[] getAntennneImages(){
+        return antenneImages;
+    }
     public Image getObjetsImages(int indice){
         return objetsImages[indice];
     }
     public Image[] getObjetsImages(){
         return objetsImages;
+    }
+
+    public double getAntenneCarteX(){
+        return antenneCarteX;
+    }
+    public void setAntenneCarteX(double a){
+        this.antenneCarteX = a;
+    }
+    public double getAntenneCarteY(){
+        return antenneCarteY;
+    }
+    public void setAntenneCarteY(double a){
+        this.antenneCarteY = a;
     }
 
     public void setObjetsCarteX(double a,int indice){

@@ -91,13 +91,7 @@ public class ControllerMap {
     int max = 2000;
     // int randomNum = ThreadLocalRandom.current().nextInt(min, max + 1); // entre min et max inclus
 
-    private double antenneCarteX = ThreadLocalRandom.current().nextInt(min, max + 1);
-    private double antenneCarteY = ThreadLocalRandom.current().nextInt(min, max + 1);
-    private Image[] antenneImages = {
-        new Image(getClass().getResourceAsStream("/images/antenne/antenne_cassee.png")),
-        new Image(getClass().getResourceAsStream("/images/antenne/antenne_un_peu_cassee.png")),
-        new Image(getClass().getResourceAsStream("/images/antenne/antenne.png"))
-    };
+
     private boolean[] objetAttrape ={false,false,false,false};
     private double[] objetEcranX = new double[5];
     private double[] objetEcranY = new double[5];
@@ -444,7 +438,7 @@ public class ControllerMap {
                 System.out.println("Voici ce qu'il y a dans l'Inventaire"+Inventaire[0]+" "+Inventaire[1]+" "+Inventaire[2]+" "+Inventaire[3]+" ");
                 drawAll();
                 
-            } else if(Math.abs(antenneCarteX - modelmap.getObjetsCarteX(currentIndex)) <20 && Math.abs(antenneCarteY - modelmap.getObjetsCarteY(currentIndex)) < 20) {
+            } else if(Math.abs(modelmap.getAntenneCarteX() - modelmap.getObjetsCarteX(currentIndex)) <20 && Math.abs(modelmap.getAntenneCarteY() - modelmap.getObjetsCarteY(currentIndex)) < 20) {
                 System.out.println("Bravo vous avez déposé l'objet sur l'antenne !");
                 modelmap.setdepose(true, currentIndex);
                 if(modelmap.getdepose(0) == true 
@@ -569,21 +563,21 @@ public class ControllerMap {
         // 6) Dessiner l’antenne
         if(VerifObjetDepose(modelmap.getdepose())<2){
             double antW = 128, antH = 128;
-            double ax = antenneCarteX - camX - antW / 2.0;
-            double ay = antenneCarteY - camY - antH / 2.0;
-            gc.drawImage(antenneImages[0], ax, ay, antW, antH);
+            double ax = modelmap.getAntenneCarteX() - camX - antW / 2.0;
+            double ay = modelmap.getAntenneCarteY() - camY - antH / 2.0;
+            gc.drawImage(modelmap.getAntennneImages(0), ax, ay, antW, antH);
         }
         else if(VerifObjetDepose(modelmap.getdepose())<4){
             double antW = 128, antH = 128;
-            double ax = antenneCarteX - camX - antW / 2.0;
-            double ay = antenneCarteY - camY - antH / 2.0;
-            gc.drawImage(antenneImages[1], ax, ay, antW, antH);
+            double ax = modelmap.getAntenneCarteX() - camX - antW / 2.0;
+            double ay = modelmap.getAntenneCarteY() - camY - antH / 2.0;
+            gc.drawImage(modelmap.getAntennneImages(1), ax, ay, antW, antH);
         }
         else if(VerifObjetDepose(modelmap.getdepose())==4){
             double antW = 128, antH = 128;
-            double ax = antenneCarteX - camX - antW / 2.0;
-            double ay = antenneCarteY - camY - antH / 2.0;
-            gc.drawImage(antenneImages[2], ax, ay, antW, antH);
+            double ax = modelmap.getAntenneCarteX() - camX - antW / 2.0;
+            double ay = modelmap.getAntenneCarteY() - camY - antH / 2.0;
+            gc.drawImage(modelmap.getAntennneImages(2), ax, ay, antW, antH);
         }
 
         // 7) Dessiner le rover (skin)
@@ -632,8 +626,8 @@ public class ControllerMap {
         double roverMiniY = modelmap.getRoverY() * scaleY;
         
         // Récupère les coordonnées de l'antenne sur la minimap
-        double antenneMiniX = antenneCarteX * scaleX;
-        double antenneMiniY = antenneCarteY * scaleY;
+        double antenneMiniX = modelmap.getAntenneCarteX() * scaleX;
+        double antenneMiniY = modelmap.getAntenneCarteY() * scaleY;
         
         double[] objetsMiniX = new double[4];
         double[] objetsMiniY = new double[4];
