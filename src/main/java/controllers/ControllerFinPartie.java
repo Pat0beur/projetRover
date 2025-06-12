@@ -11,16 +11,19 @@ import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import models.ModelMap;
 import views.ViewMap;
+import models.ModelCar; 
 
 public class ControllerFinPartie {
     @FXML private Button btnPersonnalisation;
     @FXML private Button btnQuitter;
     @FXML private Button btnRejouer;
     private ModelMap modelMap;
+    private ModelCar modelCar;
 
     @FXML
     public void initialize(){
         modelMap = App.getModelMap();
+        modelCar = App.getModelCar();
         btnPersonnalisation.setOnAction(event -> {
             try {
                 Stage stage = (Stage) btnPersonnalisation.getScene().getWindow();
@@ -34,8 +37,8 @@ public class ControllerFinPartie {
             }
         });
         btnRejouer.setOnAction(event -> {
+            App.resetGame();
             Stage currentStage = (Stage) btnRejouer.getScene().getWindow();
-            modelMap = App.setModelMap();
             new ViewMap(currentStage).show();
         });
         btnQuitter.setOnAction(event -> {

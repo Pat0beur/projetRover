@@ -215,6 +215,8 @@ public class ControllerMap {
                 if (modelCar.isEmpty() && !modelmap.getEndGame()) {
                     modelmap.setIndiceFinPartie(1); // Faire test ici
                     modelmap.setEndGame(true);
+                    gameLoop.stop();
+                    countdownTimeline.pause();
                     // modelmap.setJeuArrete(true);
                     String target = null;
                     if(modelmap.getIndiceFinPartie()==1 /*&& modelmap.getIndiceFinPartie()==0*/){
@@ -292,7 +294,7 @@ public class ControllerMap {
             if (Inventaire[0] != null) {
                 isDraggingFromInventory = true;
                 draggingInventoryIndex = 0;
-                currentIndex = 0; // réutilise ta logique existante
+                currentIndex = 0; 
 
                 // On met l'objet sur la carte à la position du clic (centrée)
                 double camX = modelmap.getRoverX() - WINDOW_WIDTH / 2.0;
@@ -435,7 +437,7 @@ public class ControllerMap {
                 }
                 System.out.println("Voici ce qu'il y a dans l'Inventaire"+Inventaire[0]+" "+Inventaire[1]+" "+Inventaire[2]+" "+Inventaire[3]+" ");
                 drawAll();
-                // Ici tu pourras ajouter à l'inventaire
+                
             } else if(Math.abs(antenneCarteX - objetsCarteX[currentIndex]) <20 && Math.abs(antenneCarteY - objetsCarteY[currentIndex]) < 20) {
                 System.out.println("Bravo vous avez déposé l'objet sur l'antenne !");
                 modelmap.setdepose(true, currentIndex);
@@ -445,6 +447,8 @@ public class ControllerMap {
                     && modelmap.getdepose(3) == true){
                     modelmap.setEndGame(true);
                     modelmap.setJeuArrete(true);
+                    gameLoop.stop();
+                    countdownTimeline.pause();
                     FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/app/gagne.fxml"));
                     Parent root = null;
                     try {

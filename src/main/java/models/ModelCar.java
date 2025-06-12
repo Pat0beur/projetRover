@@ -74,6 +74,11 @@ public class ModelCar {
     public void addCarListener(Consumer<Image> listener) {
         listeners.add(listener);
     }
+
+    public void resetBattery() {
+        this.Batterie = 100;
+        EtatBatterie = true;
+    }
     // public void add(Image objet){
     //     System.out.println("je suis ici");
     //     for(int i=0;i<Inventaire.length;i++){
