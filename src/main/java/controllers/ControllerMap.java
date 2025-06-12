@@ -214,32 +214,28 @@ public class ControllerMap {
 
                 // 3) mettre à jour la ProgressBar à chaque frame
                 progressBar.setProgress(modelCar.getBatteryPercentage());
-
-<<<<<<< HEAD
                 // 4) si batterie vide → quitter
-                    if (modelCar.isEmpty()&& !EndGame) {
-                        EndGame = true;
-                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/app/perdu.fxml"));
-                        Parent root = null;
-                        try {
-                            root = fxmlLoader.load();
-                        } catch (IOException e) {
-                            // TODO Auto-generated catch block
-                            e.printStackTrace();
-                        }
-                        // Création de la fenêtre
-                        Stage stage = new Stage();
-                        stage.setTitle("Game Over");
-                        stage.setScene(new Scene(root));
-                        stage.initModality(Modality.APPLICATION_MODAL);
-                        stage.show();
+                if (modelCar.isEmpty()&& !EndGame) {
+                    EndGame = true;
+                    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/app/perdu.fxml"));
+                    Parent root = null;
+                    try {
+                        root = fxmlLoader.load();
+                    } catch (IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
                     }
-=======
+                    // Création de la fenêtre
+                    Stage stage = new Stage();
+                    stage.setTitle("Game Over");
+                    stage.setScene(new Scene(root));
+                    stage.initModality(Modality.APPLICATION_MODAL);
+                    stage.show();
+                }
                 // 4) game over si vide
                 if (modelCar.isEmpty()) {
                     System.exit(0);
                 }
->>>>>>> 85e1033974ba6602be4cbf5cfe0f2611ce165dec
 
                 // 5) le reste : déplacer et dessiner
                 updateModel();
