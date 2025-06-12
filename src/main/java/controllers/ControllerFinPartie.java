@@ -37,6 +37,7 @@ public class ControllerFinPartie {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/app/personnalisation.fxml"));
                 Parent root = loader.load();
                 Scene scene = new Scene(root);
+                stage.setTitle("Personnalisation");
                 stage.setScene(scene);
                 stage.show();
             } catch (IOException e) {
@@ -46,6 +47,7 @@ public class ControllerFinPartie {
         btnRejouer.setOnAction(event -> {
             App.resetGame();
             Stage currentStage = (Stage) btnRejouer.getScene().getWindow();
+            currentStage.setTitle("En jeu");
             new ViewMap(currentStage).show();
         });
         btnQuitter.setOnAction(event -> {

@@ -19,9 +19,13 @@ public class ControllerCommandes {
         System.out.println("ControllerCommande.initialize() appelé");
 
         btnRetour.setOnAction(event -> {
+            Stage stage = (Stage) btnRetour.getScene().getWindow();
             String target = App.isFromPause() ? "/app/pause.fxml" : "/app/menu.fxml";
+            switch(target){
+                case "/app/pause.fxml":  stage.setTitle("Pause"); break;
+                case "/app/menu.fxml":  stage.setTitle("Menu"); break;
+            }
             try {
-                Stage stage = (Stage) btnRetour.getScene().getWindow();
                 FXMLLoader loader = new FXMLLoader(
                     getClass().getResource(target)
                 );
