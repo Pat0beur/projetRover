@@ -1,7 +1,10 @@
 // src/main/java/models/ModelMap.java
 package models;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 import app.App;
+import javafx.scene.image.Image;
 
 /**
  * ModelMap : contient la taille de la carte (mapWidth, mapHeight), 
@@ -24,6 +27,14 @@ public class ModelMap {
     private boolean JeuArrete;
     private boolean[] depose = {false,false,false,false};
     private double roverAngle = 0; // en degrés
+    private double[] objetsCarteX;
+    private double[] objetsCarteY;
+        private Image[] objetsImages = {
+        new Image(getClass().getResourceAsStream("/images/objets/circuit_imprime_test.png")),
+        new Image(getClass().getResourceAsStream("/images/objets/panneau_solaire.png")),
+        new Image(getClass().getResourceAsStream("/images/objets/tournevis_test.png")),
+        new Image(getClass().getResourceAsStream("/images/objets/vis_test.png"))
+    };
 
 
 
@@ -32,9 +43,33 @@ public class ModelMap {
      * @param mapWidth  largeur “réelle” de la carte (en pixels logiques)
      * @param mapHeight hauteur “réelle” de la carte (en pixels logiques)
      */
-    public ModelMap(double mapWidth, double mapHeight) {
+    public ModelMap(double mapWidth, double mapHeight, int difficulte) {
         this.mapWidth = mapWidth;
         this.mapHeight = mapHeight;
+        int min = 0;
+        int max = 0;
+        if(difficulte==1){
+            min=700;
+            max=1300;
+        }
+        else if(difficulte ==2){
+            min=500;
+            max=1500;
+        }
+        else if(difficulte ==3){
+            min=200;
+            max=1800;
+        }
+        this.objetsCarteX = new double[] { 
+            ThreadLocalRandom.current().nextInt(min, max + 1), 
+            ThreadLocalRandom.current().nextInt(min, max + 1), 
+            ThreadLocalRandom.current().nextInt(min, max + 1), 
+            ThreadLocalRandom.current().nextInt(min, max + 1) }; // X de chaque objet
+        this.objetsCarteY = new double[] { 
+            ThreadLocalRandom.current().nextInt(min, max + 1), 
+            ThreadLocalRandom.current().nextInt(min, max + 1), 
+            ThreadLocalRandom.current().nextInt(min, max + 1), 
+            ThreadLocalRandom.current().nextInt(min, max + 1) }; // Y de chaque objet
 
         // Initialiser le rover au centre
         this.roverX = mapWidth / 2.0;
@@ -45,6 +80,25 @@ public class ModelMap {
         // this.car = new ModelCar(model.getDifficulte());
         this.car = App.getModelCar();
         // this.Inventaire = new String[4];
+    }
+    public Image getObjetsImages(int indice){
+        return objetsImages[indice];
+    }
+    public Image[] getObjetsImages(){
+        return objetsImages;
+    }
+
+    public void setObjetsCarteX(double a,int indice){
+        this.objetsCarteX[indice] = a;
+    }
+    public void setObjetsCarteY(double a,int indice){
+        this.objetsCarteY[indice] = a;
+    }
+    public double getObjetsCarteX(int indice){
+        return objetsCarteX[indice];
+    }
+    public double getObjetsCarteY(int indice){
+        return objetsCarteY[indice];
     }
 
     public double getMapWidth() {

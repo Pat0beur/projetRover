@@ -31,7 +31,7 @@ public class ControllerPersonnalisation {
     @FXML private Button btnRetour;
     @FXML private Button btnValider;
     @FXML private ImageView imageView;
-    private ModelMap modelmap = new ModelMap(0, 0);
+    private ModelMap modelmap;
     private ModelCar modelCar;
     private int  indice = 0;
     private Image[] images;
@@ -93,6 +93,7 @@ public class ControllerPersonnalisation {
                         e.printStackTrace();
                     }
                 });
+
             btnValider.setOnAction(event -> {
                 SetVoiture(images[indice]);
                 String target = App.isFromPause() ? "/app/pause.fxml" : "/app/menu.fxml";

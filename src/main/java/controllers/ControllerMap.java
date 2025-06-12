@@ -21,6 +21,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import models.ModelMap;
+import models.Model;
 // import views.ViewMap;
 import models.ModelCar;
 
@@ -80,6 +81,7 @@ public class ControllerMap {
     // Modèle stockant la position du rover + ModelCar
     private ModelMap modelmap;
     private ModelCar modelCar;
+    private Model model;
     private Image roverSkin;
     // private ImageView test;
 
@@ -88,20 +90,7 @@ public class ControllerMap {
     int min = 0;
     int max = 2000;
     // int randomNum = ThreadLocalRandom.current().nextInt(min, max + 1); // entre min et max inclus
-    private double[] objetsCarteX = { ThreadLocalRandom.current().nextInt(min, max + 1), 
-        ThreadLocalRandom.current().nextInt(min, max + 1), 
-        ThreadLocalRandom.current().nextInt(min, max + 1), 
-        ThreadLocalRandom.current().nextInt(min, max + 1) }; // X de chaque objet
-    private double[] objetsCarteY = { ThreadLocalRandom.current().nextInt(min, max + 1), 
-        ThreadLocalRandom.current().nextInt(min, max + 1), 
-        ThreadLocalRandom.current().nextInt(min, max + 1), 
-        ThreadLocalRandom.current().nextInt(min, max + 1) }; // Y de chaque objet
-    private Image[] objetsImages = {
-        new Image(getClass().getResourceAsStream("/images/objets/circuit_imprime_test.png")),
-        new Image(getClass().getResourceAsStream("/images/objets/panneau_solaire.png")),
-        new Image(getClass().getResourceAsStream("/images/objets/tournevis_test.png")),
-        new Image(getClass().getResourceAsStream("/images/objets/vis_test.png"))
-    };
+
     private double antenneCarteX = ThreadLocalRandom.current().nextInt(min, max + 1);
     private double antenneCarteY = ThreadLocalRandom.current().nextInt(min, max + 1);
     private Image[] antenneImages = {
@@ -140,8 +129,8 @@ public class ControllerMap {
      */
     @FXML
     public void initialize() throws IOException {
-        // progressBar.setProgress(1);
         modelmap = App.getModelMap();
+        model = App.getModel();
         // if(modelmap.getEndGame()){
         //     modelmap.setEndGame(false);
         // }
@@ -287,13 +276,13 @@ public class ControllerMap {
         // Ajoute ces listeners pour le drag and drop :
         mainCanvas.setOnMousePressed(event -> {
             // Conversion coordonnées écran → carte
-            for(int i=0;i<objetsImages.length;i++){
+            for(int i=0;i<modelmap.getObjetsImages().length;i++){
                 double camX = modelmap.getRoverX() - WINDOW_WIDTH  / 2.0;
                 double camY = modelmap.getRoverY() - WINDOW_HEIGHT / 2.0;
                 double objetLargeur = 48; // même taille que pour l'affichage
                 double objetHauteur = 48;
-                objetEcranX[i]= objetsCarteX[i] - camX - objetLargeur / 2.0;
-                objetEcranY[i]= objetsCarteY[i] - camY - objetHauteur / 2.0;
+                objetEcranX[i]= modelmap.getObjetsCarteX(i) - camX - objetLargeur / 2.0;
+                objetEcranY[i]= modelmap.getObjetsCarteY(i) - camY - objetHauteur / 2.0;
                 
                 // Vérifie si le clic est sur l'objet
                 if (event.getX() >= objetEcranX[i] && event.getX() <= objetEcranX[i] + objetLargeur &&
@@ -322,8 +311,8 @@ public class ControllerMap {
                 // Supprime l'objet de l'inventaire
                 Inventaire[0] = null;
 
-                objetsCarteX[currentIndex] = camX + event.getSceneX() - 24;
-                objetsCarteY[currentIndex] = camY + event.getSceneY() - 24;
+                modelmap.setObjetsCarteX(camX + event.getSceneX() - 24, currentIndex);
+                modelmap.setObjetsCarteY(camY + event.getSceneY() - 24, currentIndex);
                 Ramasser[currentIndex] = false; // il n'est plus dans l'inventaire
                 drawAll();
             }
@@ -345,8 +334,8 @@ public class ControllerMap {
                 // Supprime l'objet de l'inventaire
                 Inventaire[1] = null;
 
-                objetsCarteX[currentIndex] = camX + event.getSceneX() - 24;
-                objetsCarteY[currentIndex] = camY + event.getSceneY() - 24;
+                modelmap.setObjetsCarteX(camX + event.getSceneX() - 24, currentIndex);
+                modelmap.setObjetsCarteY(camY + event.getSceneY() - 24, currentIndex);
                 Ramasser[currentIndex] = false; // il n'est plus dans l'inventaire
                 drawAll();
             }
@@ -367,8 +356,8 @@ public class ControllerMap {
                 // Supprime l'objet de l'inventaire
                 Inventaire[2] = null;
 
-                objetsCarteX[currentIndex] = camX + event.getSceneX() - 24;
-                objetsCarteY[currentIndex] = camY + event.getSceneY() - 24;
+                modelmap.setObjetsCarteX(camX + event.getSceneX() - 24, currentIndex);
+                modelmap.setObjetsCarteY(camY + event.getSceneY() - 24, currentIndex);
                 Ramasser[currentIndex] = false; // il n'est plus dans l'inventaire
                 drawAll();
             }
@@ -388,8 +377,8 @@ public class ControllerMap {
                 // Supprime l'objet de l'inventaire
                 Inventaire[3] = null;
 
-                objetsCarteX[currentIndex] = camX + event.getSceneX() - 24;
-                objetsCarteY[currentIndex] = camY + event.getSceneY() - 24;
+                modelmap.setObjetsCarteX(camX + event.getSceneX() - 24, currentIndex);
+                modelmap.setObjetsCarteY(camY + event.getSceneY() - 24, currentIndex);
                 Ramasser[currentIndex] = false; // il n'est plus dans l'inventaire
                 drawAll();
             }
@@ -400,16 +389,16 @@ public class ControllerMap {
                 double camX = modelmap.getRoverX() - WINDOW_WIDTH  / 2.0;
                 double camY = modelmap.getRoverY() - WINDOW_HEIGHT / 2.0;
                 
-                objetsCarteX[draggingInventoryIndex] = camX + event.getX() - 48;
-                objetsCarteY[draggingInventoryIndex] = camY + event.getY() - 48;
+                modelmap.setObjetsCarteX(camX + event.getSceneX() - 24, draggingInventoryIndex);
+                modelmap.setObjetsCarteY(camY + event.getSceneY() - 24, draggingInventoryIndex);
 
                 drawAll(); // Redessine la map
             } else if (objetAttrape[currentIndex]) {
                 // Conversion coordonnées écran → carte
                 double camX = modelmap.getRoverX() - WINDOW_WIDTH  / 2.0;
                 double camY = modelmap.getRoverY() - WINDOW_HEIGHT / 2.0;
-                objetsCarteX[currentIndex] = camX + event.getX() + objetsImages[currentIndex].getWidth() / 2.0 - decalageX;
-                objetsCarteY[currentIndex] = camY + event.getY() + objetsImages[currentIndex].getHeight() / 2.0 - decalageY;
+                modelmap.setObjetsCarteX(camX + event.getX() + modelmap.getObjetsImages(currentIndex).getWidth() / 2.0 - decalageX, currentIndex);
+                modelmap.setObjetsCarteY(camY + event.getY() + modelmap.getObjetsImages(currentIndex).getWidth() / 2.0 - decalageY, currentIndex);
                 System.out.println("L'objet est en train d'être drag and drop");
             }
         });
@@ -420,8 +409,8 @@ public class ControllerMap {
                 // draggingInventoryIndex = -1;
                 drawAll(); // Redessine avec l'objet relâché
             // Place l’objet sur la carte si valide
-                if (Math.abs(modelmap.getRoverX() - objetsCarteX[draggingInventoryIndex]) < 100 &&
-                    Math.abs(modelmap.getRoverY() - objetsCarteY[draggingInventoryIndex]) < 100) {
+                if (Math.abs(modelmap.getRoverX() - modelmap.getObjetsCarteX(draggingInventoryIndex)) < 100 &&
+                    Math.abs(modelmap.getRoverY() - modelmap.getObjetsCarteY(draggingInventoryIndex)) < 100) {
                     System.out.println("L'objet de l'inventaire a été placé sur la carte !");
                     Ramasser[draggingInventoryIndex] = false;
                     drawAll();
@@ -432,9 +421,9 @@ public class ControllerMap {
             draggingInventoryIndex = -1;
             } else {
             objetAttrape[currentIndex] = false;
-            if (Math.abs(modelmap.getRoverX() - objetsCarteX[currentIndex]) <20 && Math.abs(modelmap.getRoverY() - objetsCarteY[currentIndex]) < 40) {
+            if (Math.abs(modelmap.getRoverX() - modelmap.getObjetsCarteX(currentIndex)) <20 && Math.abs(modelmap.getRoverY() - modelmap.getObjetsCarteY(currentIndex)) < 40) {
                 System.out.println("L'objet est posé sur le rover !");
-                Inventaire[currentIndex] = objetsImages[currentIndex];
+                Inventaire[currentIndex] = modelmap.getObjetsImages(currentIndex);
                 Ramasser[currentIndex] = true;
                 if(currentIndex ==0){
                     GraphicsContext gcobjet = firstCanvas.getGraphicsContext2D();
@@ -455,7 +444,7 @@ public class ControllerMap {
                 System.out.println("Voici ce qu'il y a dans l'Inventaire"+Inventaire[0]+" "+Inventaire[1]+" "+Inventaire[2]+" "+Inventaire[3]+" ");
                 drawAll();
                 
-            } else if(Math.abs(antenneCarteX - objetsCarteX[currentIndex]) <20 && Math.abs(antenneCarteY - objetsCarteY[currentIndex]) < 20) {
+            } else if(Math.abs(antenneCarteX - modelmap.getObjetsCarteX(currentIndex)) <20 && Math.abs(antenneCarteY - modelmap.getObjetsCarteY(currentIndex)) < 20) {
                 System.out.println("Bravo vous avez déposé l'objet sur l'antenne !");
                 modelmap.setdepose(true, currentIndex);
                 if(modelmap.getdepose(0) == true 
@@ -485,7 +474,7 @@ public class ControllerMap {
             }
             else{                
                 System.out.println("Voici la position du rover :"+ modelmap.getRoverX()+" , "+modelmap.getRoverY());
-                System.out.println("Voici la position de l'objet :"+ objetsCarteX[currentIndex]+" , "+objetsCarteY[currentIndex]);
+                System.out.println("Voici la position de l'objet :"+ modelmap.getObjetsCarteX(currentIndex)+" , "+modelmap.getObjetsCarteY(currentIndex));
                 System.out.println("L'objet n'est PAS sur le rover.");
             }
         }
@@ -563,19 +552,19 @@ public class ControllerMap {
             gc.setFill(Color.LIGHTGRAY);
             gc.fillRect(0, 0, windowW, windowH);
         }
-
-        // 5) Dessiner les objets
-        double objetW = 64, objetH = 64;
-        for (int i = 0; i < objetsImages.length; i++) {
-            if (!Ramasser[i] && !modelmap.getdepose(i) && objetsImages[i] != null) {
-                double ox = objetsCarteX[i] - camX - objetW / 2.0;
-                double oy = objetsCarteY[i] - camY - objetH / 2.0;
-                gc.drawImage(objetsImages[i], ox, oy, objetW, objetH);
-            }
-        }
-    double bx = baseCarteX - camX - (BASE_DISPLAY_WIDTH  / 2.0);
+        double bx = baseCarteX - camX - (BASE_DISPLAY_WIDTH  / 2.0);
         double by = baseCarteY - camY - (BASE_DISPLAY_HEIGHT / 2.0);
         gc.drawImage(marsBase, bx, by, BASE_DISPLAY_WIDTH, BASE_DISPLAY_HEIGHT);
+        // 5) Dessiner les objets
+        double objetW = 64, objetH = 64;
+        for (int i = 0; i < modelmap.getObjetsImages().length; i++) {
+            if (!Ramasser[i] && !modelmap.getdepose(i) && modelmap.getObjetsImages(i) != null) {
+                double ox = modelmap.getObjetsCarteX(i) - camX - objetW / 2.0;
+                double oy = modelmap.getObjetsCarteY(i) - camY - objetH / 2.0;
+                gc.drawImage(modelmap.getObjetsImages(i), ox, oy, objetW, objetH);
+            }
+        }
+
 
         // 6) Dessiner l’antenne
         if(VerifObjetDepose(modelmap.getdepose())<2){
@@ -650,9 +639,9 @@ public class ControllerMap {
         double[] objetsMiniY = new double[4];
         
         // Récupère les coordonnées des objets sur la minimap
-        for(int i=0;i<objetsImages.length;i++){
-            objetsMiniX[i] = objetsCarteX[i] * scaleX;
-            objetsMiniY[i] = objetsCarteY[i] * scaleY;
+        for(int i=0;i<modelmap.getObjetsImages().length;i++){
+            objetsMiniX[i] = modelmap.getObjetsCarteX(i) * scaleX;
+            objetsMiniY[i] = modelmap.getObjetsCarteY(i) * scaleY;
         }
         
         // 4) Petit carré vert
@@ -676,7 +665,7 @@ public class ControllerMap {
             );
                 
         //Position des objets
-        for(int i=0;i<objetsImages.length;i++){
+        for(int i=0;i<modelmap.getObjetsImages().length;i++){
             if(!Ramasser[i] && !modelmap.getdepose(i)){
                 gc.setFill(javafx.scene.paint.Color.RED);
                 gc.fillRect(
