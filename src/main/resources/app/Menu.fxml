@@ -18,7 +18,7 @@
             <Font size="19.0" />
          </font>
       </Button>
-      <Button fx:id="btnPersonnaliser" minHeight="30.0" minWidth="180.0" mnemonicParsing="false" prefHeight="40.0" text="Personnaliser">
+      <Button fx:id="btnPersonnaliser" minHeight="30.0" minWidth="180.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="180.0" text="Personnaliser">
          <font>
             <Font size="19.0" />
          </font>

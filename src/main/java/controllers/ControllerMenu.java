@@ -94,4 +94,8 @@ public class ControllerMenu {
     public Model getModel(){
         return model;
     }
+    public void Jouer(){
+        Stage currentStage = (Stage) btnJouer.getScene().getWindow();
+        new ViewMap(currentStage).show();
+    }
 }

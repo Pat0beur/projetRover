@@ -21,6 +21,7 @@ import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import models.ModelMap;
+import views.ViewMap;
 import models.ModelCar;
 
 import java.io.IOException;
@@ -62,6 +63,7 @@ public class ControllerMap {
     @FXML private Canvas fourthCanvas;
     @FXML private Button btnRejouer;
     @FXML private Button btnQuitter;
+    @FXML private Button btnPersonnalisation;
 
     private int remainingSeconds = 120;
     private boolean isDraggingFromInventory = false;
@@ -111,6 +113,7 @@ public class ControllerMap {
     private boolean[] Ramasser = new boolean[4];
     private int currentIndex;
 
+    private ControllerMenu controllerMenu;
 
     private double decalageX = 0;
     private double decalageY = 0;
@@ -212,7 +215,7 @@ public class ControllerMap {
                 // 4) si batterie vide → quitter
                     if (modelCar.isEmpty()&& !EndGame) {
                         EndGame = true;
-                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/app/gagne.fxml"));
+                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/app/perdu.fxml"));
                         Parent root = null;
                         try {
                             root = fxmlLoader.load();
