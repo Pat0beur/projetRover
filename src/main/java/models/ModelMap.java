@@ -22,6 +22,7 @@ public class ModelMap {
     private final ModelCar car;
     private Model model;
     private boolean EndGame = false;
+    // Cet indice prend 3 valeurs : 0 et 1 quand on perd (soit à cause de la batterie ou à cause du temps) et 2 pour dire qu'on a gagné et afficher le score
     private int indiceFinPartie;
     private boolean JeuArrete;
     private boolean[] depose = {false,false,false,false};
@@ -56,7 +57,7 @@ public class ModelMap {
         this.mapHeight = mapHeight;
         int min = 0;
         int max = 0;
-        this.model = App.getModel();  // ou injecté autrement
+        this.model = App.getModel(); 
         int difficulte = model.getDifficulte();
         System.out.println("model.getDifficulte() = "+model.getDifficulte());
         if(difficulte==1){
@@ -91,9 +92,7 @@ public class ModelMap {
 
         // Créer une instance de ModelCar
         this.model = App.getModel();
-        // this.car = new ModelCar(model.getDifficulte());
         this.car = App.getModelCar();
-        // this.Inventaire = new String[4];
     }
 
 

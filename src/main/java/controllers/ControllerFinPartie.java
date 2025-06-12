@@ -28,7 +28,9 @@ public class ControllerFinPartie {
         modelMap = App.getModelMap();
         modelCar = App.getModelCar();
         model = App.getModel();
+        if(modelMap.getIndiceFinPartie()==2){
         scoreLabel.setText(model.getScore()+"");
+        }
         btnPersonnalisation.setOnAction(event -> {
             try {
                 Stage stage = (Stage) btnPersonnalisation.getScene().getWindow();

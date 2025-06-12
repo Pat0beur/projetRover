@@ -7,6 +7,7 @@ public class Model {
     private ModelCar modelCar;
     private Model model;
     private int Score;
+    // private
 
     public Model() {
         this.roverName = "Curiosity";

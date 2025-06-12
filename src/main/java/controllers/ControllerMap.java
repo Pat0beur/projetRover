@@ -79,13 +79,9 @@ public class ControllerMap {
     private ModelCar modelCar;
     private Model model;
     private Image roverSkin;
-    // private ImageView test;
 
     // Tout ce qui se rapporte aux objets
     private Image[] Inventaire = new Image[4];
-    int min = 0;
-    int max = 2000;
-    // int randomNum = ThreadLocalRandom.current().nextInt(min, max + 1); // entre min et max inclus
 
 
     private boolean[] objetAttrape ={false,false,false,false};
@@ -95,7 +91,6 @@ public class ControllerMap {
     private double decalageX = 0;
     private double decalageY = 0;
     
-    // Image de fond (ici mars 4000×4000 ou 2000×2000 selon ce que vous avez chargé)
     private Image backgroundImage;
 
     private double baseCarteX = 1000;  
@@ -137,7 +132,6 @@ public class ControllerMap {
         gc2.setLineWidth(8F);
         gc2.strokeRect(0,0,340,40);
 
-        // test = new ImageView(roverSkin);
         String skinPath = modelCar.getSkin();
         try{
             roverSkin = new Image(getClass().getResourceAsStream(skinPath));
@@ -166,7 +160,6 @@ public class ControllerMap {
         
         // 4) Démarrer la boucle AnimationTimer (~60 FPS)
         gameLoop = new AnimationTimer() {
-            // private long startTime = 120;
             @Override
             public void handle(long now) {
                 // 1) calculer dt en secondes
@@ -185,7 +178,7 @@ public class ControllerMap {
                 if(remainingSeconds == 0 && !modelmap.getEndGame()){
                     gameLoop.stop();
                     countdownTimeline.pause();
-                    modelmap.setIndiceFinPartie(0); // Faire test ici
+                    modelmap.setIndiceFinPartie(0);
                     modelmap.setEndGame(true);
                     FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/app/perdu.fxml"));
                     Parent root = null;
@@ -207,20 +200,19 @@ public class ControllerMap {
                 if (modelCar.isEmpty() && !modelmap.getEndGame()) {
                     gameLoop.stop();
                     countdownTimeline.pause();
-                    modelmap.setIndiceFinPartie(1); // Faire test ici
+                    modelmap.setIndiceFinPartie(1);
                     modelmap.setEndGame(true);
                     gameLoop.stop();
                     countdownTimeline.pause();
                     modelmap.setJeuArrete(true);
                     String target = null;
-                    if(modelmap.getIndiceFinPartie()==1 /*&& modelmap.getIndiceFinPartie()==0*/){
+                    if(modelmap.getIndiceFinPartie()==1){
                         target = "/app/perdu.fxml";
                     }
                     else if(modelmap.getIndiceFinPartie()==2){
                         target = "/app/gagne.fxml";
                     }
 
-                    // System.out.println("Les valeurs de EndGame et de setJeuArrete on bien été modifié");
                     FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(target));
                     Parent root = null;
                     try {
@@ -264,7 +256,7 @@ public class ControllerMap {
             for(int i=0;i<modelmap.getObjetsImages().length;i++){
                 double camX = modelmap.getRoverX() - WINDOW_WIDTH  / 2.0;
                 double camY = modelmap.getRoverY() - WINDOW_HEIGHT / 2.0;
-                double objetLargeur = 48; // même taille que pour l'affichage
+                double objetLargeur = 48;
                 double objetHauteur = 48;
                 modelmap.setObjetEcranX(modelmap.getObjetsCarteX(i) - camX - objetLargeur / 2.0, i);
                 modelmap.setObjetEcranY(modelmap.getObjetsCarteY(i) - camY - objetHauteur / 2.0, i);
@@ -280,6 +272,7 @@ public class ControllerMap {
                 }
             }
         });
+        //Première case de l'inventaire
         firstCanvas.setOnMousePressed(event -> {
             if (Inventaire[0] != null) {
                 isDraggingFromInventory = true;
@@ -302,7 +295,7 @@ public class ControllerMap {
                 drawAll();
             }
         });
-        
+        //Deuxième case de l'inventaire
         secondCanvas.setOnMousePressed(event -> {
             if (Inventaire[1] != null) {
                 isDraggingFromInventory = true;
@@ -325,6 +318,7 @@ public class ControllerMap {
                 drawAll();
             }
         });
+        //Troisième case de l'inventaire
         thirdCanvas.setOnMousePressed(event -> {
             if (Inventaire[2] != null) {
                 isDraggingFromInventory = true;
@@ -347,6 +341,7 @@ public class ControllerMap {
                 drawAll();
             }
         });
+        // Quatrième case de l'inventaire 
         fourthCanvas.setOnMousePressed(event -> {
             if (Inventaire[3] != null) {
                 isDraggingFromInventory = true;
@@ -391,12 +386,10 @@ public class ControllerMap {
         mainCanvas.setOnMouseReleased(event -> {
             if (isDraggingFromInventory) {
                 isDraggingFromInventory = false;
-                // draggingInventoryIndex = -1;
                 drawAll(); // Redessine avec l'objet relâché
-            // Place l’objet sur la carte si valide
+                // Place l’objet sur la carte si valide
                 if (Math.abs(modelmap.getRoverX() - modelmap.getObjetsCarteX(draggingInventoryIndex)) < 100 &&
                     Math.abs(modelmap.getRoverY() - modelmap.getObjetsCarteY(draggingInventoryIndex)) < 100) {
-                    System.out.println("L'objet de l'inventaire a été placé sur la carte !");
                     Ramasser[draggingInventoryIndex] = false;
                     drawAll();
                 } else {
@@ -407,7 +400,6 @@ public class ControllerMap {
             } else {
             objetAttrape[currentIndex] = false;
             if (Math.abs(modelmap.getRoverX() - modelmap.getObjetsCarteX(currentIndex)) <20 && Math.abs(modelmap.getRoverY() - modelmap.getObjetsCarteY(currentIndex)) < 40) {
-                System.out.println("L'objet est posé sur le rover !");
                 Inventaire[currentIndex] = modelmap.getObjetsImages(currentIndex);
                 Ramasser[currentIndex] = true;
                 if(currentIndex ==0){
@@ -426,18 +418,20 @@ public class ControllerMap {
                     GraphicsContext gcobjet = fourthCanvas.getGraphicsContext2D();
                     gcobjet.drawImage(Inventaire[currentIndex], 15, -5);
                 }
-                System.out.println("Voici ce qu'il y a dans l'Inventaire"+Inventaire[0]+" "+Inventaire[1]+" "+Inventaire[2]+" "+Inventaire[3]+" ");
                 drawAll();
                 
-            } else if(Math.abs(modelmap.getAntenneCarteX() - modelmap.getObjetsCarteX(currentIndex)) <20 && Math.abs(modelmap.getAntenneCarteY() - modelmap.getObjetsCarteY(currentIndex)) < 20) {
-                System.out.println("Bravo vous avez déposé l'objet sur l'antenne !");
+            } else if(Math.abs(modelmap.getAntenneCarteX() - modelmap.getObjetsCarteX(currentIndex)) <40 && Math.abs(modelmap.getAntenneCarteY() - modelmap.getObjetsCarteY(currentIndex)) < 40) {
                 modelmap.setdepose(true, currentIndex);
                 if(modelmap.getdepose(0) == true 
                     && modelmap.getdepose(1) == true 
                     && modelmap.getdepose(2) == true 
                     && modelmap.getdepose(3) == true){
+                    
+                    //Dis que c'est la fin de la partie
                     modelmap.setEndGame(true);
+                    //Précise que c'est le jeu est arrêté
                     modelmap.setJeuArrete(true);
+                    modelmap.setIndiceFinPartie(2);
                     gameLoop.stop();
                     countdownTimeline.pause();
                     model.setScore(remainingSeconds);
@@ -455,13 +449,7 @@ public class ControllerMap {
                     stage.initModality(Modality.APPLICATION_MODAL);
                     stage.show();
                 }
-                System.out.println("La valeur d'etatAntenne : "+etatAntenne);
                 drawAll();
-            }
-            else{                
-                System.out.println("Voici la position du rover :"+ modelmap.getRoverX()+" , "+modelmap.getRoverY());
-                System.out.println("Voici la position de l'objet :"+ modelmap.getObjetsCarteX(currentIndex)+" , "+modelmap.getObjetsCarteY(currentIndex));
-                System.out.println("L'objet n'est PAS sur le rover.");
             }
         }
         });
@@ -472,9 +460,8 @@ public class ControllerMap {
      */
     private void updateModel() {
         double dx = 0, dy = 0;
-        if (leftPressed){  dx -= ROVER_SPEED;
-            // test.setRotate(90);
-        }
+        if (leftPressed) dx -= ROVER_SPEED;
+
         if (rightPressed) dx += ROVER_SPEED;
         if (upPressed)    dy -= ROVER_SPEED;
         if (downPressed)  dy += ROVER_SPEED;
@@ -553,6 +540,7 @@ public class ControllerMap {
 
 
         // 6) Dessiner l’antenne
+        //En fonction du nombre d'objet déposé cela dessine un skin différent
         if(VerifObjetDepose(modelmap.getdepose())<2){
             double antW = 128, antH = 128;
             double ax = modelmap.getAntenneCarteX() - camX - antW / 2.0;
@@ -652,6 +640,7 @@ public class ControllerMap {
                 
         //Position des objets
         for(int i=0;i<modelmap.getObjetsImages().length;i++){
+            // Vérifie que l'objet n'est pas dans l'inventaire ni dans l'antenne
             if(!Ramasser[i] && !modelmap.getdepose(i)){
                 gc.setFill(javafx.scene.paint.Color.RED);
                 gc.fillRect(
@@ -696,10 +685,6 @@ public class ControllerMap {
             case ESCAPE: escapePressed = false; break;
             default: break;
         }
-    }
-    public void miseAJourSkin(String skinPath) {
-        // Actualiser l’image du skin ici
-        modelmap.getCar().notifyCarChanged(new Image(getClass().getResource(skinPath).toExternalForm()));
     }
             
     private void startTimer() {
