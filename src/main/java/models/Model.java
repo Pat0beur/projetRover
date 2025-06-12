@@ -9,13 +9,13 @@ public class Model {
 
     public Model() {
         this.roverName = "Curiosity";
-        this.difficulte = getDifficulte();
-        this.model = new Model(getDifficulte());
+        this.difficulte = 1;
         this.modelCar = new ModelCar();
     }
     public Model(int a) {
         this.roverName = "Curiosity";
         this.difficulte = a;
+        this.modelCar = new ModelCar();
     }
     public String getRoverName() {
         return roverName;

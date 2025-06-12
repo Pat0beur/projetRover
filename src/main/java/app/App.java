@@ -60,13 +60,13 @@ public class App extends Application {
     private static final double MAP_HEIGHT = 2048;
     private static ModelCar modelCar = new ModelCar();
     private static Model model = new Model();
-    private static ModelMap modelMap = new ModelMap(MAP_WIDTH, MAP_HEIGHT,1);
+    private static ModelMap modelMap/* = new ModelMap(MAP_WIDTH, MAP_HEIGHT)*/;
     // private static ModelMenu modelMenu = new ModelMenu();
     private static boolean fromPause = false;
 
     public static void resetGame() {
         // recrée la map et remet la batterie de la voiture à 100
-        modelMap = new ModelMap(MAP_WIDTH, MAP_HEIGHT, model.getDifficulte());
+        modelMap = new ModelMap(MAP_WIDTH, MAP_HEIGHT);
         modelCar.resetBattery();
     }
     
@@ -80,10 +80,10 @@ public class App extends Application {
         return modelMap;
     }
     
-    public static ModelMap setModelMap(){
-        modelMap = new ModelMap(MAP_WIDTH, MAP_HEIGHT, model.getDifficulte());
-        return modelMap;
-    }
+    // public static ModelMap setModelMap(){
+    //     modelMap = new ModelMap(MAP_WIDTH, MAP_HEIGHT);
+    //     return modelMap;
+    // }
 
 
 

@@ -117,6 +117,10 @@ public class ControllerMap {
     public void initialize() throws IOException {
         modelmap = App.getModelMap();
         model = App.getModel();
+        if(modelmap.getEndGame()){
+            modelmap.setEndGame(false);
+            modelmap.setJeuArrete(escapePressed);
+        }
         // 1) Créer le modèle
         startTimer();
         this.modelCar = App.getModelCar();
@@ -207,7 +211,7 @@ public class ControllerMap {
                     modelmap.setEndGame(true);
                     gameLoop.stop();
                     countdownTimeline.pause();
-                    // modelmap.setJeuArrete(true);
+                    modelmap.setJeuArrete(true);
                     String target = null;
                     if(modelmap.getIndiceFinPartie()==1 /*&& modelmap.getIndiceFinPartie()==0*/){
                         target = "/app/perdu.fxml";

@@ -51,20 +51,23 @@ public class ModelMap {
      * @param mapWidth  largeur “réelle” de la carte (en pixels logiques)
      * @param mapHeight hauteur “réelle” de la carte (en pixels logiques)
      */
-    public ModelMap(double mapWidth, double mapHeight, int difficulte) {
+    public ModelMap(double mapWidth, double mapHeight) {
         this.mapWidth = mapWidth;
         this.mapHeight = mapHeight;
         int min = 0;
         int max = 0;
+        this.model = App.getModel();  // ou injecté autrement
+        int difficulte = model.getDifficulte();
+        System.out.println("model.getDifficulte() = "+model.getDifficulte());
         if(difficulte==1){
             min=700;
             max=1300;
         }
-        else if(difficulte ==2){
+        else if(difficulte==2){
             min=500;
             max=1500;
         }
-        else if(difficulte ==3){
+        else if(difficulte==3){
             min=200;
             max=1800;
         }
@@ -107,7 +110,7 @@ public class ModelMap {
     public double getObjetEcranY(int indice){
         return objetEcranY[indice];
     }
-    
+
 
     public Image getAntennneImages(int indice){
         return antenneImages[indice];

@@ -1,6 +1,7 @@
 package controllers;
 
 import java.io.IOException;
+import java.lang.classfile.Label;
 
 import app.App;
 import javafx.fxml.FXML;
@@ -17,6 +18,7 @@ public class ControllerFinPartie {
     @FXML private Button btnPersonnalisation;
     @FXML private Button btnQuitter;
     @FXML private Button btnRejouer;
+    @FXML private Label scoreLabel;
     private ModelMap modelMap;
     private ModelCar modelCar;
 

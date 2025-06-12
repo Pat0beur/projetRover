@@ -75,27 +75,29 @@ public class ControllerMenu {
         btnJouer.setOnAction(event -> {
             Stage currentStage = (Stage) btnJouer.getScene().getWindow();
             new ViewMap(currentStage).show();
-            System.out.println("La difficulté :"+model.getDifficulte());
+            // System.out.println("La difficulté :"+model.getDifficulte());
         });
         radiobtnEasy.setOnAction(event -> {
             radiobtnHard.setSelected(false);
             radiobtnMedium.setSelected(false);
-            model.setDifficulte(1);
-            model.setModel(new Model(1));
-            // this.model = App.getModel();
+            App.getModel().setDifficulte(1);
+            //Pour redéfinir model
+            App.resetGame();
         });
         radiobtnMedium.setOnAction(event -> {
             radiobtnHard.setSelected(false);
             radiobtnEasy.setSelected(false);
-            model.setDifficulte(2);
-            // this.model = App.getModel();
+            App.getModel().setDifficulte(2);
+            //Pour redéfinir model
+            App.resetGame();
         });
         radiobtnHard.setOnAction(event -> {
             radiobtnEasy.setSelected(false);
             radiobtnMedium.setSelected(false);
-            model.setDifficulte(3);
-            model.setModel(new Model(3));
-            // this.model = App.getModel();
+            App.getModel().setDifficulte(3);
+            //Pour redéfinir model
+            App.resetGame();
+
         });
     }
     // public Model getModel(){
