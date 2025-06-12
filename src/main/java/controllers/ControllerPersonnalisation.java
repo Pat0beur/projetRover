@@ -96,8 +96,7 @@ public class ControllerPersonnalisation {
                 
             btnValider.setOnAction(event -> {
                 SetVoiture(images[indice]);
-                String target = null;
-            // String target = App.isFromPause() ? "/app/pause.fxml" : "/app/menu.fxml";
+                String target = App.isFromPause() ? "/app/pause.fxml" : "/app/menu.fxml";
             
                 if(modelmap.getJeuArrete()){
                     if(modelmap.getIndiceFinPartie()==1 || modelmap.getIndiceFinPartie()==0){
