@@ -17,11 +17,11 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
+// import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import models.ModelMap;
-import views.ViewMap;
+// import views.ViewMap;
 import models.ModelCar;
 
 import java.io.IOException;
@@ -83,7 +83,6 @@ public class ControllerMap {
     private ModelCar modelCar;
     private Image roverSkin;
     // private ImageView test;
-    private boolean EndGame = false;
 
     // Tout ce qui se rapporte aux objets
     private Image[] Inventaire = new Image[4];
@@ -142,15 +141,16 @@ public class ControllerMap {
      */
     @FXML
     public void initialize() throws IOException {
-        if(EndGame){
+        modelmap = new ModelMap(MAP_WIDTH, MAP_HEIGHT);
+        if(modelmap.getEndGame()){
             btnRejouer = new Button();
             btnQuitter = new Button();
-            EndGame = false;
+            // EndGame = false;
+            modelmap.setEndGame(false);
         }
         else{
         // 1) Créer le modèle
         startTimer();
-        modelmap = new ModelMap(MAP_WIDTH, MAP_HEIGHT);
         // mainCanvas = new Canvas();
         this.modelCar = App.getModelCar();
         lastNanoTime = System.nanoTime();
@@ -215,10 +215,14 @@ public class ControllerMap {
                 // 3) mettre à jour la ProgressBar à chaque frame
                 progressBar.setProgress(modelCar.getBatteryPercentage());
                 // 4) si batterie vide → quitter
-                if (modelCar.isEmpty()&& !EndGame) {
-                    EndGame = true;
+                if (modelCar.isEmpty() && !modelmap.getEndGame()) {
+                    // EndGame = true;
+                    modelmap.setEndGame(true);
                     FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/app/perdu.fxml"));
                     Parent root = null;
+
+                    // ControllerFinPartie controllerFinPartie = fxmlLoader.getController();
+                    // controllerFinPartie.setParent(this);
                     try {
                         root = fxmlLoader.load();
                     } catch (IOException e) {
@@ -233,9 +237,9 @@ public class ControllerMap {
                     stage.show();
                 }
                 // 4) game over si vide
-                if (modelCar.isEmpty()) {
-                    System.exit(0);
-                }
+                // if (modelCar.isEmpty()) {
+                //     System.exit(0);
+                // }
 
                 // 5) le reste : déplacer et dessiner
                 updateModel();

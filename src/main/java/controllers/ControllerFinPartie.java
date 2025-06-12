@@ -14,6 +14,7 @@ public class ControllerFinPartie {
     @FXML private Button btnPersonnalisation;
     @FXML private Button btnQuitter;
     @FXML private Button btnRejouer;
+    private ControllerMap parent;
 
     @FXML
     public void initialize(){
@@ -36,5 +37,8 @@ public class ControllerFinPartie {
         btnQuitter.setOnAction(event -> {
             System.exit(0);
         });
+    }
+    public void setParent(ControllerMap parent) {
+    this.parent = parent;
     }
 }

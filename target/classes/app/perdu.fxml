@@ -18,7 +18,7 @@
             <Font size="24.0" />
          </font>
       </Button>
-      <Button layoutX="223.0" layoutY="224.0" minHeight="40.0" minWidth="150.0" mnemonicParsing="false" text="Personnalisation">
+      <Button fx:id="btnPersonnalisation" layoutX="223.0" layoutY="224.0" minHeight="40.0" minWidth="150.0" mnemonicParsing="false" text="Personnalisation">
          <font>
             <Font size="18.0" />
          </font>

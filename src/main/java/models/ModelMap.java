@@ -19,6 +19,8 @@ public class ModelMap {
     private final ModelCar car;
     private Model model;
     private String[] Inventaire;
+    private boolean EndGame = false;
+
 
     /**
      * @param mapWidth  largeur “réelle” de la carte (en pixels logiques)
@@ -53,6 +55,12 @@ public class ModelMap {
 
     public double getRoverY() {
         return roverY;
+    }
+    public boolean getEndGame(){
+        return EndGame;
+    }
+    public void setEndGame(boolean a){
+        this.EndGame = a;
     }
 
     /**

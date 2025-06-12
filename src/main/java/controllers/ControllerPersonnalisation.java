@@ -89,6 +89,10 @@ public class ControllerPersonnalisation {
         btnValider.setOnAction(event -> {
             SetVoiture(images[indice]);
             String target = App.isFromPause() ? "/app/pause.fxml" : "/app/menu.fxml";
+            
+            // if(EndGame){
+
+            // }
             try {
                 Stage stage = (Stage) btnValider.getScene().getWindow();
                 FXMLLoader loader = new FXMLLoader(
