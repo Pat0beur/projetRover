@@ -11,6 +11,8 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+import app.App;
+
 public class ControllerPause {
     private ControllerMap parent;
 
@@ -35,6 +37,7 @@ public class ControllerPause {
         // Personnaliser
         btnPersonnaliser.setOnAction(e -> {
             try {
+                App.setFromPause(true);
                 Stage s = (Stage) btnPersonnaliser.getScene().getWindow();
                 Parent root = FXMLLoader.load(getClass().getResource("/app/personnalisation.fxml"));
                 s.setScene(new Scene(root));
@@ -46,6 +49,7 @@ public class ControllerPause {
         // Commandes
         btnCommandes.setOnAction(e -> {
             try {
+                App.setFromPause(true);
                 Stage s = (Stage) btnCommandes.getScene().getWindow();
                 Parent root = FXMLLoader.load(getClass().getResource("/app/commandes.fxml"));
                 s.setScene(new Scene(root));

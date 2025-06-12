@@ -11,7 +11,6 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ControllerCommandes">
    <children>
       <VBox prefHeight="400.0" prefWidth="600.0">
@@ -37,7 +36,7 @@
             </HBox>
             <HBox prefHeight="75.0" prefWidth="600.0">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="- Mettre pause : Clique gauche sur ">
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="- Mettre pause : Appuyer sur la touche Echap ">
                      <font>
                         <Font size="18.0" />
                      </font>
@@ -45,7 +44,6 @@
                         <Insets />
                      </HBox.margin>
                   </Text>
-                  <Button mnemonicParsing="false" text="Pause" textFill="#000000c6" />
                </children>
             </HBox>
             <HBox prefHeight="161.0" prefWidth="600.0">

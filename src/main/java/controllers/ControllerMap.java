@@ -71,6 +71,10 @@ public class ControllerMap {
     private int etatAntenne = 0;
     private boolean[] depose = {false,false,false,false};
     private long lastNanoTime;
+    private AnimationTimer gameLoop;
+    private Timeline countdownTimeline;
+    private Timeline batteryTimeline;
+
 
 
 
@@ -191,27 +195,27 @@ public class ControllerMap {
         }
         
         // 4) Démarrer la boucle AnimationTimer (~60 FPS)
-        AnimationTimer gameLoop = new AnimationTimer() {
+        gameLoop = new AnimationTimer() {
             @Override
             public void handle(long now) {
                 // 1) calculer dt en secondes
                 double dt = (now - lastNanoTime) / 1_000_000_000.0;
                 lastNanoTime = now;
 
-                // 2) si sur la base (distance < rayon), recharge, sinon dépense
-                double dxBase = modelmap.getRoverX() - baseCarteX;
-                double dyBase = modelmap.getRoverY() - baseCarteY;
-                double distance = Math.hypot(dxBase, dyBase);
-                double rechargeRadius = 150; // ou un autre rayon
-                if (distance <= rechargeRadius) {
+                // 2) batterie : selon la distance, tick ou recharge
+                double dxB = modelmap.getRoverX() - baseCarteX;
+                double dyB = modelmap.getRoverY() - baseCarteY;
+                double dist = Math.hypot(dxB, dyB);
+                if (dist <= 150) {
                     modelCar.recharge(dt);
                 } else {
                     modelCar.tick(dt);
                 }
 
-                // 3) mettre à jour la ProgressBar
+                // 3) mettre à jour la ProgressBar à chaque frame
                 progressBar.setProgress(modelCar.getBatteryPercentage());
 
+<<<<<<< HEAD
                 // 4) si batterie vide → quitter
                     if (modelCar.isEmpty()&& !EndGame) {
                         EndGame = true;
@@ -230,6 +234,12 @@ public class ControllerMap {
                         stage.initModality(Modality.APPLICATION_MODAL);
                         stage.show();
                     }
+=======
+                // 4) game over si vide
+                if (modelCar.isEmpty()) {
+                    System.exit(0);
+                }
+>>>>>>> 85e1033974ba6602be4cbf5cfe0f2611ce165dec
 
                 // 5) le reste : déplacer et dessiner
                 updateModel();
@@ -237,6 +247,21 @@ public class ControllerMap {
             }
         };
         gameLoop.start();
+
+
+
+
+        // Capturer Échap une fois la Scene attachée
+       mainCanvas.sceneProperty().addListener((obs, oldS, newS) -> {
+        if (newS != null) {
+            newS.addEventFilter(KeyEvent.KEY_PRESSED, ev -> {
+            if (ev.getCode() == KeyCode.ESCAPE) {
+              showPauseDialog();
+               ev.consume();
+             }
+           });
+         }
+        });
         
         // Ajoute ces listeners pour le drag and drop :
         mainCanvas.setOnMousePressed(event -> {
@@ -654,18 +679,52 @@ private void drawMainView() {
         }
                 
         private void startTimer() {
-            Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
-            if (remainingSeconds > 0) {
-                    remainingSeconds--;
-                int minutes = remainingSeconds / 60;
-                int seconds = remainingSeconds % 60;
-                label.setText(String.format("%02d:%02d", minutes, seconds));
-            } else {
+            countdownTimeline = new Timeline(
+            new KeyFrame(Duration.seconds(1), ev -> {
+                if (remainingSeconds > 0) {
+                remainingSeconds--;
+                int m = remainingSeconds / 60;
+                int s = remainingSeconds % 60;
+                label.setText(String.format("%02d:%02d", m, s));
+                } else {
                 label.setText("Temps écoulé !");
+                }
+            })
+            );
+            countdownTimeline.setCycleCount(Timeline.INDEFINITE);
+            countdownTimeline.play();
+        }
+
+        private void showPauseDialog() {
+            // 1) Stoppe l'animation
+            gameLoop.stop();
+            countdownTimeline.pause();
+
+            try {
+                // 2) Charge pause.fxml
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/app/pause.fxml"));
+                Parent root = loader.load();
+
+                // 3) Récupère le controller de la pause et passe-lui une référence si besoin
+                ControllerPause ctrl = loader.getController();
+                ctrl.setParent(this);
+
+                // 4) Ouvre une fenêtre modale
+                Stage pauseStage = new Stage();
+                pauseStage.initModality(Modality.APPLICATION_MODAL);
+                pauseStage.setTitle("Pause");
+                pauseStage.setScene(new Scene(root));
+                pauseStage.showAndWait();
+
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            }));
-        timeline.setCycleCount(remainingSeconds);
-        timeline.play();
+
+            lastNanoTime = System.nanoTime();
+
+            // 5) Relance le jeu quand la fenêtre de pause se ferme
+            gameLoop.start();
+            countdownTimeline.play();
         }
         
     }
