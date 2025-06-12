@@ -24,6 +24,8 @@ public class ModelMap {
     private boolean JeuArrete;
 
 
+
+
     /**
      * @param mapWidth  largeur “réelle” de la carte (en pixels logiques)
      * @param mapHeight hauteur “réelle” de la carte (en pixels logiques)

@@ -141,6 +141,7 @@ public class ControllerMap {
      */
     @FXML
     public void initialize() throws IOException {
+        // progressBar.setProgress(1);
         modelmap = App.getModelMap();
         // if(modelmap.getEndGame()){
         //     modelmap.setEndGame(false);
@@ -159,7 +160,6 @@ public class ControllerMap {
         gc1.strokeRect(0, 0, MINI_WIDTH, MINI_HEIGHT);
         gc1.setFill(javafx.scene.paint.Color.WHITE);
         gc1.fillRect(0, 0, MINI_WIDTH, MINI_HEIGHT);
-        progressBar.setProgress(100F);
         GraphicsContext gc2 = borderCanvas.getGraphicsContext2D();
         gc2.setLineWidth(8F);
         gc2.strokeRect(0,0,340,40);
@@ -215,11 +215,18 @@ public class ControllerMap {
                 if (modelCar.isEmpty() && !modelmap.getEndGame()) {
                     modelmap.setIndiceFinPartie(1); // Faire test ici
                     modelmap.setEndGame(true);
-                    modelmap.setJeuArrete(true);
-                    System.out.println("Les valeurs de EndGame et de setJeuArrete on bien été modifié");
-                    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/app/perdu.fxml"));
-                    Parent root = null;
+                    // modelmap.setJeuArrete(true);
+                    String target = null;
+                    if(modelmap.getIndiceFinPartie()==1 /*&& modelmap.getIndiceFinPartie()==0*/){
+                        target = "/app/perdu.fxml";
+                    }
+                    else if(modelmap.getIndiceFinPartie()==2){
+                        target = "/app/gagne.fxml";
+                    }
 
+                    // System.out.println("Les valeurs de EndGame et de setJeuArrete on bien été modifié");
+                    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(target));
+                    Parent root = null;
                     try {
                         root = fxmlLoader.load();
                     } catch (IOException e) {
@@ -406,7 +413,7 @@ public class ControllerMap {
             draggingInventoryIndex = -1;
             } else {
             objetAttrape[currentIndex] = false;
-            if (Math.abs(modelmap.getRoverX() - objetsCarteX[currentIndex]) <20 && Math.abs(modelmap.getRoverY() - objetsCarteY[currentIndex]) < 100) {
+            if (Math.abs(modelmap.getRoverX() - objetsCarteX[currentIndex]) <20 && Math.abs(modelmap.getRoverY() - objetsCarteY[currentIndex]) < 40) {
                 System.out.println("L'objet est posé sur le rover !");
                 Inventaire[currentIndex] = objetsImages[currentIndex];
                 Ramasser[currentIndex] = true;
@@ -433,6 +440,24 @@ public class ControllerMap {
                 System.out.println("Bravo vous avez déposé l'objet sur l'antenne !");
                 depose[currentIndex] = true;
                 etatAntenne++;
+                if(etatAntenne == 4){
+                    modelmap.setEndGame(true);
+                    modelmap.setJeuArrete(true);
+                    // System.out.println("Les valeurs de EndGame et de setJeuArrete on bien été modifié");
+                    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/app/gagne.fxml"));
+                    Parent root = null;
+                    try {
+                        root = fxmlLoader.load();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    // Création de la fenêtre
+                    Stage stage = new Stage();
+                    stage.setTitle("Game Over");
+                    stage.setScene(new Scene(root));
+                    stage.initModality(Modality.APPLICATION_MODAL);
+                    stage.show();
+                }
                 System.out.println("La valeur d'etatAntenne : "+etatAntenne);
                 drawAll();
             }
@@ -722,5 +747,8 @@ private void drawMainView() {
             gameLoop.start();
             countdownTimeline.play();
         }
-        
+        // @FXML
+        // public void setProgressBar(double a){
+        //     this.progressBar.setProgress(a);
+        // }
     }

@@ -72,6 +72,10 @@ public class App extends Application {
     public static ModelMap getModelMap(){
         return modelMap;
     }
+    public static ModelMap setModelMap(){
+        modelMap = new ModelMap(MAP_WIDTH, MAP_HEIGHT);
+        return modelMap;
+    }
 
     @SuppressWarnings("exports")
     @Override

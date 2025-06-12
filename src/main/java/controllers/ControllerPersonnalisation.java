@@ -73,6 +73,14 @@ public class ControllerPersonnalisation {
             imageView.setImage(images[indice]);
             btnRetour.setOnAction(event -> {
                 String target = App.isFromPause() ? "/app/pause.fxml" : "/app/menu.fxml";
+                    if(modelmap.getJeuArrete()){
+                        if(modelmap.getIndiceFinPartie()==1 || modelmap.getIndiceFinPartie()==0){
+                            target = "/app/perdu.fxml";
+                        }
+                        if(modelmap.getIndiceFinPartie()==2){
+                            target = "/app/gagne.fxml";
+                        }
+                    }
                 try {
                     Stage stage = (Stage) btnRetour.getScene().getWindow();
                     FXMLLoader loader = new FXMLLoader(
@@ -98,7 +106,6 @@ public class ControllerPersonnalisation {
                     if(modelmap.getIndiceFinPartie()==2){
                         target = "/app/gagne.fxml";
                     }
-
                 }
                 try {
                     Stage stage = (Stage) btnValider.getScene().getWindow();

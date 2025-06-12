@@ -35,6 +35,7 @@ public class ControllerFinPartie {
         });
         btnRejouer.setOnAction(event -> {
             Stage currentStage = (Stage) btnRejouer.getScene().getWindow();
+            modelMap = App.setModelMap();
             new ViewMap(currentStage).show();
         });
         btnQuitter.setOnAction(event -> {
