@@ -41,6 +41,7 @@ public class ControllerPause {
                 Stage s = (Stage) btnPersonnaliser.getScene().getWindow();
                 Parent root = FXMLLoader.load(getClass().getResource("/app/personnalisation.fxml"));
                 s.setScene(new Scene(root));
+                s.setTitle("Personnalisation");
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
@@ -53,6 +54,7 @@ public class ControllerPause {
                 Stage s = (Stage) btnCommandes.getScene().getWindow();
                 Parent root = FXMLLoader.load(getClass().getResource("/app/commandes.fxml"));
                 s.setScene(new Scene(root));
+                s.setTitle("Commandes");
             } catch (IOException ex) {
                 ex.printStackTrace();
             }

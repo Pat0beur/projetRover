@@ -46,6 +46,7 @@ public class ControllerMenu {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/app/personnalisation.fxml"));
                 Parent root = loader.load();
                 Scene scene = new Scene(root);
+                stage.setTitle("Personnalisation");
                 stage.setScene(scene);
                 stage.show();
             } catch (IOException e) {
@@ -61,6 +62,7 @@ public class ControllerMenu {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/app/commandes.fxml"));
                 Parent root = loader.load();
                 Scene scene = new Scene(root);
+                stage.setTitle("Commandes");
                 stage.setScene(scene);
                 stage.show();
             } catch (IOException e) {
@@ -70,6 +72,7 @@ public class ControllerMenu {
 
         btnJouer.setOnAction(event -> {
             Stage currentStage = (Stage) btnJouer.getScene().getWindow();
+            currentStage.setTitle("En jeu");
             new ViewMap(currentStage).show();
         });
         radiobtnEasy.setOnAction(event -> {

@@ -72,17 +72,23 @@ public class ControllerPersonnalisation {
             }
             imageView.setImage(images[indice]);
             btnRetour.setOnAction(event -> {
+                Stage stage = (Stage) btnRetour.getScene().getWindow();
                 String target = App.isFromPause() ? "/app/pause.fxml" : "/app/menu.fxml";
+                switch(target){
+                    case "/app/pause.fxml":  stage.setTitle("Pause"); break;
+                    case "/app/menu.fxml":  stage.setTitle("Menu"); break;
+                }
                     if(modelmap.getJeuArrete()){
                         if(modelmap.getIndiceFinPartie()==1 || modelmap.getIndiceFinPartie()==0){
                             target = "/app/perdu.fxml";
+                            stage.setTitle("Perdu");
                         }
                         if(modelmap.getIndiceFinPartie()==2){
                             target = "/app/gagne.fxml";
+                            stage.setTitle("Gagné");
                         }
                     }
                 try {
-                    Stage stage = (Stage) btnRetour.getScene().getWindow();
                     FXMLLoader loader = new FXMLLoader(
                         getClass().getResource(target)
                         );
@@ -96,18 +102,23 @@ public class ControllerPersonnalisation {
 
             btnValider.setOnAction(event -> {
                 SetVoiture(images[indice]);
+                Stage stage = (Stage) btnValider.getScene().getWindow();
                 String target = App.isFromPause() ? "/app/pause.fxml" : "/app/menu.fxml";
-            
+                switch(target){
+                    case "/app/pause.fxml":  stage.setTitle("Pause"); break;
+                    case "/app/menu.fxml":  stage.setTitle("Menu"); break;
+                }
                 if(modelmap.getJeuArrete()){
                     if(modelmap.getIndiceFinPartie()==1 || modelmap.getIndiceFinPartie()==0){
                         target = "/app/perdu.fxml";
+                        stage.setTitle("Perdu");
                     }
                     if(modelmap.getIndiceFinPartie()==2){
                         target = "/app/gagne.fxml";
+                        stage.setTitle("Gagné");
                     }
                 }
                 try {
-                    Stage stage = (Stage) btnValider.getScene().getWindow();
                     System.out.println("La valeur de target est : "+target+" les valeurs de IndiceFinPartie : "+modelmap.getIndiceFinPartie()+" et la valeur de JeuArrete : "+modelmap.getJeuArrete());
                     FXMLLoader loader = new FXMLLoader(
                         getClass().getResource(target)
